@@ -1,0 +1,367 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Final|x64">
+      <Configuration>Final</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Audio.cpp" />
+    <ClCompile Include="src\BlockMesher.cpp" />
+    <ClCompile Include="src\BlockTypes.cpp" />
+    <ClCompile Include="src\Box.cpp" />
+    <ClCompile Include="src\BTCBot.cpp" />
+    <ClCompile Include="src\Cache.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Chunk.cpp" />
+    <ClCompile Include="src\ChunkHandler.cpp" />
+    <ClCompile Include="src\Controls.cpp" />
+    <ClCompile Include="src\Cosmic.cpp" />
+    <ClCompile Include="src\CosmicModel.cpp" />
+    <ClCompile Include="src\Decimator.cpp" />
+    <ClCompile Include="src\Effect Object.cpp" />
+    <ClCompile Include="src\FaceOptimizer.cpp" />
+    <ClCompile Include="src\FastPack.cpp" />
+    <ClCompile Include="src\File\File.cpp" />
+    <ClCompile Include="src\File\ImageFile.cpp" />
+    <ClCompile Include="src\File\StreamFile.cpp" />
+    <ClCompile Include="src\Framebuffer.cpp" />
+    <ClCompile Include="src\FrameRate.cpp" />
+    <ClCompile Include="src\Glorious\Glorious.cpp" />
+    <ClCompile Include="src\Glorious\LeastRects.cpp" />
+    <ClCompile Include="src\GamePads.cpp" />
+    <ClCompile Include="src\HALO.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\math\Exponent.cpp" />
+    <ClCompile Include="src\Math\Maths.cpp" />
+    <ClCompile Include="src\Math\Matrix4x4.cpp" />
+    <ClCompile Include="src\Math\Plane.cpp" />
+    <ClCompile Include="src\Math\Ray.cpp" />
+    <ClCompile Include="src\Math\Sphere.cpp" />
+    <ClCompile Include="src\Math\Triangle.cpp" />
+    <ClCompile Include="src\Mesh\AlphaRenderObject.cpp" />
+    <ClCompile Include="src\Mesh\Assimp.cpp" />
+    <ClCompile Include="src\Mesh\Buffer.cpp" />
+    <ClCompile Include="src\Mesh\CustomRenderObjects.cpp" />
+    <ClCompile Include="src\Mesh\GLtypes.cpp" />
+    <ClCompile Include="src\Mesh\PolyModel.cpp" />
+    <ClCompile Include="src\Mesh\RenderObject.cpp" />
+    <ClCompile Include="src\Mesh\RenderObjectMaker.cpp" />
+    <ClCompile Include="src\Mesh\Shaders.cpp" />
+    <ClCompile Include="src\Mesh\Textures.cpp" />
+    <ClCompile Include="src\Minecraft.cpp" />
+    <ClCompile Include="src\BlockWorld.cpp" />
+    <ClCompile Include="src\NodeList.cpp" />
+    <ClCompile Include="src\NovaCosm.cpp" />
+    <ClCompile Include="src\NovaCosmModel.cpp" />
+    <ClCompile Include="src\Octree.cpp" />
+    <ClCompile Include="src\PointCloud.cpp" />
+    <ClCompile Include="src\pokemon.cpp" />
+    <ClCompile Include="src\PolyMesh.cpp" />
+    <ClCompile Include="src\Pool.cpp" />
+    <ClCompile Include="src\RayTracer.cpp" />
+    <ClCompile Include="src\RealTimeEngine.cpp" />
+    <ClCompile Include="src\RectPacker.cpp" />
+    <ClCompile Include="src\Region.cpp" />
+    <ClCompile Include="src\Round.cpp" />
+    <ClCompile Include="src\SecondStream.cpp" />
+    <ClCompile Include="src\StreamTest.cpp" />
+    <ClCompile Include="src\FilePath.cpp" />
+    <ClCompile Include="src\Text.cpp" />
+    <ClCompile Include="src\Threads.cpp" />
+    <ClCompile Include="src\Vector.cpp" />
+    <ClCompile Include="src\Warthog.cpp" />
+    <ClCompile Include="src\Window.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Final|x64'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="src\Zelda\Zelda.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Assets.h" />
+    <ClInclude Include="src\Audio.h" />
+    <ClInclude Include="src\BlockMesher.h" />
+    <ClInclude Include="src\BlockTypes.h" />
+    <ClInclude Include="src\Box.h" />
+    <ClInclude Include="src\BTCBot.h" />
+    <ClInclude Include="src\btcFunctions.h" />
+    <ClInclude Include="src\btcTypes.h" />
+    <ClInclude Include="src\Cache.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Chunk.h" />
+    <ClInclude Include="src\ChunkHandler.h" />
+    <ClInclude Include="src\ChunkInstance.h" />
+    <ClInclude Include="src\Controls.h" />
+    <ClInclude Include="src\Cosmic.h" />
+    <ClInclude Include="src\CosmicModel.h" />
+    <ClInclude Include="src\CPUDraw.h" />
+    <ClInclude Include="src\Decimator.h" />
+    <ClInclude Include="src\DynamicTextureArrayAtlas.h" />
+    <ClInclude Include="src\Effect Object.h" />
+    <ClInclude Include="src\Entities.h" />
+    <ClInclude Include="src\FaceOptimizer.h" />
+    <ClInclude Include="src\FastPack.h" />
+    <ClInclude Include="src\File\File.h" />
+    <ClInclude Include="src\File\ImageFile.h" />
+    <ClInclude Include="src\File\StreamFile.h" />
+    <ClInclude Include="src\Framebuffer.h" />
+    <ClInclude Include="src\FrameRate.h" />
+    <ClInclude Include="src\Glorious\Convertor.h" />
+    <ClInclude Include="src\Glorious\Creator.h" />
+    <ClInclude Include="src\Glorious\Glorious.h" />
+    <ClInclude Include="src\Glorious\LeastRects.h" />
+    <ClInclude Include="src\GloriousModel.h" />
+    <ClInclude Include="src\GamePads.h" />
+    <ClInclude Include="src\HALO.h" />
+    <ClInclude Include="src\Line.h" />
+    <ClInclude Include="src\Math\Clamp.h" />
+    <ClInclude Include="src\math\Exponent.h" />
+    <ClInclude Include="src\Math\Maths.h" />
+    <ClInclude Include="src\Math\MathsForward.h" />
+    <ClInclude Include="src\Math\Matrix4x4.h" />
+    <ClInclude Include="src\Math\PI.h" />
+    <ClInclude Include="src\Math\Plane.h" />
+    <ClInclude Include="src\Math\Ray.h" />
+    <ClInclude Include="src\Math\Sphere.h" />
+    <ClInclude Include="src\Math\Triangle.h" />
+    <ClInclude Include="src\MatVecSIMD.h" />
+    <ClInclude Include="src\Mesh\AlphaRenderObject.h" />
+    <ClInclude Include="src\Mesh\Assimp.h" />
+    <ClInclude Include="src\Mesh\Buffer.h" />
+    <ClInclude Include="src\Mesh\CustomRenderObjects.h" />
+    <ClInclude Include="src\Mesh\GLtypes.h" />
+    <ClInclude Include="src\Mesh\PolyModel.h" />
+    <ClInclude Include="src\Mesh\RenderObject.h" />
+    <ClInclude Include="src\Mesh\RenderObjectMaker.h" />
+    <ClInclude Include="src\Mesh\Shaders.h" />
+    <ClInclude Include="src\Mesh\Textures.h" />
+    <ClInclude Include="src\Minecraft.h" />
+    <ClInclude Include="src\NCSCrush.h" />
+    <ClInclude Include="src\BlockWorld.h" />
+    <ClInclude Include="src\NodeList.h" />
+    <ClInclude Include="src\NovaCosm.h" />
+    <ClInclude Include="src\NovaCosmModel.h" />
+    <ClInclude Include="src\Octree.h" />
+    <ClInclude Include="src\Physics.h" />
+    <ClInclude Include="src\PointCloud.h" />
+    <ClInclude Include="src\pokemon.h" />
+    <ClInclude Include="src\PolyMesh.h" />
+    <ClInclude Include="src\Pool.h" />
+    <ClInclude Include="src\RayTracer.h" />
+    <ClInclude Include="src\RealTimeEngine.h" />
+    <ClInclude Include="src\RectPacker.h" />
+    <ClInclude Include="src\Region.h" />
+    <ClInclude Include="src\Round.h" />
+    <ClInclude Include="src\SecondStream.h" />
+    <ClInclude Include="src\SortedList.h" />
+    <ClInclude Include="src\StreamTest.h" />
+    <ClInclude Include="src\FilePath.h" />
+    <ClInclude Include="src\Text.h" />
+    <ClInclude Include="src\Threads.h" />
+    <ClInclude Include="src\Vector2.h" />
+    <ClInclude Include="src\Vector3.h" />
+    <ClInclude Include="src\Vector4.h" />
+    <ClInclude Include="src\Vector.h" />
+    <ClInclude Include="src\Warthog.h" />
+    <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\Zelda\Zelda.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D03D5ED3-1A03-407C-9595-48D3CF075416}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SDL_GLSL</RootNamespace>
+    <ProjectName>Engine</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
+    <CustomBuildBeforeTargets>
+    </CustomBuildBeforeTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRTDBG_MAP_ALLOC; WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\ZLIB;$(SolutionDir)3rdParty\SDL2Image\include;$(ProjectDir)src;$(ProjectDir)src\Mesh;$(ProjectDir)src\Math;$(ProjectDir)src\File;$(ProjectDir)src\VoxelBoy;$(ProjectDir)src\Zelda;$(ProjectDir)src\Glorious</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\Lib\$(Platform)\$(Configuration)\SDL2.DLL" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\SDL2_image.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\zlib1.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\libpng16-16.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\libjpeg-9.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\Assimp\Lib\assimp.dll" "$(OutDir)" /d /y /i</Command>
+    </PreBuildEvent>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/Oa %(AdditionalOptions)</AdditionalOptions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\ZLIB;$(SolutionDir)3rdParty\SDL2Image\include;$(ProjectDir)src;$(ProjectDir)src\Mesh;$(ProjectDir)src\Math;$(ProjectDir)src\File;$(ProjectDir)src\VoxelBoy;$(ProjectDir)src\Zelda;$(ProjectDir)src\Glorious</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\Lib\$(Platform)\$(Configuration)\SDL2.DLL" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\SDL2_image.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\zlib1.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\libpng16-16.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\libjpeg-9.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\Assimp\Lib\assimp.dll" "$(OutDir)" /d /y /i</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;FINAL;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/Oa %(AdditionalOptions)</AdditionalOptions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\ZLIB;$(SolutionDir)3rdParty\SDL2Image\include;$(ProjectDir)src;$(ProjectDir)src\Mesh;$(ProjectDir)src\Math;$(ProjectDir)src\File;$(ProjectDir)src\VoxelBoy;$(ProjectDir)src\Zelda;$(ProjectDir)src\Glorious</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\Release;$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\Release;$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\Release;$(SolutionDir)3rdParty\Assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\Lib\$(Platform)\Release\SDL2.DLL" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\Release\SDL2_image.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\Release\zlib1.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\Release\libpng16-16.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\Release\libjpeg-9.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\Assimp\Lib\assimp.dll" "$(OutDir)" /d /y /i
+
+xcopy "$(SolutionDir)Projects\src\mesh\shaders" "$(OutDir)shaders" /d /y /i
+xcopy "$(SolutionDir)Projects\splits" "$(OutDir)splits" /d /y /i
+xcopy "$(SolutionDir)Projects\house.Gm" "$(OutDir)" /d /y /i
+
+xcopy "$(SolutionDir)Assets" "$(OutDir)Assets" /d /y /i /e</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

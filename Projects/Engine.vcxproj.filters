@@ -1,0 +1,687 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\Main.cpp">
+      <Filter>Projects\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Controls.cpp">
+      <Filter>Engine\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window.cpp">
+      <Filter>Engine\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FrameRate.cpp">
+      <Filter>Engine\FrameRate</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Threads.cpp">
+      <Filter>Engine\Threads</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Engine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Maths.cpp">
+      <Filter>Engine\Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh\Buffer.cpp">
+      <Filter>Engine\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh\Assimp.cpp">
+      <Filter>Engine\Mesh\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh\AlphaRenderObject.cpp">
+      <Filter>Engine\Mesh\Render Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh\GLtypes.cpp">
+      <Filter>Engine\Mesh\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh\PolyModel.cpp">
+      <Filter>Engine\Mesh\PolyModel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh\RenderObject.cpp">
+      <Filter>Engine\Mesh\Render Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh\CustomRenderObjects.cpp">
+      <Filter>Engine\Mesh\Render Object\Render Makers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh\RenderObjectMaker.cpp">
+      <Filter>Engine\Mesh\Render Object\Render Makers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cache.cpp">
+      <Filter>Engine\Cache</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vector.cpp">
+      <Filter>Engine\Vector</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RealTimeEngine.cpp">
+      <Filter>Engine\RealTimeEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\File\ImageFile.cpp">
+      <Filter>Engine\File\ImageFile</Filter>
+    </ClCompile>
+    <ClCompile Include="src\File\File.cpp">
+      <Filter>Engine\File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Glorious\Glorious.cpp">
+      <Filter>Projects\Glorious</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Glorious\LeastRects.cpp">
+      <Filter>Projects\Glorious\Slicer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Matrix4x4.cpp">
+      <Filter>Engine\Maths\Algebra\Abstract\Matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh\Shaders.cpp">
+      <Filter>Engine\Mesh\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh\Textures.cpp">
+      <Filter>Engine\Mesh\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Sphere.cpp">
+      <Filter>Engine\Maths\Geometry\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="src\File\StreamFile.cpp">
+      <Filter>Engine\File\StreamFile</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Zelda\Zelda.cpp">
+      <Filter>Projects\Zelda</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HALO.cpp">
+      <Filter>Projects\Halo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cosmic.cpp">
+      <Filter>Projects\Cosmic</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CosmicModel.cpp">
+      <Filter>Projects\Cosmic</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NovaCosmModel.cpp">
+      <Filter>Projects\Novacosm</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NovaCosm.cpp">
+      <Filter>Projects\Novacosm</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GamePads.cpp">
+      <Filter>Engine\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\Exponent.cpp">
+      <Filter>Engine\Maths\Algebra\Elementary</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Ray.cpp">
+      <Filter>Engine\Maths\Geometry\Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Warthog.cpp">
+      <Filter>Projects\Halo\Vehicles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Audio.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Plane.cpp">
+      <Filter>Engine\Maths\Geometry\Plane</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PolyMesh.cpp">
+      <Filter>Engine\Maths\Geometry\PolyMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Triangle.cpp">
+      <Filter>Engine\Maths\Geometry\Triangle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Framebuffer.cpp">
+      <Filter>Engine\Mesh\FrameBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Decimator.cpp">
+      <Filter>Engine\Mesh\Decimator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Box.cpp">
+      <Filter>Engine\Maths\Geometry\Plane</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StreamTest.cpp">
+      <Filter>Projects\StreamTest</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Round.cpp">
+      <Filter>Engine\Maths\Algebra\Elementary</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NodeList.cpp">
+      <Filter>Engine\Trees</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Octree.cpp">
+      <Filter>Engine\Trees</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PointCloud.cpp">
+      <Filter>Engine\PointCloud</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SecondStream.cpp">
+      <Filter>Projects\SecondStream</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Minecraft.cpp">
+      <Filter>Projects\Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chunk.cpp">
+      <Filter>Projects\Minecraft\Chunks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BlockTypes.cpp">
+      <Filter>Projects\Minecraft\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Region.cpp">
+      <Filter>Projects\Minecraft\Region</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BlockMesher.cpp">
+      <Filter>Projects\Minecraft\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pool.cpp">
+      <Filter>Engine\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Text.cpp">
+      <Filter>Engine\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ChunkHandler.cpp">
+      <Filter>Projects\Minecraft\ChunkHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FaceOptimizer.cpp">
+      <Filter>Projects\Minecraft\Faces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BlockWorld.cpp">
+      <Filter>Projects\Minecraft\BlockWorld</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FilePath.cpp">
+      <Filter>Engine\Strings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RectPacker.cpp">
+      <Filter>Engine\Packer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FastPack.cpp">
+      <Filter>Engine\Packer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pokemon.cpp">
+      <Filter>Projects\Pokemon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RayTracer.cpp">
+      <Filter>Projects\RayTracer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BTCBot.cpp">
+      <Filter>Projects\BTCBot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Effect Object.cpp">
+      <Filter>Engine\Buffer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Controls.h">
+      <Filter>Engine\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window.h">
+      <Filter>Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FrameRate.h">
+      <Filter>Engine\FrameRate</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Threads.h">
+      <Filter>Engine\Threads</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>Engine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Maths.h">
+      <Filter>Engine\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\Buffer.h">
+      <Filter>Engine\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\Assimp.h">
+      <Filter>Engine\Mesh\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\AlphaRenderObject.h">
+      <Filter>Engine\Mesh\Render Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\GLtypes.h">
+      <Filter>Engine\Mesh\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\PolyModel.h">
+      <Filter>Engine\Mesh\PolyModel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\RenderObject.h">
+      <Filter>Engine\Mesh\Render Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\CustomRenderObjects.h">
+      <Filter>Engine\Mesh\Render Object\Render Makers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\RenderObjectMaker.h">
+      <Filter>Engine\Mesh\Render Object\Render Makers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cache.h">
+      <Filter>Engine\Cache</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vector.h">
+      <Filter>Engine\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RealTimeEngine.h">
+      <Filter>Engine\RealTimeEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\File\ImageFile.h">
+      <Filter>Engine\File\ImageFile</Filter>
+    </ClInclude>
+    <ClInclude Include="src\File\File.h">
+      <Filter>Engine\File</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Glorious\Glorious.h">
+      <Filter>Projects\Glorious</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Glorious\LeastRects.h">
+      <Filter>Projects\Glorious\Slicer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Glorious\Convertor.h">
+      <Filter>Projects\Glorious\PCF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Glorious\Creator.h">
+      <Filter>Projects\Glorious\PCF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Matrix4x4.h">
+      <Filter>Engine\Maths\Algebra\Abstract\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\Shaders.h">
+      <Filter>Engine\Mesh\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\Textures.h">
+      <Filter>Engine\Mesh\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Plane.h">
+      <Filter>Engine\Maths\Geometry\Plane</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Ray.h">
+      <Filter>Engine\Maths\Geometry\Ray</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Sphere.h">
+      <Filter>Engine\Maths\Geometry\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Triangle.h">
+      <Filter>Engine\Maths\Geometry\Triangle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\File\StreamFile.h">
+      <Filter>Engine\File\StreamFile</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Zelda\Zelda.h">
+      <Filter>Projects\Zelda</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Assets.h">
+      <Filter>Engine\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HALO.h">
+      <Filter>Projects\Halo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cosmic.h">
+      <Filter>Projects\Cosmic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CosmicModel.h">
+      <Filter>Projects\Cosmic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NovaCosmModel.h">
+      <Filter>Projects\Novacosm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NovaCosm.h">
+      <Filter>Projects\Novacosm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GamePads.h">
+      <Filter>Engine\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\MathsForward.h">
+      <Filter>Engine\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\PI.h">
+      <Filter>Engine\Maths\Algebra\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\Exponent.h">
+      <Filter>Engine\Maths\Algebra\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Clamp.h">
+      <Filter>Engine\Maths\Algebra\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Line.h">
+      <Filter>Engine\Maths\Geometry\Line</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PolyMesh.h">
+      <Filter>Engine\Maths\Geometry\PolyMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Warthog.h">
+      <Filter>Projects\Halo\Vehicles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Audio.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Decimator.h">
+      <Filter>Engine\Mesh\Decimator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framebuffer.h">
+      <Filter>Engine\Mesh\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StreamTest.h">
+      <Filter>Projects\StreamTest</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Round.h">
+      <Filter>Engine\Maths\Algebra\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Box.h">
+      <Filter>Engine\Maths\Geometry\Box</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vector3.h">
+      <Filter>Engine\Maths\Algebra\Abstract\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vector2.h">
+      <Filter>Engine\Maths\Algebra\Abstract\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vector4.h">
+      <Filter>Engine\Maths\Algebra\Abstract\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CPUDraw.h">
+      <Filter>Engine\CPUDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MatVecSIMD.h">
+      <Filter>Engine\CPUDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NodeList.h">
+      <Filter>Engine\Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Octree.h">
+      <Filter>Engine\Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PointCloud.h">
+      <Filter>Engine\PointCloud</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SecondStream.h">
+      <Filter>Projects\SecondStream</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NCSCrush.h">
+      <Filter>Projects\Novacosm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Minecraft.h">
+      <Filter>Projects\Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chunk.h">
+      <Filter>Projects\Minecraft\Chunks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BlockTypes.h">
+      <Filter>Projects\Minecraft\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Region.h">
+      <Filter>Projects\Minecraft\Region</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BlockMesher.h">
+      <Filter>Projects\Minecraft\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities.h">
+      <Filter>Projects\Minecraft\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Text.h">
+      <Filter>Engine\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pool.h">
+      <Filter>Engine\Pool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ChunkHandler.h">
+      <Filter>Projects\Minecraft\ChunkHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FaceOptimizer.h">
+      <Filter>Projects\Minecraft\Faces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ChunkInstance.h">
+      <Filter>Projects\Minecraft\Chunks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BlockWorld.h">
+      <Filter>Projects\Minecraft\BlockWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RectPacker.h">
+      <Filter>Engine\Packer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FilePath.h">
+      <Filter>Engine\Strings</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GloriousModel.h">
+      <Filter>Projects\Glorious\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DynamicTextureArrayAtlas.h">
+      <Filter>Engine\Mesh\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FastPack.h">
+      <Filter>Engine\Packer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SortedList.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pokemon.h">
+      <Filter>Projects\Pokemon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Effect Object.h">
+      <Filter>Engine\Mesh\Effect Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RayTracer.h">
+      <Filter>Projects\RayTracer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BTCBot.h">
+      <Filter>Projects\BTCBot</Filter>
+    </ClInclude>
+    <ClInclude Include="src\btcFunctions.h">
+      <Filter>Projects\BTCBot</Filter>
+    </ClInclude>
+    <ClInclude Include="src\btcTypes.h">
+      <Filter>Projects\BTCBot</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{a62dc38b-1a35-4ce5-8b4d-777dcdbe1bb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Controls">
+      <UniqueIdentifier>{715f4729-4dc7-456c-8015-2e54de326cfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\FrameRate">
+      <UniqueIdentifier>{24b86b6f-b844-4f1a-bd23-1317a9d8e80d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Threads">
+      <UniqueIdentifier>{de203050-8bce-4790-b59e-6cc89d81828e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Camera">
+      <UniqueIdentifier>{cd2c19ed-491e-487f-ab1f-e57ecd0d7a88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\File">
+      <UniqueIdentifier>{682a7a2a-4984-4f4a-8e7a-60440bdaa0cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths">
+      <UniqueIdentifier>{2ca61c47-fff9-4980-b8c6-7c90de6f0e06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Buffer">
+      <UniqueIdentifier>{c179883e-c915-4800-8a96-b7b9864b9062}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Mesh">
+      <UniqueIdentifier>{4e99f32b-6470-4459-9b28-b92b11a34cc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Mesh\Render Object">
+      <UniqueIdentifier>{0ef9523c-4b62-419f-b9d9-f7a4877ba2a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Mesh\PolyModel">
+      <UniqueIdentifier>{1ad8da9d-ac03-4ee1-a311-5a0688042bed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Mesh\Render Object\Render Makers">
+      <UniqueIdentifier>{dd17a45b-2fff-40b3-9966-7ccf4ea15ed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Mesh\Importer">
+      <UniqueIdentifier>{35425812-0973-4597-95bd-c55b750abd27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Mesh\Types">
+      <UniqueIdentifier>{6afb484d-60e3-40dc-900c-fe87f3e5559f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Cache">
+      <UniqueIdentifier>{89b63ce8-8881-4c77-80b7-e7142913c966}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Vector">
+      <UniqueIdentifier>{21a1dcb8-2059-4333-8bbb-87ab55a1729e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Strings">
+      <UniqueIdentifier>{db184f61-3f72-4137-970a-a4c918e97aaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Geometry">
+      <UniqueIdentifier>{3d4e8df0-f843-4d00-a288-fbca2776bcd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Algebra">
+      <UniqueIdentifier>{fb4f4c7c-8b0d-4175-b265-b60fea552f84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Algebra\Elementary">
+      <UniqueIdentifier>{b4a2624f-ea9c-44b9-877a-84e309cd0dfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Algebra\Abstract">
+      <UniqueIdentifier>{6a3bfd4b-3b7a-40bd-9c7a-52f6f2184860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Algebra\Abstract\Vector">
+      <UniqueIdentifier>{bf9c65a6-df89-429d-af79-7ce6a78eae81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Algebra\Abstract\Matrix">
+      <UniqueIdentifier>{e74290d9-b5fa-40f0-8cf5-f685cf7cad8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Geometry\Sphere">
+      <UniqueIdentifier>{36a1ce8a-8bbf-4663-b12b-cf5646495a0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Geometry\Plane">
+      <UniqueIdentifier>{6670cd8e-1f09-4b21-a394-1361cf52ce75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Geometry\Triangle">
+      <UniqueIdentifier>{e7ed647d-d86a-4079-af1a-6121e8d4ea75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Geometry\Ray">
+      <UniqueIdentifier>{2f4bf474-17f4-4e92-a29a-52ca4a2c1faa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\RealTimeEngine">
+      <UniqueIdentifier>{fa65cef3-24bb-4992-a7fa-ed0e3bbb9bd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects">
+      <UniqueIdentifier>{65a9e8db-c612-4bf2-b5f5-dd539be1f48c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Glorious">
+      <UniqueIdentifier>{41fdbee5-bb63-4961-9316-14e923171338}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Glorious\Slicer">
+      <UniqueIdentifier>{00f25fdf-3dde-4a50-b5ae-470f08833b3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Glorious\PCF">
+      <UniqueIdentifier>{152ca3d6-e6d6-47e1-a474-c61673019db0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Main">
+      <UniqueIdentifier>{c4daf971-3aff-4c5a-bbd6-7d64855d0cdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Mesh\Textures">
+      <UniqueIdentifier>{fb597423-2165-42cf-8f64-c32fabd2c3b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Mesh\Shaders">
+      <UniqueIdentifier>{e4889515-1467-43e3-b622-7d2fa3a3e84b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Window">
+      <UniqueIdentifier>{1227bc5d-86f8-4265-8b6c-290f2a3aa573}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\File\ImageFile">
+      <UniqueIdentifier>{33457c49-c5f7-4eb0-ab0c-b3481897fcd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\File\StreamFile">
+      <UniqueIdentifier>{38bd8e87-f3c8-42e8-98de-31a52831242e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Glorious\Model">
+      <UniqueIdentifier>{237a4279-f9f8-494c-8bfb-ad12c523996f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Assets">
+      <UniqueIdentifier>{f8efbc43-4ba5-4441-bda9-a2c9785ff6f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Cosmic">
+      <UniqueIdentifier>{83dc95d1-4264-4c45-b16a-b46ad42beca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Novacosm">
+      <UniqueIdentifier>{46f60a41-fb6a-42d6-b9f8-a771a7c2d200}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Halo">
+      <UniqueIdentifier>{2f6d26b8-fd8e-477c-b32d-7786a08a5aed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics">
+      <UniqueIdentifier>{54545a24-3d17-4fe9-97f1-93ecc5c1d7e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Geometry\Line">
+      <UniqueIdentifier>{9ddbe50a-4f04-4866-96b9-179f51718f5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Geometry\PolyMesh">
+      <UniqueIdentifier>{07eebf77-c7c1-42a8-80b7-ccb0a3094c3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Halo\Vehicles">
+      <UniqueIdentifier>{03a2c6dd-40d7-4f97-9251-d2140ea0d0cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio">
+      <UniqueIdentifier>{81b87e11-e089-4483-bf2e-a5c9f4d7a594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Mesh\Decimator">
+      <UniqueIdentifier>{66100221-cc83-4a74-a5fd-96a4bf3bbc36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Mesh\FrameBuffer">
+      <UniqueIdentifier>{695a1d3f-1fdd-48cd-8a30-a67846c1445d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\StreamTest">
+      <UniqueIdentifier>{4b04ce54-9628-474c-955c-1f84d236b9e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Maths\Geometry\Box">
+      <UniqueIdentifier>{edffeb20-fee5-4b1b-87d1-bdfd45589122}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\CPUDraw">
+      <UniqueIdentifier>{2087c5e4-c2b3-4e4f-825c-7fff4c2c3d05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Trees">
+      <UniqueIdentifier>{adfd7ee0-2cce-49ea-98f5-742a6cb2343e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PointCloud">
+      <UniqueIdentifier>{3f3b9038-7c5f-485e-b6fd-987e6becddd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\SecondStream">
+      <UniqueIdentifier>{25a5f980-9d62-4ac0-b31f-c77ec7d3796a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Minecraft">
+      <UniqueIdentifier>{4a08aa40-f2cd-4002-a21e-8bb90d4f2127}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Minecraft\Chunks">
+      <UniqueIdentifier>{df1e2706-84a6-4dc4-accc-4cbfe1fb8d45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Minecraft\Blocks">
+      <UniqueIdentifier>{5a5209ed-e4cc-43cc-b15b-2b7d3d36f006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Minecraft\Region">
+      <UniqueIdentifier>{1fe12200-4d99-464c-827f-e648d20ecc0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Minecraft\BlockWorld">
+      <UniqueIdentifier>{2ac83c84-c9cf-4287-84ff-7a9fbb13be56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Minecraft\Entities">
+      <UniqueIdentifier>{aa13bc5d-0b8b-41f5-9ee8-55373ff4fd6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Text">
+      <UniqueIdentifier>{6720c50e-9f0f-4a5f-a7a4-c92176b36e22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Pool">
+      <UniqueIdentifier>{24d4cf88-d629-46dc-9930-8f35813e7c2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Minecraft\ChunkHandler">
+      <UniqueIdentifier>{6d96e862-48ef-45f2-9555-6ce7d27ff251}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Zelda">
+      <UniqueIdentifier>{96d62b38-45ce-4eb9-ad18-e6827bd1d218}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Minecraft\Faces">
+      <UniqueIdentifier>{37726e95-7173-4a76-adf8-b7d7115dccb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Pokemon">
+      <UniqueIdentifier>{c43126fb-7a48-4a10-b85c-42db6a300385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Mesh\Effect Object">
+      <UniqueIdentifier>{aa2f2f26-27e8-4ef7-8053-d4f56eabdd59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\RayTracer">
+      <UniqueIdentifier>{49eeb0ad-2cdf-413a-b482-d43d63c13f6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Packer">
+      <UniqueIdentifier>{69035b9f-df69-4ea1-8819-87cb33c97692}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\BTCBot">
+      <UniqueIdentifier>{f5b6e919-b3f6-4e5b-a6f2-7189e5cc973c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
