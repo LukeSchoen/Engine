@@ -8,11 +8,11 @@
 #include "Minecraft.h"
 #include "BTCBot.h";
 #include "pokemon.h"
-#include "RayTracer.h"
+#include "DLux.h"
 
 void main() // console entry
 {
-  //RayTracer();
+  DLux();
   //Pokemon();
   //BTCBot();
   //SecondStream();
@@ -22,7 +22,7 @@ void main() // console entry
   //Cosmic();
   //HALO();
   //Minecraft();
-  Zelda();
+  //Zelda();
 }
 
 int wmain(int pc, char* ps){main();} // windows entry

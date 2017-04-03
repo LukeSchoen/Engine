@@ -202,6 +202,12 @@
     <ClCompile Include="src\Effect Object.cpp">
       <Filter>Engine\Buffer</Filter>
     </ClCompile>
+    <ClCompile Include="src\DLux.cpp">
+      <Filter>Projects\RayTracer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RaytracerTypes.cpp">
+      <Filter>Projects\RayTracer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -464,6 +470,12 @@
     </ClInclude>
     <ClInclude Include="src\btcTypes.h">
       <Filter>Projects\BTCBot</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RayTracerTypes.h">
+      <Filter>Projects\RayTracer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DLux.h">
+      <Filter>Projects\RayTracer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
