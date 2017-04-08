@@ -34,8 +34,8 @@ void Zelda()
   mat4 projectionMat;
   projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 1.0f, 50000.0f);
 
-  PolyModel skybox;
-  skybox.LoadModel("../Assets/skybox/skybox.obj");
+  //PolyModel skybox;
+  //skybox.LoadModel("../Assets/skybox/skybox.obj");
 
   window.Swap();
   PolyModel model, model2, lightModel;
@@ -88,7 +88,7 @@ void Zelda()
     skyMVP = projectionMat * Camera::RotationMatrix();
     skyMVP.Transpose();
     glDepthMask(GL_FALSE);
-    skybox.Render(skyMVP);
+    //skybox.Render(skyMVP);
     glDepthMask(GL_TRUE);
 
     mat4 viewMat = Camera::Matrix();

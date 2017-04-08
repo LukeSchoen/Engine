@@ -56,8 +56,6 @@ void Text::DrawText(const char* text, vec2 pos, vec2 size, vec3 color, bool inWo
     //  Zpos = c.y - 1.0;
     //}
 
-
-
     positions[character * 6 + 0] = vec3(Xpos1, Zpos, Ypos1);
     colors[character * 6 + 0] = vec3(color);
     uvs[character * 6 + 0] = vec2(U1, V1);
@@ -88,7 +86,6 @@ void Text::DrawText(const char* text, vec2 pos, vec2 size, vec3 color, bool inWo
 
   mat4 m;
   m.Ortho(-5, 5, -5, 5);
-  //m.Perspective(90, 1, 0.01, 1000);
 
   textMesh->AssignAttribute("position0", GLAttributeType::AT_FLOAT, positions, 3, len * 6);
   textMesh->AssignAttribute("colour0", GLAttributeType::AT_FLOAT, colors, 3, len * 6);

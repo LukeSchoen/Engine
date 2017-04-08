@@ -18,8 +18,8 @@
 void NovaCosm()
 {
   //_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-  Threads::SetFastMode(); // Work in real time mode while loading
-  //Threads::SetSlowMode(); // Don't starve OpenGLs driver while rendering
+  //Threads::SetFastMode(); // Work in real time mode while loading
+  Threads::SetSlowMode(); // Don't starve OpenGLs driver while rendering
   //Convertor::ExportPCFtoNovaCosm("D:/Luke/Programming/Visual Studio/pixelly/Software Tracer/CarrickHill.pcf", "D:/temp/CarrickHillFull.ncs", "D:/temp/export/", 255);
   //Convertor::ExportPCFtoNovaCosm("D:/Luke/Programming/Visual Studio/pixelly/Software Tracer/sorrento.pcf", "D:/temp/sorrento.ncs", "D:/temp/export/", 2048);
   //Convertor::ExportPCFtoNovaCosm("D:/Luke/Programming/Visual Studio/pixelly/Software Tracer/Expressway.pcf", "D:/temp/Expressway.ncs", "D:/temp/export/", 8192);
@@ -28,9 +28,9 @@ void NovaCosm()
 
   Window window("Game", true, 1920, 1080, true); // Create Game Window
 
-  NovaCosmModel model("D:/temp/CarrickHill.ncs");
+  //NovaCosmModel model("D:/temp/CarrickHill.ncs");
   //NovaCosmModel model("C:/temp/map.ncs");
-  //NovaCosmModel model("C:/temp/Colledge.ncs");
+  NovaCosmModel model("D:/temp/Colledge.ncs");
 
   Controls::SetMouseLock(true);
 

@@ -91,8 +91,8 @@ void DLux()
 {
   // Setup Window
   Controls::SetMouseLock(true);
-  //Window window("RayTracer", false, 1200, 600, false);
-  Window window("RayTracer", false, 1920/1.5, 1080/1.5, true);
+  Window window("RayTracer", false, 1200, 600, false);
+  //Window window("RayTracer", false, 1920/1.5, 1080/1.5, true);
 
   {
     // Create Ray tracer

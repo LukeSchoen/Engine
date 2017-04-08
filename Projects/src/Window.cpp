@@ -19,12 +19,12 @@ Window::Window(char * windowTitle /*= "Program"*/, bool OpenGL /*= false*/, int 
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
     glEnable(GL_MULTISAMPLE);
 
+    //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3); // OpenGL 3.1 core
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1); // Anti Aliasing
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-    //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
   }
 
   int windowPos = SDL_WINDOWPOS_UNDEFINED;
@@ -70,7 +70,7 @@ void Window::Swap()
   if (OpenGLEnabled)
   {
     SDL_GL_SwapWindow(window);
-    glFinish();
+    //glFinish();
   }
   else
     SDL_UpdateWindowSurface(window);

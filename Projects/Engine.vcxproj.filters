@@ -208,6 +208,9 @@
     <ClCompile Include="src\RaytracerTypes.cpp">
       <Filter>Projects\RayTracer</Filter>
     </ClCompile>
+    <ClCompile Include="src\OpenGL.cpp">
+      <Filter>Projects\OpenGL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -477,6 +480,12 @@
     <ClInclude Include="src\DLux.h">
       <Filter>Projects\RayTracer</Filter>
     </ClInclude>
+    <ClInclude Include="src\OpenGL.h">
+      <Filter>Projects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EasyTree.h">
+      <Filter>Engine\Trees</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -694,6 +703,9 @@
     </Filter>
     <Filter Include="Projects\BTCBot">
       <UniqueIdentifier>{f5b6e919-b3f6-4e5b-a6f2-7189e5cc973c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\OpenGL">
+      <UniqueIdentifier>{e6921447-0113-4ad8-84c4-d1e2ccde187c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

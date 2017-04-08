@@ -60,7 +60,6 @@ protected:
 
   unsigned int vertexCount = 0;
 
-
   char *vertShaderPath = nullptr;
   char *fragShaderPath = nullptr;
   char *geomShaderPath = nullptr;

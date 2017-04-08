@@ -18,6 +18,13 @@ void SceneAddMesh(aiMesh *mesh, aiMatrix4x4 transformationMatrix)
       unsigned int index = mesh->mFaces[faceItr].mIndices;
       unsigned int material = mesh->mMaterialIndex;
       unsigned int *indicies = mesh->mIndices + index;
+      if (mesh->mNumIndices == 0)
+      {
+        indicies = new unsigned int[mesh->mNumVertices];
+        for (int i = 0; i < mesh->mNumVertices; i++)
+          indicies[i] = i;
+      }
+      //mesh->mNumIndices
       vertex verticies[3];
       if (mesh->mFaces[faceItr].mNumIndices == 3)
       {
@@ -37,6 +44,8 @@ void SceneAddMesh(aiMesh *mesh, aiMatrix4x4 transformationMatrix)
         }
         modelData.push_back(face(verticies[0], verticies[1], verticies[2], material));
       }
+      if (mesh->mNumIndices == 0)
+        delete[] indicies;
     }
   }
 }

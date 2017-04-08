@@ -9,10 +9,11 @@
 #include "BTCBot.h";
 #include "pokemon.h"
 #include "DLux.h"
+#include "OpenGL.h"
 
 void main() // console entry
 {
-  DLux();
+  //DLux();
   //Pokemon();
   //BTCBot();
   //SecondStream();
@@ -23,6 +24,7 @@ void main() // console entry
   //HALO();
   //Minecraft();
   //Zelda();
+  OpenGL();
 }
 
 int wmain(int pc, char* ps){main();} // windows entry

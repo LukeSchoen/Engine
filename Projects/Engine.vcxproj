@@ -65,6 +65,7 @@
     <ClCompile Include="src\NovaCosm.cpp" />
     <ClCompile Include="src\NovaCosmModel.cpp" />
     <ClCompile Include="src\Octree.cpp" />
+    <ClCompile Include="src\OpenGL.cpp" />
     <ClCompile Include="src\PointCloud.cpp" />
     <ClCompile Include="src\pokemon.cpp" />
     <ClCompile Include="src\PolyMesh.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="src\CPUDraw.h" />
     <ClInclude Include="src\Decimator.h" />
     <ClInclude Include="src\DynamicTextureArrayAtlas.h" />
+    <ClInclude Include="src\EasyTree.h" />
     <ClInclude Include="src\Effect Object.h" />
     <ClInclude Include="src\Entities.h" />
     <ClInclude Include="src\FaceOptimizer.h" />
@@ -155,6 +157,7 @@
     <ClInclude Include="src\NovaCosm.h" />
     <ClInclude Include="src\NovaCosmModel.h" />
     <ClInclude Include="src\Octree.h" />
+    <ClInclude Include="src\OpenGL.h" />
     <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\PointCloud.h" />
     <ClInclude Include="src\pokemon.h" />

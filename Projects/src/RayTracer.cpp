@@ -70,7 +70,7 @@ void RayTracer::Draw()
     bool ready = true;
     for (int t = 0; t < threadCount; t++) if (!doneArray[t]) ready = false;
     if (ready) break;
-    Sleep(0);
+    //Sleep(0);
   }
 }
 

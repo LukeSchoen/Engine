@@ -62,10 +62,10 @@ void SecondStream()
 
   CPURenderer renderer;
 
-  PointCloud pc("c:/temp/map.pcf"); // Open Point Cloud
+  PointCloud pc("d:/temp/map.pcf"); // Open Point Cloud
   pc.pointCount = 1000000;
   Octree model(pc); // Create Octree
-  model.SaveFile("c:/temp/fullmodel.oct");
+  model.SaveFile("d:/temp/fullmodel.oct");
   //Octree model("c:/temp/fullmodel.oct");
 
   // Create software depth buffer

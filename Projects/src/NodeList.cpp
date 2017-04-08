@@ -2,13 +2,14 @@
 #include "Maths.h"
 #include <malloc.h>
 #include <stdio.h>
+#include "StreamFile.h"
 
 void NodeList::Reallocate(uint32_t newMaxNodeCount)
 {
   if (newMaxNodeCount > MaxNodeCount)
   {
     Children = (Node*)realloc(Children, newMaxNodeCount * sizeof(Node));
-    Colors = (Color*)realloc(Colors, newMaxNodeCount * sizeof(Color));
+    Colors = (uint32_t*)realloc(Colors, newMaxNodeCount * sizeof(uint32_t));
     FreeNodes = (Node*)realloc(FreeNodes, newMaxNodeCount * sizeof(Node));
     // Add these newly created nodes to the free node list
     for (uint32_t i = MaxNodeCount; i < newMaxNodeCount; i++)
@@ -21,7 +22,7 @@ void NodeList::Reallocate(uint32_t newMaxNodeCount)
   }
 }
 
-Node NodeList::CreateNode(Node child, Color color)
+Node NodeList::CreateNode(Node child, uint32_t color)
 {
   if (NodeCount + 16 >= MaxNodeCount) // check if we need more space
   {
@@ -45,39 +46,33 @@ void NodeList::DeleteNode(Node location)
   NodeCount--;
 }
 
-void NodeList::SaveFile(const char* filePath)
+void NodeList::SaveFile(StreamFileWriter *stream)
 {
-  FILE* f = fopen(filePath, "wb");
-  if (!f) return;
   //Header
-  fwrite(&NodeCount, sizeof(NodeCount), 1, f);
-  fwrite(&MaxNodeCount, sizeof(MaxNodeCount), 1, f);
-  fwrite(&FreeNodeHead, sizeof(FreeNodeHead), 1, f);
-  fwrite(&FreeNodeCount, sizeof(FreeNodeCount), 1, f);
+  stream->WriteBytes(&NodeCount, sizeof(NodeCount));
+  stream->WriteBytes(&MaxNodeCount, sizeof(MaxNodeCount));
+  stream->WriteBytes(&FreeNodeHead, sizeof(FreeNodeHead));
+  stream->WriteBytes(&FreeNodeCount, sizeof(FreeNodeCount));
   //Data
-  fwrite(Colors, sizeof(Color), MaxNodeCount, f);
-  fwrite(Children, sizeof(Node), MaxNodeCount, f);
-  fwrite(FreeNodes, sizeof(Node), MaxNodeCount, f);
-  fclose(f);
+  stream->WriteBytes(Colors, sizeof(uint32_t) * MaxNodeCount);
+  stream->WriteBytes(Children, sizeof(Node) * MaxNodeCount);
+  stream->WriteBytes(FreeNodes, sizeof(Node) * MaxNodeCount);
 }
 
-void NodeList::LoadFile(const char* filePath)
+void NodeList::LoadFile(StreamFileReader *stream)
 {
-  FILE* f = fopen(filePath, "rb");
-  if (!f) return;
   //Header
-  fread(&NodeCount, sizeof(NodeCount), 1, f);
-  fread(&MaxNodeCount, sizeof(MaxNodeCount), 1, f);
-  fread(&FreeNodeHead, sizeof(FreeNodeHead), 1, f);
-  fread(&FreeNodeCount, sizeof(FreeNodeCount), 1, f);
+  stream->ReadBytes(&NodeCount, sizeof(NodeCount));
+  stream->ReadBytes(&MaxNodeCount, sizeof(MaxNodeCount));
+  stream->ReadBytes(&FreeNodeHead, sizeof(FreeNodeHead));
+  stream->ReadBytes(&FreeNodeCount, sizeof(FreeNodeCount));
 
+  Colors = (uint32_t*)realloc(Colors, MaxNodeCount * sizeof(uint32_t));
   Children = (Node*)realloc(Children, MaxNodeCount * sizeof(Node));
-  Colors = (Color*)realloc(Colors, MaxNodeCount * sizeof(Color));
   FreeNodes = (Node*)realloc(FreeNodes, MaxNodeCount * sizeof(Node));
 
   //Data
-  fread(Colors, sizeof(Color), MaxNodeCount, f);
-  fread(Children, sizeof(Node), MaxNodeCount, f);
-  fread(FreeNodes, sizeof(Node), MaxNodeCount, f);
-  fclose(f);
+  stream->ReadBytes(Colors, sizeof(uint32_t) * MaxNodeCount);
+  stream->ReadBytes(Children, sizeof(Node) * MaxNodeCount);
+  stream->ReadBytes(FreeNodes, sizeof(Node) * MaxNodeCount);
 }

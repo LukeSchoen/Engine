@@ -1,6 +1,7 @@
 #include "Octree.h"
 #include "Maths.h"
 #include <limits.h>
+#include "StreamFile.h"
 
 void RecursiveAddVoxel(Octree &tree, Node node, uint32_t color, int targetX, int targetY, int targetZ, int curX, int curY, int curZ, int targetLayer, int curLayer)
 {
@@ -48,7 +49,7 @@ void RecursiveAddVoxel(Octree &tree, Node node, uint32_t color, int targetX, int
   return RecursiveAddVoxel(tree, node, color, targetX, targetY, targetZ, curX + midsize * (targetX >= midX), curY + midsize * (targetY >= midY), curZ + midsize * (targetZ >= midZ), targetLayer, curLayer);
 };
 
-Octree::Octree(int8_t treeDepth, Color color)
+Octree::Octree(int8_t treeDepth, uint32_t color)
 {
   depth = treeDepth;
   root = nodes.CreateNode(0, color);
@@ -100,6 +101,11 @@ Node Octree::RootNode()
   return root;
 }
 
+uint8_t Octree::Depth()
+{
+  return depth;
+}
+
 void Octree::Split(Node node)
 {
   if (IsLeaf(node))
@@ -125,7 +131,23 @@ Node Octree::GetChild(Node node, int childIndex) const
     return child + childIndex;
 }
 
-Color Octree::GetColor(Node node) const
+Node Octree::GetChild(Node node, int childIndex, vec3 *position, int layer) const
+{
+  Node child = nodes.Children[node];
+  if (child == 0)
+    return node;
+  else
+  {
+    float layerSize = 1.0f / (1LL << layer);
+    uint8_t xoff = childIndex & 1;
+    uint8_t yoff = (childIndex >> 1) & 1;
+    uint8_t zoff = (childIndex >> 2) & 1;
+    *position += vec3(xoff * layerSize, yoff * layerSize, zoff * layerSize);
+    return child + childIndex;
+  }
+}
+
+uint32_t Octree::GetColor(Node node) const
 {
   return nodes.Colors[node];
 }
@@ -135,7 +157,7 @@ void Octree::SetChild(Node node, Node child)
   nodes.Children[node] = child;
 }
 
-void Octree::SetColor(Node node, Color color)
+void Octree::SetColor(Node node, uint32_t color)
 {
   nodes.Colors[node] = color;
 }
@@ -160,11 +182,15 @@ void Octree::AddVoxel(uint32_t Color, int Xpos, int Ypos, int Zpos)
 
 void Octree::SaveFile(const char* filePath)
 {
-  nodes.SaveFile(filePath);
+  StreamFileWriter stream(filePath);
+  //stream.WriteBytes(&depth, sizeof(depth));
+  nodes.SaveFile(&stream);
 }
 
 void Octree::LoadFile(const char* filePath)
 {
-  nodes.LoadFile(filePath);
+  StreamFileReader stream(filePath);
+  //stream.ReadBytes(&depth, sizeof(depth));
+  nodes.LoadFile(&stream);
   root = 0;
 }

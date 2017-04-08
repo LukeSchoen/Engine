@@ -62,7 +62,7 @@ void Minecraft()
   projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 0.1f, 4096.0f);
 
   PolyModel skybox;
-  skybox.LoadModel("../Assets/skybox/skybox.obj");
+  skybox.LoadModel(ASSETDIR "/skybox/skybox.obj");
   //Textures::SetTextureFilterMode(false);
 
   // Create World

@@ -74,6 +74,7 @@ void *StreamFileReader::ReadBytes(int64_t a_requestSize, int64_t *a_bytesRead)
     m_bufferSize = a_requestSize;
     free(m_buffer);
     m_buffer = malloc(m_bufferSize);
+    m_bufferHead = 0;
   }
   if (m_bufferHead + a_requestSize > m_bufferSize) m_bufferHead = 0; // request more data
   if (m_bufferHead == 0) fread(m_buffer, 1, m_bufferSize, m_pFile); // Read Data
