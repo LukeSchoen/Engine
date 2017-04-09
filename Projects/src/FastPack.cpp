@@ -20,7 +20,7 @@ struct Node
 
     steps++;
     if (full || rect.width > myRect.width || rect.height > myRect.height) return nullptr;
-     if (fails > 4) full = true; // this node just sucks!
+    // if (fails > 4) full = true; // this node just sucks!
     if (left)
     {
       Node *node = left->AddRect(rect);
@@ -112,7 +112,7 @@ bool FastPacker::InsertRect(Rect &rect)
   all++;
   if (all == 512)
   {
-    printf("--------------- %d\n", avg / all);
+    //printf("--------------- %d\n", avg / all);
     all = 0;
     avg = 0;
   }

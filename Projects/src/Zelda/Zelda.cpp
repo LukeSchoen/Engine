@@ -52,7 +52,7 @@ void Zelda()
   mat4 modelMat;
   Shaders::Report();
 
-  float superSample = 2;
+  float superSample = 3;
 
    // Frame buffering
   BufferObject worldDiffuseDetail(window.width * superSample, window.height * superSample);

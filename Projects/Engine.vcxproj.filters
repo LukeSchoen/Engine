@@ -211,6 +211,15 @@
     <ClCompile Include="src\OpenGL.cpp">
       <Filter>Projects\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\LogicMonday.cpp">
+      <Filter>Engine\LogicMonday</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Insight.cpp">
+      <Filter>Engine\LogicMonday</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Compression.cpp">
+      <Filter>Projects\Compression</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -486,6 +495,15 @@
     <ClInclude Include="src\EasyTree.h">
       <Filter>Engine\Trees</Filter>
     </ClInclude>
+    <ClInclude Include="src\LogicMonday.h">
+      <Filter>Engine\LogicMonday</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Insight.h">
+      <Filter>Engine\LogicMonday</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Compression.h">
+      <Filter>Projects\Compression</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -706,6 +724,12 @@
     </Filter>
     <Filter Include="Projects\OpenGL">
       <UniqueIdentifier>{e6921447-0113-4ad8-84c4-d1e2ccde187c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\LogicMonday">
+      <UniqueIdentifier>{36d88d8e-ed99-49bb-9056-65becbb4139a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Compression">
+      <UniqueIdentifier>{48fe5076-fa04-46d9-a8e7-be0c8ed74bc5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

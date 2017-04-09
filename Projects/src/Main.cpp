@@ -10,6 +10,7 @@
 #include "pokemon.h"
 #include "DLux.h"
 #include "OpenGL.h"
+#include "Compression.h"
 
 void main() // console entry
 {
@@ -24,7 +25,8 @@ void main() // console entry
   //HALO();
   //Minecraft();
   //Zelda();
-  OpenGL();
+  //OpenGL();
+  Compression();
 }
 
 int wmain(int pc, char* ps){main();} // windows entry

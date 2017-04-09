@@ -157,6 +157,7 @@ private:
 
   GloriousBlock *LoadBlock(int64_t discLocation)
   {
+    printf("Loading Block\n");
     // CPU
     GloriousBlock *block = new GloriousBlock;
     block->discLocation = discLocation;
@@ -268,9 +269,12 @@ private:
 
     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 1);
     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 2);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 2, 32);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 4);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 16);
+    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 3);
+    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 4);
+     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 5);
+     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 6);
+     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 7);
+     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 8);
 
     //printf("built block\n");
     std::vector<int> tiles;

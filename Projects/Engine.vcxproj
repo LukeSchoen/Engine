@@ -24,6 +24,7 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Chunk.cpp" />
     <ClCompile Include="src\ChunkHandler.cpp" />
+    <ClCompile Include="src\Compression.cpp" />
     <ClCompile Include="src\Controls.cpp" />
     <ClCompile Include="src\Cosmic.cpp" />
     <ClCompile Include="src\CosmicModel.cpp" />
@@ -41,6 +42,8 @@
     <ClCompile Include="src\Glorious\LeastRects.cpp" />
     <ClCompile Include="src\GamePads.cpp" />
     <ClCompile Include="src\HALO.cpp" />
+    <ClCompile Include="src\Insight.cpp" />
+    <ClCompile Include="src\LogicMonday.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\math\Exponent.cpp" />
     <ClCompile Include="src\Math\Maths.cpp" />
@@ -104,6 +107,7 @@
     <ClInclude Include="src\Chunk.h" />
     <ClInclude Include="src\ChunkHandler.h" />
     <ClInclude Include="src\ChunkInstance.h" />
+    <ClInclude Include="src\Compression.h" />
     <ClInclude Include="src\Controls.h" />
     <ClInclude Include="src\Cosmic.h" />
     <ClInclude Include="src\CosmicModel.h" />
@@ -127,8 +131,10 @@
     <ClInclude Include="src\GloriousModel.h" />
     <ClInclude Include="src\GamePads.h" />
     <ClInclude Include="src\HALO.h" />
+    <ClInclude Include="src\Insight.h" />
     <ClInclude Include="src\Line.h" />
     <ClInclude Include="src\DLux.h" />
+    <ClInclude Include="src\LogicMonday.h" />
     <ClInclude Include="src\Math\Clamp.h" />
     <ClInclude Include="src\math\Exponent.h" />
     <ClInclude Include="src\Math\Maths.h" />

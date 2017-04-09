@@ -55,7 +55,7 @@ Octree::Octree(int8_t treeDepth, uint32_t color)
   root = nodes.CreateNode(0, color);
 }
 
-Octree::Octree(PointCloud &pc)
+Octree::Octree(PointCloud &pc) 
 {
   if (pc.pointCount == 0) return;
 
@@ -180,17 +180,30 @@ void Octree::AddVoxel(uint32_t Color, int Xpos, int Ypos, int Zpos)
   RecursiveAddVoxel(*this, RootNode(), Color, Xpos, Ypos, Zpos, 0, 0, 0, depth, 0);
 }
 
+
 void Octree::SaveFile(const char* filePath)
 {
-  StreamFileWriter stream(filePath);
-  //stream.WriteBytes(&depth, sizeof(depth));
-  nodes.SaveFile(&stream);
+  nodes.SaveFile(filePath);
 }
 
 void Octree::LoadFile(const char* filePath)
 {
-  StreamFileReader stream(filePath);
-  //stream.ReadBytes(&depth, sizeof(depth));
-  nodes.LoadFile(&stream);
+  nodes.LoadFile(filePath);
   root = 0;
 }
+
+
+//void Octree::SaveFile(const char* filePath)
+//{
+//  StreamFileWriter stream(filePath);
+//  //stream.WriteBytes(&depth, sizeof(depth));
+//  nodes.SaveFile(&stream);
+//}
+//
+//void Octree::LoadFile(const char* filePath)
+//{
+//  StreamFileReader stream(filePath);
+//  //stream.ReadBytes(&depth, sizeof(depth));
+//  nodes.LoadFile(&stream);
+//  root = 0;
+//}

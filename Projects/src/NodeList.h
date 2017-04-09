@@ -4,20 +4,18 @@
 #include "stdint.h"
 
 typedef uint32_t Node;
-
-struct StreamFileWriter;
-struct StreamFileReader;
+typedef uint32_t Color;
 
 struct NodeList
 {
 public:
   uint32_t NodeCount = 0;
-  uint32_t *Colors = nullptr;
+  Color *Colors = nullptr;
   Node *Children = nullptr;
-  Node CreateNode(Node child, uint32_t color);
+  Node CreateNode(Node child, Color color);
   void DeleteNode(Node node);
-  void SaveFile(StreamFileWriter *stream);
-  void LoadFile(StreamFileReader *stream);
+  void SaveFile(const char* filePath);
+  void LoadFile(const char* filePath);
 private:
   Node *FreeNodes = nullptr;
   uint32_t FreeNodeCount = 0;

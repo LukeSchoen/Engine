@@ -29,9 +29,6 @@ void Pokemon()
   mat4 projectionMat;
   projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 50.0f, 50000.0f);
 
-  PolyModel skybox;
-  skybox.LoadModel("../Assets/skybox/skybox.obj");
-
   window.Swap();
   PolyModel model;
   //model.LoadModel("../Assets/Hyrule Map/Over_World.obj");
@@ -66,7 +63,7 @@ void Pokemon()
     skyMVP = projectionMat * Camera::RotationMatrix();
     skyMVP.Transpose();
     glDepthMask(GL_FALSE);
-    skybox.Render(skyMVP);
+    //skybox.Render(skyMVP);
     glDepthMask(GL_TRUE);
 
     mat4 viewMat = Camera::Matrix();
