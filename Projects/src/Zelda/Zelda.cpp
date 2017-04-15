@@ -26,69 +26,77 @@ void Zelda()
   Window window("Game", true, 1920, 1080, true); // Create Game Window
 #endif
 
-  RenderObject *meshes;
-  int64_t meshCount;
 
   Controls::SetMouseLock(true);
 
   mat4 projectionMat;
   projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 1.0f, 50000.0f);
 
-  //PolyModel skybox;
-  //skybox.LoadModel("../Assets/skybox/skybox.obj");
+  PolyModel skybox;
+  skybox.LoadModel(ASSETDIR "skybox/skybox.obj");
 
   window.Swap();
-  PolyModel model, model2, lightModel;
+  PolyModel hyruleColorModel, hyruleLightModel;
 
-  //model.LoadModel("../Assets/Hyrule Map/Over_World.obj");
-  model.LoadModel(ASSETDIR "zelda/Hyrule/Diffuse/Hyrule.obj");
-  model2.LoadModel(ASSETDIR "zelda/Hyrule/Diffuse/Hyrule.obj");
-  lightModel.LoadModel(ASSETDIR "zelda/Hyrule/light2/Hyrule.obj");
+  hyruleColorModel.LoadModel("C:/Users/Luke/Desktop/Test/Test.dae");
+  //hyruleColorModel.LoadModel(ASSETDIR "zelda/Hyrule/Color/Hyrule.obj");
+  hyruleLightModel.LoadModel(ASSETDIR "zelda/Hyrule/Light/Hyrule.obj");
 
-  model2.GetMeshData(&meshCount, &meshes);
+  PolyMesh hyruleCollisionMesh;
+
+  RenderObject *meshes;
+  int64_t meshCount;
+  hyruleColorModel.GetMeshData(&meshCount, &meshes);
+  for (int m = 0; m < meshCount; m++)
+  {
+    int64_t vertexCount;
+    const void *posData;
+    meshes[m].AccessAttribute("position0", &vertexCount, nullptr, nullptr, &posData);
+    vec3 *verts = (vec3*)posData;
+    for (int i = 0; i < vertexCount / 3; i++)
+      hyruleCollisionMesh.AddTriangle(Triangle(verts[i * 3 + 0], verts[i * 3 + 1], verts[i * 3 + 2]));
+  }
+
   for (int m = 0; m < meshCount; m++)
     meshes[m].AssignShader(SHADERDIR "TexturedRenderObject.vert", ASSETDIR "zelda/shaders/Detail.frag");
 
   mat4 modelMat;
   Shaders::Report();
 
-  float superSample = 3;
+  float superSample = 1;
 
    // Frame buffering
-  BufferObject worldDiffuseDetail(window.width * superSample, window.height * superSample);
-  model2.GetMeshData(&meshCount, &meshes); for (int m = 0; m < meshCount; m++) worldDiffuseDetail.AddRenderObject(&meshes[m]);
-  worldDiffuseDetail.AddBuffer("fragColor");
+  BufferObject hyruleColorBuffer(window.width * superSample, window.height * superSample);
+  hyruleColorBuffer.AddPolyModel(&hyruleColorModel);
+  hyruleColorBuffer.AddBuffer("fragColor");
 
-  BufferObject worldDiffuse(window.width * superSample, window.height * superSample);
-  model.GetMeshData(&meshCount, &meshes); for (int m = 0; m < meshCount; m++) worldDiffuse.AddRenderObject(&meshes[m]);
-  worldDiffuse.AddBuffer("fragColor");
-
-  BufferObject worldLight(window.width  * superSample, window.height * superSample);
-  lightModel.GetMeshData(&meshCount, &meshes); for (int m = 0; m < meshCount; m++) worldLight.AddRenderObject(&meshes[m]);
-  worldLight.AddBuffer("fragColor");
+  BufferObject hyruleLightBuffer(window.width  * superSample, window.height * superSample);
+  hyruleLightBuffer.AddPolyModel(&hyruleLightModel);
+  hyruleLightBuffer.AddBuffer("fragColor");
 
   RenderObject *finalRenderObject = FullScreenQuad(ASSETDIR "Zelda/shaders/lighting.frag");
   BufferObject finalRenderBuffer(window.width, window.height);
-  finalRenderObject->AssignTexture("texture0", worldDiffuseDetail.GetBuffer("fragColor"));
-  finalRenderObject->AssignTexture("texture1", worldLight.GetBuffer("fragColor"));
+  finalRenderObject->AssignTexture("texture0", hyruleColorBuffer.GetBuffer("fragColor"));
+  finalRenderObject->AssignTexture("texture1", hyruleLightBuffer.GetBuffer("fragColor"));
   finalRenderBuffer.AddRenderObject(finalRenderObject);
   finalRenderBuffer.AddBuffer("fragColor");
-
 
   Threads::SetSlowMode(); // Don't starve OpenGLs driver while rendering
 
   while (Controls::Update()) // Main Game Loop
   {
     window.Clear(0, 190, 255);
+
+    vec3 oldCamPos = Camera::Position();
     Camera::Update(60);
+    Camera::SetPosition(hyruleCollisionMesh.SlideSweepSphere(Sphere(oldCamPos), Camera::Position() - oldCamPos));
 
     // Skybox
-    //Textures::SetTextureMode(false);
     mat4 skyMVP;
     skyMVP = projectionMat * Camera::RotationMatrix();
     skyMVP.Transpose();
     glDepthMask(GL_FALSE);
-    //skybox.Render(skyMVP);
+    skybox.Render(skyMVP);
     glDepthMask(GL_TRUE);
 
     mat4 viewMat = Camera::Matrix();
@@ -98,34 +106,26 @@ void Zelda()
     MVP = projectionMat * viewMat * modelMat;
     MVP.Transpose();
 
-    //superSampler.Render(MVP);
+    // Create Hyrule color buffer
+    float useDetail = 1;
+    if (!Controls::KeyDown(SDL_SCANCODE_1)) useDetail = 0;
+    hyruleColorModel.GetMeshData(&meshCount, &meshes); for (int m = 0; m < meshCount; m++) meshes[m].AssignUniform("useDetail", UT_1f, &useDetail);
+    hyruleColorBuffer.Render(MVP);
 
-    // Render World
-    if (Controls::KeyDown(SDL_SCANCODE_1))
-      worldDiffuse.Render(MVP);
-    worldDiffuseDetail.Render(MVP);
+    // Create Hyrule light buffer
     modelMat.LoadIdentity();
     modelMat.RotateX(270 * DegsToRads);
     MVP = projectionMat * viewMat * modelMat;
     MVP.Transpose();
-    if (!Controls::KeyDown(SDL_SCANCODE_1))
-      worldLight.Render(MVP);
+    hyruleLightBuffer.Render(MVP);
 
-    //BufferObject::DisplayFullscreenTexture(worldDiffuseDetail.GetBuffer("fragColor"));
     mat4 identity;
     finalRenderBuffer.Render(identity);
 
-    if (Controls::KeyDown(SDL_SCANCODE_1))
-      BufferObject::DisplayFullscreenTexture(worldDiffuse.GetBuffer("fragColor"));
-    if (Controls::KeyDown(SDL_SCANCODE_2))
-      BufferObject::DisplayFullscreenTexture(worldLight.GetBuffer("fragColor"));
-    else
-      BufferObject::DisplayFullscreenTexture(finalRenderBuffer.GetBuffer("fragColor"));
+    BufferObject::DisplayFullscreenTexture(finalRenderBuffer.GetBuffer("fragColor"));
 
     // Render Everything
     window.Swap(); // Swap Window
     FrameRate::Update();
   }
-
-  //model.Destroy();
 }

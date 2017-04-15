@@ -42,7 +42,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @file  cexport.h
 *  @brief Defines the C-API for the Assimp export interface
 */
-#pragma once
 #ifndef AI_EXPORT_H_INC
 #define AI_EXPORT_H_INC
 

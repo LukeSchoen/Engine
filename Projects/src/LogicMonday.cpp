@@ -215,4 +215,3 @@ void InsightScore::Clear()
 {
   memset(cases, 0, sizeof(cases));
 }
-

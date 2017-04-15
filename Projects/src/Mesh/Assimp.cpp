@@ -15,15 +15,8 @@ void SceneAddMesh(aiMesh *mesh, aiMatrix4x4 transformationMatrix)
   {
     if (mesh->HasPositions())
     {
-      unsigned int index = mesh->mFaces[faceItr].mIndices;
       unsigned int material = mesh->mMaterialIndex;
-      unsigned int *indicies = mesh->mIndices + index;
-      if (mesh->mNumIndices == 0)
-      {
-        indicies = new unsigned int[mesh->mNumVertices];
-        for (int i = 0; i < mesh->mNumVertices; i++)
-          indicies[i] = i;
-      }
+      unsigned int *indicies = mesh->mFaces[faceItr].mIndices;
       //mesh->mNumIndices
       vertex verticies[3];
       if (mesh->mFaces[faceItr].mNumIndices == 3)
@@ -44,8 +37,6 @@ void SceneAddMesh(aiMesh *mesh, aiMatrix4x4 transformationMatrix)
         }
         modelData.push_back(face(verticies[0], verticies[1], verticies[2], material));
       }
-      if (mesh->mNumIndices == 0)
-        delete[] indicies;
     }
   }
 }
@@ -72,7 +63,7 @@ AssimpModel AssimpLoadModel(const char *filePath)
   Assimp::Importer importer;
   const aiScene *pScene;
   aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
-  pScene = importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_GenNormals | aiProcess_GenSmoothNormals | aiProcess_PreTransformVertices | aiProcess_TransformUVCoords);
+  pScene = importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_GenUVCoords );
   
   // Parse Materials & textures
   int texCount = pScene->mNumMaterials;

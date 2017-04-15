@@ -13,6 +13,7 @@
 #include "Physics.h"
 #include "Warthog.h"
 #include "Audio.h"
+#include "Assets.h"
 
 extern bool camFollowCar;
 
@@ -25,13 +26,12 @@ void HALO()
   if (SDL_GL_SetSwapInterval(-1) == -1)
     SDL_GL_SetSwapInterval(1);
 
-  Audio::PlayMP3("../Assets/HALO/Blood Gulch Ambient Noise.mp3", 500, "BloodGulch", true);
-  Audio::PlayMP3("../Assets/HALO/Engine.mp3", 0, "Engine", true);
+  Audio::PlayMP3(ASSETDIR "HALO/Blood Gulch Ambient Noise.mp3", 500, "BloodGulch", true);
+  Audio::PlayMP3(ASSETDIR "HALO/Engine.mp3", 0, "Engine", true);
 
   PolyModel map;
-  map.LoadModel("../Assets/HALO/BloodGulge.dae");
-  //map.LoadModel("C:\\Users\\Administrator\\Desktop\\map.dae", true);
-  //map.LoadModel("C:\\Users\\Administrator\\Desktop\\terrain.dae", true);
+  map.LoadModel(ASSETDIR "HALO/BloodGulge.dae");
+
   PolyMesh mapCollider;
   int64_t meshCount = 0;
   RenderObject *meshs;
@@ -47,7 +47,7 @@ void HALO()
   }
 
   PolyModel pistol;
-  pistol.LoadModel("../Assets/HALO/Pistol.dae");
+  pistol.LoadModel(ASSETDIR "HALO/Pistol.dae");
 
 
   PolyModel dirtShrapnelModel;
@@ -184,7 +184,7 @@ void HALO()
       modelMat.RotateZ(0 - gunRot.x - 0 * DegsToRads);
       MVP = projectionMat * viewMat * modelMat;
       MVP.Transpose();
-      pistol.Render(MVP);
+      //pistol.Render(MVP);
     }
 
     // Car

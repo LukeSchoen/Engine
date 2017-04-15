@@ -36,17 +36,20 @@ void Pokemon()
   mat4 modelMat;
   Shaders::Report();
 
-  TexturedRenderObjectMaker maker;
-  maker.AddVertex(vec3(-1, -1, -1), vec2(0, 0));
-  maker.AddVertex(vec3(1, -1, -1), vec2(1, 0));
-  maker.AddVertex(vec3(1, 1, -1), vec2(1, 1));
-  maker.AddVertex(vec3(1, 1, -1), vec2(1, 1));
-  maker.AddVertex(vec3(-1, 1, -1), vec2(0, 1));
-  maker.AddVertex(vec3(-1, -1, -1), vec2(0, 0));
-  maker.SetTexture("C:/Luke/Programming/Engine/Assets/HALO/BloodGulge/Grass.jpg");
-  RenderObject *mesh = maker.AssembleRenderObject();
+//   TexturedRenderObjectMaker maker;
+//   maker.AddVertex(vec3(-1, -1, -1), vec2(0, 0));
+//   maker.AddVertex(vec3(1, -1, -1), vec2(1, 0));
+//   maker.AddVertex(vec3(1, 1, -1), vec2(1, 1));
+//   maker.AddVertex(vec3(1, 1, -1), vec2(1, 1));
+//   maker.AddVertex(vec3(-1, 1, -1), vec2(0, 1));
+//   maker.AddVertex(vec3(-1, -1, -1), vec2(0, 0));
+//   maker.SetTexture("C:/Luke/Programming/Engine/Assets/HALO/BloodGulge/Grass.jpg");
+//   RenderObject *mesh = maker.AssembleRenderObject();
 
-  mesh->AssignShader(ASSETDIR "Pokemon/Shaders/pokemon.vert", ASSETDIR "Pokemon/Shaders/pokemon.frag", ASSETDIR "Pokemon/Shaders/pokemon.geom");
+  PolyModel sword;
+  sword.LoadModel(ASSETDIR "sword/sword.obj");
+
+  //mesh->AssignShader(ASSETDIR "Pokemon/Shaders/pokemon.vert", ASSETDIR "Pokemon/Shaders/pokemon.frag", ASSETDIR "Pokemon/Shaders/pokemon.geom");
 
   Threads::SetSlowMode(); // Don't starve OpenGLs driver while rendering
 
@@ -77,7 +80,8 @@ void Pokemon()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //model.Render(MVP);
     //mesh->Render(MVP);
-    mesh->RenderPoints(MVP);
+    //mesh->RenderPoints(MVP);
+    sword.Render(MVP);
 
     window.Swap(); // Swap Window
     FrameRate::Update();

@@ -38,14 +38,12 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
-#pragma once
 
 /** @file scene.h
  *  @brief Defines the data structures in which the imported scene is returned.
  */
-#pragma once
-#ifndef AI_SCENE_H_INC
-#define AI_SCENE_H_INC
+#ifndef __AI_SCENE_H_INC__
+#define __AI_SCENE_H_INC__
 
 #include "types.h"
 #include "texture.h"
@@ -427,4 +425,4 @@ struct aiScene
 } //! namespace Assimp
 #endif
 
-#endif // AI_SCENE_H_INC
+#endif // __AI_SCENE_H_INC__

@@ -8,6 +8,7 @@
 #include "SDL_opengl.h"
 #include "Framebuffer.h"
 #include "Shaders.h"
+#include "PolyModel.h"
 
 class BufferObject
 {
@@ -16,6 +17,7 @@ public:
 
   void Reset();
   void AddRenderObject(RenderObject *ro);
+  void AddPolyModel(PolyModel *pm);
   void AddBuffer(const char *name);
   void DelBuffer(const char *name);
   GLint GetBuffer(const char *name);

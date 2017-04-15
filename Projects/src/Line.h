@@ -15,7 +15,7 @@ struct Line
     vec3 line = end - start;
     float len = line.Length();
     line = line / len;
-    double t = line.DotProduct(point - start);
+    float t = line.DotProduct(point - start);
     if (t < 0.0f) return (start); // T is before line start
     if (t > len) return (end); // T is after line end
     return (start + line * t); // T is within the line segment

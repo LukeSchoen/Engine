@@ -1,3 +1,6 @@
+#ifndef LogicMonday_h__
+#define LogicMonday_h__
+
 #include <vector>
 #include <cstdint>
 #include <unordered_map>
@@ -44,7 +47,6 @@ struct InsightScore
   void Clear();
 };
 
-
 class LogicMonday
 {
 public:
@@ -78,3 +80,5 @@ private:
   uint32_t m_examplesDone;
   float m_lastProgressUpdate;
 };
+
+#endif // LogicMonday_h__

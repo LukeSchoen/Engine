@@ -42,9 +42,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @file matrix4x4.inl
  *  @brief Inline implementation of the 4x4 matrix operators
  */
-#pragma once
-#ifndef AI_MATRIX4X4_INL_INC
-#define AI_MATRIX4X4_INL_INC
+#ifndef AI_MATRIX4x4_INL_INC
+#define AI_MATRIX4x4_INL_INC
 
 #ifdef __cplusplus
 
@@ -539,4 +538,4 @@ inline aiMatrix4x4t<TReal>& aiMatrix4x4t<TReal>::FromToMatrix(const aiVector3t<T
 }
 
 #endif // __cplusplus
-#endif // AI_MATRIX4X4_INL_INC
+#endif // AI_MATRIX4x4_INL_INC

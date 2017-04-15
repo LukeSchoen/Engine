@@ -42,9 +42,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @file metadata.h
  *  @brief Defines the data structures for holding node meta information.
  */
-#pragma once
-#ifndef AI_METADATA_H_INC
-#define AI_METADATA_H_INC
+#ifndef __AI_METADATA_H_INC__
+#define __AI_METADATA_H_INC__
 
 #include <assert.h>
 
@@ -68,9 +67,8 @@ typedef enum aiMetadataType
     AI_INT = 1,
     AI_UINT64 = 2,
     AI_FLOAT = 3,
-    AI_DOUBLE = 4,
-    AI_AISTRING = 5,
-    AI_AIVECTOR3D = 6,
+    AI_AISTRING = 4,
+    AI_AIVECTOR3D = 5,
 
 #ifndef SWIG
     FORCE_32BIT = INT_MAX
@@ -109,7 +107,6 @@ inline aiMetadataType GetAiType( bool ) { return AI_BOOL; }
 inline aiMetadataType GetAiType( int ) { return AI_INT; }
 inline aiMetadataType GetAiType( uint64_t ) { return AI_UINT64; }
 inline aiMetadataType GetAiType( float ) { return AI_FLOAT; }
-inline aiMetadataType GetAiType( double ) { return AI_DOUBLE; }
 inline aiMetadataType GetAiType( aiString ) { return AI_AISTRING; }
 inline aiMetadataType GetAiType( aiVector3D ) { return AI_AIVECTOR3D; }
 
@@ -173,9 +170,6 @@ struct aiMetadata
                     break;
                 case AI_FLOAT:
                     delete static_cast<float*>(data);
-                    break;
-                case AI_DOUBLE:
-                    delete static_cast<double*>(data);
                     break;
                 case AI_AISTRING:
                     delete static_cast<aiString*>(data);
@@ -252,4 +246,6 @@ struct aiMetadata
 
 };
 
-#endif // AI_METADATA_H_INC
+#endif // __AI_METADATA_H_INC__
+
+

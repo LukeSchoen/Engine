@@ -1,8 +1,9 @@
-#include <vector>
 #ifndef Insight_h__
 #define Insight_h__
 
-class InsightExample;
+#include <vector>
+
+struct InsightExample;
 class LogicMonday;
 
 class Insight

@@ -19,6 +19,14 @@ void BufferObject::AddRenderObject(RenderObject *ro)
   meshes.push_back(ro);
 }
 
+void BufferObject::AddPolyModel(PolyModel *pm)
+{
+  RenderObject *meshes;
+  int64_t meshCount;
+  pm->GetMeshData(&meshCount, &meshes); for (int m = 0; m < meshCount; m++)
+    AddRenderObject(&meshes[m]);
+}
+
 void BufferObject::AddBuffer(const char *name)
 {
   if (buffers.find(name) == buffers.end())
@@ -51,7 +59,6 @@ void BufferObject::Render(const Matrix4x4 &MVP)
   // Bind shader outputs
   fb.AttachColour(0, buffers.begin()->second);
   FrameBufferStatus a = fb.GetStatus(FBBM_Write);
-  a = a;
 
   int t = 0; for (auto &buffer : buffers) fb.AttachColour(t++, buffer.second);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

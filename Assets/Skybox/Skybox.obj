@@ -1,9 +1,6 @@
-# Alias OBJ Model File
-# Exported from SketchUp, (c) 2000-2006 Google, Inc.
-# File units = millimeters
+o sky
 
 mtllib Skybox.mtl
-
 g Mesh1 Model
 
 usemtl Bottom

@@ -43,9 +43,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *  @brief Declares the data structures in which the imported geometry is
     returned by ASSIMP: aiMesh, aiFace and aiBone data structures.
  */
-#pragma once
-#ifndef AI_MESH_H_INC
-#define AI_MESH_H_INC
+#ifndef INCLUDED_AI_MESH_H
+#define INCLUDED_AI_MESH_H
 
 #include "types.h"
 
@@ -129,24 +128,27 @@ struct aiFace
     //! The maximum value for this member is #AI_MAX_FACE_INDICES.
     unsigned int mNumIndices;
 
-    //! Index to the indices array.
-    unsigned int mIndices;
+    //! Pointer to the indices array. Size of the array is given in numIndices.
+    unsigned int* mIndices;
 
 #ifdef __cplusplus
 
     //! Default constructor
     aiFace()
       : mNumIndices( 0 )
-      , mIndices( 0 )
+      , mIndices( NULL )
     {
     }
 
     //! Default destructor. Delete the index array
-    ~aiFace() { }
+    ~aiFace()
+    {
+        delete [] mIndices;
+    }
 
     //! Copy constructor. Copy the index array
     aiFace( const aiFace& o)
-      : mIndices( 0 )
+      : mIndices( NULL )
     {
         *this = o;
     }
@@ -157,8 +159,15 @@ struct aiFace
         if (&o == this)
             return *this;
 
+        delete[] mIndices;
         mNumIndices = o.mNumIndices;
-        mIndices = o.mIndices;
+        if (mNumIndices) {
+            mIndices = new unsigned int[mNumIndices];
+            ::memcpy( mIndices, o.mIndices, mNumIndices * sizeof( unsigned int));
+        }
+        else {
+            mIndices = NULL;
+        }
         return *this;
     }
 
@@ -167,7 +176,12 @@ struct aiFace
     bool operator== (const aiFace& o) const
     {
         if (mIndices == o.mIndices)return true;
-        else if (mNumIndices == o.mNumIndices)return true;
+        else if (mIndices && mNumIndices == o.mNumIndices)
+        {
+            for (unsigned int i = 0;i < this->mNumIndices;++i)
+                if (mIndices[i] != o.mIndices[i])return false;
+            return true;
+        }
         return false;
     }
 
@@ -553,16 +567,6 @@ struct aiMesh
     */
     C_STRUCT aiFace* mFaces;
 
-    /** The number of indices this mesh contains.
-    */
-    unsigned int mNumIndices;
-
-    /** The indices of this mesh.
-    * The faces contain an index and length for looking up in
-    * this array.
-    */
-    unsigned int* mIndices;
-
     /** The number of bones this mesh contains.
     * Can be 0, in which case the mBones array is NULL.
     */
@@ -616,8 +620,6 @@ struct aiMesh
         , mTangents( NULL )
         , mBitangents( NULL )
         , mFaces( NULL )
-        , mNumIndices( 0 )
-        , mIndices( NULL )
         , mNumBones( 0 )
         , mBones( NULL )
         , mMaterialIndex( 0 )
@@ -664,7 +666,6 @@ struct aiMesh
         }
 
         delete [] mFaces;
-        delete [] mIndices;
     }
 
     //! Check whether the mesh contains positions. Provided no special
@@ -735,5 +736,5 @@ struct aiMesh
 #ifdef __cplusplus
 }
 #endif //! extern "C"
-#endif // AI_MESH_H_INC
+#endif // __AI_MESH_H_INC
 

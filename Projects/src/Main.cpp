@@ -22,11 +22,11 @@ void main() // console entry
   //Glorious();
   //NovaCosm();
   //Cosmic();
-  //HALO();
+  HALO();
   //Minecraft();
   //Zelda();
   //OpenGL();
-  Compression();
+  //Compression();
 }
 
 int wmain(int pc, char* ps){main();} // windows entry

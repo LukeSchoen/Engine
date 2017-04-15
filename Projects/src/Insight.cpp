@@ -28,7 +28,7 @@ void Insight::AddExample(void *input, void *output)
 
 void Insight::Execute(void *input, void *output)
 {
-  BitBuffer outBuffer = (outputBitCount);
+  BitBuffer outBuffer(outputBitCount); // TELL KHAN ABOUT THIS LINE
   cerebro->Query(BitBuffer(inputBitCount, input), outBuffer);
   memcpy(output, &(outBuffer.data[0]), (size_t)ceil(outputBitCount / 8.0f));
 }

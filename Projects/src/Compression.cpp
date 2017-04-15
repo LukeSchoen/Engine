@@ -15,7 +15,7 @@ void Compression()
   int64_t inputBits = 1;
   int64_t outputBits = w * h * 32;
 
-  Insight cerebro(inputBits, input);
+  Insight cerebro(inputBits, outputBits);
   
   cerebro.AddExample(&input, output);
 
