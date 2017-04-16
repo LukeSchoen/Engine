@@ -41,7 +41,7 @@
     <ClCompile Include="src\Glorious\Glorious.cpp" />
     <ClCompile Include="src\Glorious\LeastRects.cpp" />
     <ClCompile Include="src\GamePads.cpp" />
-    <ClCompile Include="src\HALO.cpp" />
+    <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\Insight.cpp" />
     <ClCompile Include="src\LogicMonday.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -85,7 +85,6 @@
     <ClCompile Include="src\Text.cpp" />
     <ClCompile Include="src\Threads.cpp" />
     <ClCompile Include="src\Vector.cpp" />
-    <ClCompile Include="src\Warthog.cpp" />
     <ClCompile Include="src\Window.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Final|x64'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
@@ -130,7 +129,7 @@
     <ClInclude Include="src\Glorious\LeastRects.h" />
     <ClInclude Include="src\GloriousModel.h" />
     <ClInclude Include="src\GamePads.h" />
-    <ClInclude Include="src\HALO.h" />
+    <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\Insight.h" />
     <ClInclude Include="src\Line.h" />
     <ClInclude Include="src\DLux.h" />
@@ -164,7 +163,6 @@
     <ClInclude Include="src\NovaCosmModel.h" />
     <ClInclude Include="src\Octree.h" />
     <ClInclude Include="src\OpenGL.h" />
-    <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\PointCloud.h" />
     <ClInclude Include="src\pokemon.h" />
     <ClInclude Include="src\PolyMesh.h" />
@@ -185,7 +183,6 @@
     <ClInclude Include="src\Vector3.h" />
     <ClInclude Include="src\Vector4.h" />
     <ClInclude Include="src\Vector.h" />
-    <ClInclude Include="src\Warthog.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\Zelda\Zelda.h" />
   </ItemGroup>

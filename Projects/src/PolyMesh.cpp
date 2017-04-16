@@ -16,10 +16,10 @@ vec3 PolyMesh::SlideSweepSphere(Sphere &_sphere, vec3 _velocity) const
 {
   Sphere sphere = _sphere;
   vec3 velocity = _velocity;
-  const int MaxSteps = 5;
+  const int MaxSteps = 2;
   int step = 0;
   float dist = velocity.Length();
-  while (dist > 0.001f)
+  while (dist > 0.0001f)
   {
     vec3 velocityDir = velocity.Normalized();
     uint32_t polyID;
@@ -33,7 +33,7 @@ vec3 PolyMesh::SlideSweepSphere(Sphere &_sphere, vec3 _velocity) const
 
       vec3 target = plane.MovePointToPlane(sphere.position + velocity);
       vec3 source = plane.MovePointToPlane(sphere.position);
-      if ((target - source).Length() < 0.01) break; // too oblique
+      if ((target - source).Length() < 0.0001) break; // too oblique
 
       velocity = (target - source).Normalized() * dist;
 
@@ -53,16 +53,10 @@ float PolyMesh::OnSweepSphere(const Sphere &sphere, const vec3 &velocity, uint32
   for (uint32_t i = 0; i < polys.size(); i++)
   {
     Triangle triangle = polys[i];
-
-    // Basic distance check
-    //float longSide = Max(Max((triangle.p1 - triangle.p2).LengthSquared(), (triangle.p2 - triangle.p3).LengthSquared()), (triangle.p3 - triangle.p1).LengthSquared());
-    //float closest = Max(Max((triangle.p1 - sphere.position).LengthSquared(), (triangle.p2 - sphere.position).LengthSquared()), (triangle.p3 - sphere.position).LengthSquared());
-    //if (closest > longSide * 2) continue;
-
-    float T = triangle.OnSweepSphere(sphere, velocity);
-    if (T < ClosestT)
+    float t = triangle.OnSweepSphere(sphere, velocity);
+    if (t < ClosestT)
     {
-      ClosestT = T;
+      ClosestT = t;
       polyID = i;
     }
   }

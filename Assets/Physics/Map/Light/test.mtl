@@ -1,0 +1,13 @@
+# 
+# Wavefront material file
+# Created with Kaydara FBX
+# 
+
+newmtl Model_0Mat_ncl1_1
+map_Kd lmap-Model_0.png
+Ka 0.200000 0.200000 0.200000
+Kd 0.800000 0.800000 0.800000
+Ks 0.200000 0.200000 0.200000
+illum 2
+Ns 20.000000
+Tr 1.000000

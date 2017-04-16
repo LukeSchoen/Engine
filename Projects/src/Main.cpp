@@ -2,7 +2,7 @@
 #include "Zelda.h"
 #include "Cosmic.h"
 #include "NovaCosm.h"
-#include "HALO.h"
+#include "Physics.h"
 #include "SecondStream.h"
 #include "StreamTest.h"
 #include "Minecraft.h"
@@ -22,9 +22,9 @@ void main() // console entry
   //Glorious();
   //NovaCosm();
   //Cosmic();
-  HALO();
-  //Minecraft();
   //Zelda();
+  Physics();
+  //Minecraft();
   //OpenGL();
   //Compression();
 }

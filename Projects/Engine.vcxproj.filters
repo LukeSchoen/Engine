@@ -85,9 +85,6 @@
     <ClCompile Include="src\Zelda\Zelda.cpp">
       <Filter>Projects\Zelda</Filter>
     </ClCompile>
-    <ClCompile Include="src\HALO.cpp">
-      <Filter>Projects\Halo</Filter>
-    </ClCompile>
     <ClCompile Include="src\Cosmic.cpp">
       <Filter>Projects\Cosmic</Filter>
     </ClCompile>
@@ -108,9 +105,6 @@
     </ClCompile>
     <ClCompile Include="src\Math\Ray.cpp">
       <Filter>Engine\Maths\Geometry\Ray</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Warthog.cpp">
-      <Filter>Projects\Halo\Vehicles</Filter>
     </ClCompile>
     <ClCompile Include="src\Audio.cpp">
       <Filter>Engine\Audio</Filter>
@@ -220,6 +214,9 @@
     <ClCompile Include="src\Compression.cpp">
       <Filter>Projects\Compression</Filter>
     </ClCompile>
+    <ClCompile Include="src\Physics.cpp">
+      <Filter>Projects\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -321,9 +318,6 @@
     <ClInclude Include="src\Assets.h">
       <Filter>Engine\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="src\HALO.h">
-      <Filter>Projects\Halo</Filter>
-    </ClInclude>
     <ClInclude Include="src\Cosmic.h">
       <Filter>Projects\Cosmic</Filter>
     </ClInclude>
@@ -351,17 +345,11 @@
     <ClInclude Include="src\Math\Clamp.h">
       <Filter>Engine\Maths\Algebra\Elementary</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics.h">
-      <Filter>Engine\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Line.h">
       <Filter>Engine\Maths\Geometry\Line</Filter>
     </ClInclude>
     <ClInclude Include="src\PolyMesh.h">
       <Filter>Engine\Maths\Geometry\PolyMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Warthog.h">
-      <Filter>Projects\Halo\Vehicles</Filter>
     </ClInclude>
     <ClInclude Include="src\Audio.h">
       <Filter>Engine\Audio</Filter>
@@ -504,6 +492,9 @@
     <ClInclude Include="src\Compression.h">
       <Filter>Projects\Compression</Filter>
     </ClInclude>
+    <ClInclude Include="src\Physics.h">
+      <Filter>Projects\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -632,20 +623,11 @@
     <Filter Include="Projects\Novacosm">
       <UniqueIdentifier>{46f60a41-fb6a-42d6-b9f8-a771a7c2d200}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Projects\Halo">
-      <UniqueIdentifier>{2f6d26b8-fd8e-477c-b32d-7786a08a5aed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Physics">
-      <UniqueIdentifier>{54545a24-3d17-4fe9-97f1-93ecc5c1d7e7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Maths\Geometry\Line">
       <UniqueIdentifier>{9ddbe50a-4f04-4866-96b9-179f51718f5f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Maths\Geometry\PolyMesh">
       <UniqueIdentifier>{07eebf77-c7c1-42a8-80b7-ccb0a3094c3a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Projects\Halo\Vehicles">
-      <UniqueIdentifier>{03a2c6dd-40d7-4f97-9251-d2140ea0d0cb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Audio">
       <UniqueIdentifier>{81b87e11-e089-4483-bf2e-a5c9f4d7a594}</UniqueIdentifier>
@@ -730,6 +712,9 @@
     </Filter>
     <Filter Include="Projects\Compression">
       <UniqueIdentifier>{48fe5076-fa04-46d9-a8e7-be0c8ed74bc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Physics">
+      <UniqueIdentifier>{2f6d26b8-fd8e-477c-b32d-7786a08a5aed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

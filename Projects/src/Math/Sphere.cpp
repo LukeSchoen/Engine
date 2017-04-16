@@ -43,13 +43,24 @@ bool Sphere::HitsSphere(const Sphere &sphere) const
 
 float Sphere::OnRay(const Ray &ray) const
 {
-  vec3 rayToSphere = position - ray.position;
-  float distToCentre = rayToSphere.Length();
-  //Project input ray against ray to sphere center
-  float inRayOnRayToCentre = rayToSphere.DotProduct(ray.direction);
-  float d = radius*radius - (distToCentre*distToCentre - inRayOnRayToCentre*inRayOnRayToCentre);
-  // No intersection occurred ?, return -1
-  if (d < 0.0) return (-1.0f);
-  // Otherwise return distance to intersection
-  return (inRayOnRayToCentre - sqrtf(d));
+  vec3 rayToSphere = ray.position - position;
+  float rayCo = rayToSphere.DotProduct(ray.direction);
+  float c = rayToSphere.DotProduct(rayToSphere) - radius * radius;
+
+  // Exit if r’s origin outside s (c > 0) and r pointing away from s (b > 0) 
+  if (c > 0.0f && rayCo > 0.0f)
+    return -1;
+  float discr = rayCo*rayCo - c;
+
+  // A negative discriminant corresponds to ray missing sphere 
+  if (discr < 0.0f)
+    return -1;
+
+  // Ray now found to intersect sphere, compute smallest t value of intersection
+  float ret = -rayCo - sqrt(discr);
+
+  // If t is negative, ray started inside sphere so clamp t to zero 
+  if (ret < 0.0f) ret = 0.0f;
+
+  return ret;
 }

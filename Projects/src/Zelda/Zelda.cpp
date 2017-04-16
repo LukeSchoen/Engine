@@ -38,9 +38,11 @@ void Zelda()
   window.Swap();
   PolyModel hyruleColorModel, hyruleLightModel;
 
-  hyruleColorModel.LoadModel("C:/Users/Luke/Desktop/Test/Test.dae");
+  hyruleColorModel.LoadModel("C:/Users/Luke/Desktop/TestMap/Color/Test.obj");
+  hyruleLightModel.LoadModel("C:/Users/Luke/Desktop/TestMap/Light/Test.obj");
+
   //hyruleColorModel.LoadModel(ASSETDIR "zelda/Hyrule/Color/Hyrule.obj");
-  hyruleLightModel.LoadModel(ASSETDIR "zelda/Hyrule/Light/Hyrule.obj");
+  //hyruleLightModel.LoadModel(ASSETDIR "zelda/Hyrule/Light/Hyrule.obj");
 
   PolyMesh hyruleCollisionMesh;
 
@@ -87,9 +89,10 @@ void Zelda()
   {
     window.Clear(0, 190, 255);
 
-    vec3 oldCamPos = Camera::Position();
-    Camera::Update(60);
-    Camera::SetPosition(hyruleCollisionMesh.SlideSweepSphere(Sphere(oldCamPos), Camera::Position() - oldCamPos));
+    vec3 oldCamPos = vec3() - Camera::Position();
+    Camera::Update(6);
+    vec3 newCamPos = vec3() - Camera::Position();
+    Camera::SetPosition(vec3() - hyruleCollisionMesh.SlideSweepSphere(Sphere(oldCamPos), newCamPos - oldCamPos));
 
     // Skybox
     mat4 skyMVP;

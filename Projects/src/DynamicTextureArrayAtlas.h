@@ -40,7 +40,7 @@ struct DynamicTextureArrayAtlas
   {
     delete[] image;
     free(packers);
-     //DELETE texture here
+    //DELETE texture here
   }
 
   void UploadToGPU()

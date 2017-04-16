@@ -50,7 +50,7 @@ void Camera::Update(float speed)
     speed *= 0.2f;
 
   if (Controls::KeyDown(SDL_SCANCODE_LSHIFT))
-    speed *= 25.0f;
+    speed *= 5.0f;
 
   // Controller Speed
   vec2 controllerSpeed = Controls::GetController2DAxis(2);
@@ -61,7 +61,7 @@ void Camera::Update(float speed)
   vec2 controllerMove = Controls::GetController2DAxis(0);
   if (fabs(controllerMove.x) < controllerDeadZone) controllerMove.x = 0;
   if (fabs(controllerMove.y) < controllerDeadZone) controllerMove.y = 0;
-  controllerMove = Delinerize(controllerMove, 3.0f) * 4;
+  controllerMove = Delinerize(controllerMove, 3.0f);
   pos.x += camSinY * camCosX * speed * -controllerMove.y;
   pos.y += camSinX * speed * -controllerMove.y;
   pos.z += camCosY * camCosX * speed * -controllerMove.y;

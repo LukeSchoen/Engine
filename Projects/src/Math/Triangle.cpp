@@ -38,9 +38,6 @@ bool Triangle::PointInTriangle(vec3 point) const
 
 float Triangle::OnSweepSphere(const Sphere &sphere, const vec3 &velocity) const
 {
-  // broad phase check (dodgy)
-  //if ((sphere.position - centrePos).LengthSquared() > (sqrBoundSize + velocity.Length())) return 2;
-
   // Front face check
   if (velocity.DotProduct(normal) > 0) return 2;
 
@@ -49,11 +46,17 @@ float Triangle::OnSweepSphere(const Sphere &sphere, const vec3 &velocity) const
   // towards Triangle by one and
   // Project it onto H-plane to check
   // if it falls withing the Triangle.
+
   vec3 newSpherePos = sphere.position - (normal * sphere.radius);
-  float t = Ray(newSpherePos, velocity).OnPlane(Plane(p1, normal));
+  float t = OnRay(Ray(newSpherePos, velocity.Normalized()));
+  //float t = Ray(newSpherePos, velocity).OnPlane(Plane(p1, normal));
   vec3 planeHitSpot = newSpherePos + velocity * t;
-  if (t >= 0 && t < 1.0) if (PointInTriangle(planeHitSpot)) return t;
-  if (t > 1.0) return 2; // too far to collide at all
+  //if (t >= 0 && t < 1.0) if (PointInTriangle(planeHitSpot)) return t;
+  //if (t > 1.0) return 2; // too far to collide at all
+
+  float ft = 2;
+  if (t >= 0 && t < 1.0)
+    ft = t;
 
   // Sphere Hits Edges (Test 2) //
   // Project sphere center onto
@@ -71,19 +74,29 @@ float Triangle::OnSweepSphere(const Sphere &sphere, const vec3 &velocity) const
   {
     t = closestEdge / velocity.Length();
     if (t >= 0 && t < 1.0)
-      return t;
+      if (t < ft)
+        return t;
   }
-  return 2;
+  return ft;
 }
 
 float Triangle::OnRay(const Ray &ray) const
 {
-  // Front face check
-  //if (velocity.DotProduct(normal) > 0) return 2;
-  float t = ray.OnPlane(Plane(p1, normal));
-  vec3 planeHitSpot = ray.position + ray.direction * t;
-  if (t >= 0 && t < 1.0) if (PointInTriangle(planeHitSpot)) return t;
-  return 2; // too far to collide at all
+  const float EPSILON = 0.000001;
+  vec3 edge1 = p2 - p1;
+  vec3 edge2 = p3 - p1;
+  vec3 pvec = ray.direction.CrossProduct(edge2);
+  float det = edge1.DotProduct(pvec);
+  if (det > -EPSILON && det < EPSILON) return -1;
+  float inv_det = 1.f / det;
+  vec3 tvec = ray.position - p1;
+  float u = tvec.DotProduct(pvec) * inv_det;
+  if (u < 0 || u > 1) return -1;
+  vec3 qvec = tvec.CrossProduct(edge1);
+  float v = ray.direction.DotProduct(qvec) * inv_det;
+  if (v < 0 || u + v > 1) return -1;
+  float t = edge2.DotProduct(qvec) * inv_det;
+  return t;
 }
 
 float Triangle::Area()

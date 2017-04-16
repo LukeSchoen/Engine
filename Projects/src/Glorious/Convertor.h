@@ -320,7 +320,7 @@ struct Convertor
     }
 
     // Create Transformed Point Cloud File
-    return Max(Max(maxX - minX, maxY - minY), maxZ - minZ);
+    return Max(Max(maxX - minX + 1, maxY - minY + 1), maxZ - minZ + 1);
   }
 
   static void ResamplePCF(const char *inputPath, const char *outputPath, uint32_t newSize)

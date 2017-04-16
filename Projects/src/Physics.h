@@ -1,11 +1,6 @@
-#ifndef Physics_h__
-#define Physics_h__
-#include "maths.h"
-#include "stdint.h"
+#ifndef HALO_h__
+#define HALO_h__
 
-struct Physics
-{
+void Physics();
 
-};
-
-#endif // Physics_h__
+#endif // HALO_h__
