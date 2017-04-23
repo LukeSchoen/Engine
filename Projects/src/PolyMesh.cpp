@@ -16,7 +16,7 @@ vec3 PolyMesh::SlideSweepSphere(Sphere &_sphere, vec3 _velocity) const
 {
   Sphere sphere = _sphere;
   vec3 velocity = _velocity;
-  const int MaxSteps = 2;
+  const int MaxSteps = 4;
   int step = 0;
   float dist = velocity.Length();
   while (dist > 0.0001f)
@@ -24,7 +24,7 @@ vec3 PolyMesh::SlideSweepSphere(Sphere &_sphere, vec3 _velocity) const
     vec3 velocityDir = velocity.Normalized();
     uint32_t polyID;
     float t = OnSweepSphere(sphere, velocityDir * dist, &polyID);
-    sphere.position = sphere.position + velocity * t * 0.9;
+    sphere.position = sphere.position + velocity * t;
     dist -= dist * t;
     if (t < 1.0f)
     { // Collision Response
@@ -37,8 +37,7 @@ vec3 PolyMesh::SlideSweepSphere(Sphere &_sphere, vec3 _velocity) const
 
       velocity = (target - source).Normalized() * dist;
 
-      // keep slightly away from poly for floating point accuracy problems
-      sphere.position = sphere.position + plane.normal * dist * 0.1;
+      sphere.position = sphere.position + plane.normal * dist;
     }
 
     if (step++ > MaxSteps) break;

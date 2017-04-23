@@ -150,6 +150,7 @@ void Matrix4x4::Scale(float num)
 
   *this *= mat2;
 }
+
 void Matrix4x4::Rotate(const vec3 &rot)
 {
   Rotate(rot.x, rot.y, rot.z);

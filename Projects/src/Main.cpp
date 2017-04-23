@@ -2,7 +2,6 @@
 #include "Zelda.h"
 #include "Cosmic.h"
 #include "NovaCosm.h"
-#include "Physics.h"
 #include "SecondStream.h"
 #include "StreamTest.h"
 #include "Minecraft.h"
@@ -11,6 +10,8 @@
 #include "DLux.h"
 #include "OpenGL.h"
 #include "Compression.h"
+#include "PhysicsTest.h"
+#include "ModelView.h"
 
 void main() // console entry
 {
@@ -23,10 +24,11 @@ void main() // console entry
   //NovaCosm();
   //Cosmic();
   //Zelda();
-  Physics();
   //Minecraft();
   //OpenGL();
   //Compression();
+  PhysicsTest();
+  //ModelView();
 }
 
 int wmain(int pc, char* ps){main();} // windows entry

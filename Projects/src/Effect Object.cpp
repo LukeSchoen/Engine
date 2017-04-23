@@ -8,15 +8,19 @@ BufferObject::BufferObject(int _width, int _height)
   depthTexture = Textures::CreateTexture(width, height, true);
 }
 
-void BufferObject::Reset()
+void BufferObject::ClearRenderInstances()
 {
-  meshes.clear();
+  RenderInstances.clear();
+}
+
+void BufferObject::ClearBuffers()
+{
   buffers.clear();
 }
 
-void BufferObject::AddRenderObject(RenderObject *ro)
+void BufferObject::AddRenderObject(RenderObject *modelMesh, mat4 modelMat)
 {
-  meshes.push_back(ro);
+  RenderInstances.emplace_back(modelMesh, modelMat);
 }
 
 void BufferObject::AddPolyModel(PolyModel *pm)
@@ -46,7 +50,12 @@ GLint BufferObject::GetBuffer(const char *name)
   return buffers[name];
 }
 
-void BufferObject::Render(const Matrix4x4 &MVP)
+GLint BufferObject::GetDepth()
+{
+  return depthTexture;
+}
+
+void BufferObject::Render(const Matrix4x4 &VP)
 {
   // Prepare frame buffer
   int vp[4];
@@ -64,18 +73,20 @@ void BufferObject::Render(const Matrix4x4 &MVP)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   t = 0; for (auto &buffer : buffers) fb.DetachColour(t++);
 
-  for (auto &mesh : meshes)
+  for (auto &RenderInstance : RenderInstances)
   {
-    mesh->UploadToGPU();
+    RenderInstance.modelMesh->UploadToGPU();
     for (auto &buffer : buffers)
     {
-      int loc = glGetFragDataLocation(mesh->program, buffer.first.c_str());
+      int loc = glGetFragDataLocation(RenderInstance.modelMesh->program, buffer.first.c_str());
       fb.AttachColour(loc, buffer.second);
     }
-    mesh->Render(MVP);
+    mat4 MVP = VP * RenderInstance.modelMat;
+    MVP.Transpose();
+    RenderInstance.modelMesh->Render(MVP);
     for (auto &buffer : buffers)
     {
-      int loc = glGetFragDataLocation(mesh->program, buffer.first.c_str());
+      int loc = glGetFragDataLocation(RenderInstance.modelMesh->program, buffer.first.c_str());
       fb.DetachColour(loc);
     }
   }

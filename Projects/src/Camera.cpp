@@ -19,7 +19,7 @@ vec3 Camera::Direction()
   return vec3(camSinY * camCosX, camSinX, camCosY * camCosX).Normalized();
 }
 
-void Camera::Update(float speed)
+void Camera::Update(float speed, bool only2D)
 {
   const float MouseTurnSensitivity = 1.0f / 1000.0f;
   const float ControllerTurnSensitivity = 1.0f / 1000.0f * 2000;
@@ -62,25 +62,51 @@ void Camera::Update(float speed)
   if (fabs(controllerMove.x) < controllerDeadZone) controllerMove.x = 0;
   if (fabs(controllerMove.y) < controllerDeadZone) controllerMove.y = 0;
   controllerMove = Delinerize(controllerMove, 3.0f);
-  pos.x += camSinY * camCosX * speed * -controllerMove.y;
-  pos.y += camSinX * speed * -controllerMove.y;
-  pos.z += camCosY * camCosX * speed * -controllerMove.y;
-  pos.x -= camCosY * speed * controllerMove.x;
-  pos.z += camSinY * speed * controllerMove.x;
+  if (only2D)
+  {
+    pos.x += camSinY * speed * -controllerMove.y;
+    pos.z += camCosY * speed * -controllerMove.y;
+    pos.x -= camCosY * speed * controllerMove.x;
+    pos.z += camSinY * speed * controllerMove.x;
+  }
+  else
+  {
+    pos.x += camSinY * camCosX * speed * -controllerMove.y;
+    pos.y += camSinX * speed * -controllerMove.y;
+    pos.z += camCosY * camCosX * speed * -controllerMove.y;
+    pos.x -= camCosY * speed * controllerMove.x;
+    pos.z += camSinY * speed * controllerMove.x;
+  }
 
 
   if (Controls::KeyDown(SDL_SCANCODE_W))
   {
-    pos.x += camSinY * camCosX * speed;
-    pos.y += camSinX * speed;
-    pos.z += camCosY * camCosX * speed;
+    if (only2D)
+    {
+      pos.x += camSinY * speed;
+      pos.z += camCosY * speed;
+    }
+    else
+    {
+      pos.x += camSinY * camCosX * speed;
+      pos.y += camSinX * speed;
+      pos.z += camCosY * camCosX * speed;
+    }
   }
 
   if (Controls::KeyDown(SDL_SCANCODE_S))
   {
-    pos.x -= camSinY * camCosX * speed;
-    pos.y -= camSinX * speed;
-    pos.z -= camCosY * camCosX * speed;
+    if (only2D)
+    {
+      pos.x -= camSinY * speed;
+      pos.z -= camCosY * speed;
+    }
+    else
+    {
+      pos.x -= camSinY * camCosX * speed;
+      pos.y -= camSinX * speed;
+      pos.z -= camCosY * camCosX * speed;
+    }
   }
 
   if (Controls::KeyDown(SDL_SCANCODE_A))

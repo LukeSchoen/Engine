@@ -9,4 +9,3 @@ struct Line;
 struct Sphere;
 struct Plane;
 struct Triangle;
-

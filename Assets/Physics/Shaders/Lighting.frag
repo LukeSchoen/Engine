@@ -2,6 +2,11 @@
 
 uniform sampler2D texture0;
 uniform sampler2D texture1;
+uniform sampler2D texture2;
+
+uniform sampler2D depth0;
+uniform sampler2D depth1;
+
 in vec2 passTexcoord0;
 out vec4 fragColor;
 
@@ -16,6 +21,14 @@ vec3 saturation(vec3 rgb, float adjustment)
 
 void main()
 {
-	vec3 color = (texture(texture0, passTexcoord0) * texture(texture1, passTexcoord0)).rgb;
-	fragColor = vec4( saturation(color, 1.5) * 2.5 , 1.0 );
+	vec3 mapColor = (texture(texture0, passTexcoord0) * texture(texture1, passTexcoord0)).rgb;
+	vec3 actorColor = texture(texture2, passTexcoord0).rgb;
+	
+	float mapDepth = texture(depth0, passTexcoord0).x;
+	float actorDepth = texture(depth1, passTexcoord0).x;
+	
+	if(actorDepth < mapDepth)
+		fragColor = vec4( saturation(actorColor, 1.5), 1.0 );
+	else
+		fragColor = vec4( saturation(mapColor, 1.5) * 2.5, 1.0 );
 }

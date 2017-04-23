@@ -38,11 +38,8 @@ void Zelda()
   window.Swap();
   PolyModel hyruleColorModel, hyruleLightModel;
 
-  hyruleColorModel.LoadModel("C:/Users/Luke/Desktop/TestMap/Color/Test.obj");
-  hyruleLightModel.LoadModel("C:/Users/Luke/Desktop/TestMap/Light/Test.obj");
-
-  //hyruleColorModel.LoadModel(ASSETDIR "zelda/Hyrule/Color/Hyrule.obj");
-  //hyruleLightModel.LoadModel(ASSETDIR "zelda/Hyrule/Light/Hyrule.obj");
+  hyruleColorModel.LoadModel(ASSETDIR "zelda/Hyrule/Color/Hyrule.obj");
+  hyruleLightModel.LoadModel(ASSETDIR "zelda/Hyrule/Light/Hyrule.obj");
 
   PolyMesh hyruleCollisionMesh;
 

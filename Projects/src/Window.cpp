@@ -10,6 +10,9 @@ Window::Window(char * windowTitle /*= "Program"*/, bool OpenGL /*= false*/, int 
 
   if (OpenGL) // PreWindow Creation GL Options
   {
+    // VSYNC
+    SDL_GL_SetSwapInterval(1);
+
     // Do these help?
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

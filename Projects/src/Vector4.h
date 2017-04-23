@@ -8,7 +8,7 @@ struct Vector4
   T x, y, z, w;
 
   // Creation Constructor
-  Vector4(T _x = 0, T _y = 0, T _z = 0, T _w = 0) { x = _x; y = _y; z = _z; w = _w; }
+  Vector4(T _x = 0, T _y = 0, T _z = 0, T _w = 0) : x(_x), y(_y), z(_z), w(_w) { }
 
   // Move Constructor
   Vector4(Vector4 &&move) { x = move.x; y = move.y; z = move.z; w = move.w; }
@@ -30,10 +30,7 @@ struct Vector4
   T DotProduct(const Vector4 &o) const { return T(x * o.x + y * o.y + z * o.z + w * o.w); }
   //uint32_t ConvertTo32BitRGBA() const { return int(x * 255) + (int(y * 255) << 8) + (int(z * 255) << 16) + (int(w * 255) << 24); }
 
-  Vector4 operator*(const mat4 &rhs)
-  {
-    return rhs * Vector4(x, y, z, w);
-  }
+  Vector4 operator*(const mat4 &rhs) { return rhs * Vector4(x, y, z, w); }
 
   // Scalar Algebra Operations
   Vector4<T>& operator +=(T o) const { x += o; y += o; z += o; w += o; return *this; }

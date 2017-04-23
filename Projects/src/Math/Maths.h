@@ -6,13 +6,18 @@
 #include "Vector4.h"
 #include "Vector3.h"
 
+// Matrix
+#include "Matrix4x4.h"
+
+// Quaternion
+#include "Quaternion.h"
+
 // Algebra
 #include <math.h>
 #include "PI.h"
 #include "Clamp.h"
 #include "Exponent.h"
 #include "Round.h"
-#include "Matrix4x4.h"
 
 // Geometry
 #include "Ray.h"

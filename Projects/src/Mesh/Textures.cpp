@@ -26,13 +26,6 @@ GLuint Textures::CreateTexture(uint32_t width, uint32_t height, bool depthTextur
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (nearestNeighbour | depthTexture) ? GL_NEAREST : GL_LINEAR_MIPMAP_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-  if (depthTexture)
-  {
-    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-  }
 
   uint32_t *img = new uint32_t[width * height];
   for (int y = 0; y < height; y++)

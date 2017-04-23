@@ -1,158 +1,149 @@
 #include "Physics.h"
-#include "Window.h"
-#include "Threads.h"
-#include "FrameRate.h"
-#include "Controls.h"
-#include "Camera.h"
-#include <stdlib.h>
-#include "RenderObject.h"
-#include "Polymodel.h"
-#include "Maths.h"
-#include "Matrix4x4.h"
-#include "Shaders.h"
-#include "Chunk.h"
-#include "Convertor.h"
-#include "Textures.h"
-#include "Framebuffer.h"
-#include "Effect Object.h"
-#include "Assets.h"
-#include "Audio.h"
+#include "btBulletDynamicsCommon.h"
 
-void Physics()
+btVector3 ToBT(const vec3 &vec) { return btVector3(vec.x, vec.y, vec.z); }
+vec3 FromBT(const btVector3 &vec) { return vec3(vec.x(), vec.y(), vec.z()); }
+
+btTransform GetWorldTransform(const btCollisionObject *pObject)
 {
-  Threads::SetFastMode(); 
+  btTransform trans;
+  const btRigidBody* body = btRigidBody::upcast(pObject);
+  body && body->getMotionState() ? body->getMotionState()->getWorldTransform(trans) : trans = pObject->getWorldTransform();
+  return trans;
+}
 
-#ifdef _DEBUG
-  Window window("Physics", true, 640, 480, false);
-#else
-  Window window("Physics", true, 1920, 1080, true);
-#endif
+PhysicsObject::PhysicsObject(btCollisionObject *a_pObject)
+{
+  pObject = a_pObject;
+}
 
-  Audio::PlayMP3(ASSETDIR "Physics/Music/Kakariko.mp3", 500, "music", true);
+vec3 PhysicsObject::GetPos() const
+{
+  btTransform t = GetWorldTransform(pObject);
+  return FromBT(t.getOrigin());
+}
 
-  Controls::SetMouseLock(true);
+vec3 PhysicsObject::GetSpeed() const
+{
+  const btRigidBody* body = btRigidBody::upcast(pObject);
+  return FromBT(body->getLinearVelocity());
+}
 
-  mat4 projectionMat;
-  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, .4f, 4000.0f);
+Quat PhysicsObject::GetOri() const
+{
+  btQuaternion ori = GetWorldTransform(pObject).getRotation();
+  return Quat(ori.x(), ori.y(), ori.z(), ori.w());
+}
 
-  PolyModel skybox;
-  skybox.LoadModel(ASSETDIR "skybox/skybox.obj");
+mat4 PhysicsObject::GetModelMat() const
+{
+  mat4 mat, rot;
+  GetOri().GetMatrix(&rot);
+  rot.Transpose();
+  mat.Translate(GetPos());
+  mat *= rot;
+  return mat;
+}
 
-  window.Swap();
-  PolyModel colorModel, lightModel;
+void PhysicsObject::ApplyForce(vec3 force, vec3 offset)
+{
+  btRigidBody *body = btRigidBody::upcast(pObject);
+  body->applyForce(ToBT(force), ToBT(offset));
+}
 
-  colorModel.LoadModel(ASSETDIR "Physics/Map/Color/test.obj");
-  lightModel.LoadModel(ASSETDIR "Physics/Map/Light/test.obj");
+void PhysicsObject::SetCanSleep(bool canSleep)
+{
+  btRigidBody *body = btRigidBody::upcast(pObject);
+  if (canSleep)
+    body->setActivationState(ACTIVE_TAG);
+  else
+    body->setActivationState(DISABLE_DEACTIVATION);
+}
 
-  PolyMesh CollisionMesh;
+PhysicsWorld::PhysicsWorld()
+{
+  btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+  btCollisionDispatcher* dispatcher = new	btCollisionDispatcher(collisionConfiguration);
+  btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
+  btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+  world = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+  world->setGravity(btVector3(0, -10, 0));
+}
 
-  RenderObject *meshes;
-  int64_t meshCount;
-  colorModel.GetMeshData(&meshCount, &meshes);
-  for (int m = 0; m < meshCount; m++)
+void PhysicsWorld::UpdateWorld(float StepSize, int subSteps)
+{
+  world->stepSimulation(StepSize, subSteps);
+}
+
+PhysicsObject PhysicsWorld::AddMesh(vec3 position, vec3 *vertData, int64_t vertCount, float mass)
+{
+  btTransform trans;
+  trans.setIdentity();
+  trans.setOrigin(ToBT(position));
+  btTriangleIndexVertexArray* meshInterface = new btTriangleIndexVertexArray();
+  btIndexedMesh part;
+  int *indicies = new int[vertCount];
+  for (size_t v = 0; v < vertCount; v++) indicies[v] = v;
+  part.m_vertexBase = (const unsigned char*)vertData;
+  part.m_vertexStride = sizeof(vec3);
+  part.m_numVertices = vertCount;
+  part.m_triangleIndexBase = (const unsigned char*)indicies;
+  part.m_triangleIndexStride = sizeof(int) * 3;
+  part.m_numTriangles = vertCount / 3;
+  part.m_indexType = PHY_INTEGER;
+  meshInterface->addIndexedMesh(part, PHY_INTEGER);
+  btBvhTriangleMeshShape *shape = new btBvhTriangleMeshShape(meshInterface, true);
+  btTransform worldTransform;
+  worldTransform.setIdentity();
+  btVector3 localInertia(0, 0, 0);
+  btDefaultMotionState *myMotionState = new btDefaultMotionState(worldTransform);
+  btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, shape, localInertia);
+  btRigidBody *body = new btRigidBody(rbInfo);
+  world->addRigidBody(body);
+  return PhysicsObject(body);
+}
+
+bool PhysicsWorld::RayCast(vec3 start, vec3 end, vec3 *hitPos)
+{
+  btVector3 btFrom(start.x, start.y, start.z);
+  btVector3 btTo(end.x, end.y, end.z);
+  btCollisionWorld::ClosestRayResultCallback res(btFrom, btTo);
+  world->rayTest(btFrom, btTo, res);
+  if (res.hasHit())
   {
-    int64_t vertexCount;
-    const void *posData;
-    meshes[m].AccessAttribute("position0", &vertexCount, nullptr, nullptr, &posData);
-    vec3 *verts = (vec3*)posData;
-    for (int i = 0; i < vertexCount / 3; i++)
-      CollisionMesh.AddTriangle(Triangle(verts[i * 3 + 0], verts[i * 3 + 1], verts[i * 3 + 2]));
+    if (hitPos)
+      *hitPos = FromBT(res.m_hitPointWorld);
+    return true;
   }
+  return false;
+}
 
-  mat4 modelMat;
-  Shaders::Report();
+PhysicsObject PhysicsWorld::AddCube(vec3 position, vec3 dimensions, float mass)
+{
+  btCollisionShape *shape = new btBoxShape(ToBT(dimensions * 0.5f));
+  btTransform worldTransform;
+  worldTransform.setIdentity();
+  worldTransform.setOrigin(ToBT(position));
+  btVector3 localInertia(0, 0, 0);
+  if (mass > 0.0f) shape->calculateLocalInertia(mass, localInertia);
+  btDefaultMotionState *myMotionState = new btDefaultMotionState(worldTransform);
+  btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, shape, localInertia);
+  btRigidBody* body = new btRigidBody(rbInfo);
+  world->addRigidBody(body);
+  return PhysicsObject(body);
+}
 
-  Camera::SetPosition(vec3(0, -4, 0));
-
-  float superSample = 2;
-
-  // Frame buffering
-  BufferObject colorBuffer(window.width * superSample, window.height * superSample);
-  colorBuffer.AddPolyModel(&colorModel);
-  colorBuffer.AddBuffer("fragColor");
-
-  BufferObject lightBuffer(window.width  * superSample, window.height * superSample);
-  lightBuffer.AddPolyModel(&lightModel);
-  lightBuffer.AddBuffer("fragColor");
-
-  RenderObject *finalRenderObject = FullScreenQuad(ASSETDIR "Physics/shaders/lighting.frag");
-  BufferObject finalRenderBuffer(window.width, window.height);
-  finalRenderObject->AssignTexture("texture0", colorBuffer.GetBuffer("fragColor"));
-  finalRenderObject->AssignTexture("texture1", lightBuffer.GetBuffer("fragColor"));
-  finalRenderBuffer.AddRenderObject(finalRenderObject);
-  finalRenderBuffer.AddBuffer("fragColor");
-
-  Threads::SetSlowMode();
-
-  float verticalSpeed = 0;
-
-  while (Controls::Update()) // Main Game Loop
-  {
-    window.Clear(0, 190, 255);
-
-    bool spaceDown = Controls::KeyDown(SDL_SCANCODE_SPACE) | Controls::GetControllerButton(10);
-    bool ctrlDown = Controls::KeyDown(SDL_SCANCODE_LCTRL) | Controls::GetControllerButton(11);
-    bool shiftDown = Controls::KeyDown(SDL_SCANCODE_LSHIFT) | Controls::GetControllerButton(12);
-
-    float speed = 1;
-    if (ctrlDown)
-      speed /= 5.0f;
-
-    float camspeed = 40;
-    if (Controls::GetControllerButton(11))
-      camspeed /= 5.0f;
-    vec3 oldCamPos = vec3() - Camera::Position();
-    Camera::Update(camspeed);
-    vec3 newCamPos = vec3() - Camera::Position();
-    vec3 diff = newCamPos - oldCamPos;
-    if (!shiftDown)
-    {
-      diff.y = 0;
-      vec3 finalPos = CollisionMesh.SlideSweepSphere(Sphere(oldCamPos, 3), diff + vec3(0, verticalSpeed * speed, 0));
-      finalPos.y = Max(finalPos.y, -32);
-      Camera::SetPosition(vec3() - finalPos);
-    }
-    newCamPos = vec3() - Camera::Position();
-
-    bool onFloor = CollisionMesh.OnSweepSphere(Sphere(newCamPos, 3), vec3(0, -0.1, 0)) < 1.0;
-    if(onFloor)
-      verticalSpeed = Max(verticalSpeed, -0.1);
-    else
-      verticalSpeed -= 0.004 * speed;
-    if (spaceDown && onFloor)
-      verticalSpeed = 0.3;
-    if (shiftDown)
-      verticalSpeed = 0;
-
-
-    // Skybox
-    mat4 skyMVP;
-    skyMVP = projectionMat * Camera::RotationMatrix();
-    skyMVP.Transpose();
-    glDepthMask(GL_FALSE);
-    skybox.Render(skyMVP);
-    glDepthMask(GL_TRUE);
-
-    mat4 viewMat = Camera::Matrix();
-    mat4 MVP;
-
-    modelMat.LoadIdentity();
-    MVP = projectionMat * viewMat * modelMat;
-    MVP.Transpose();
-    colorBuffer.Render(MVP);
-
-    modelMat.LoadIdentity();
-    modelMat.RotateX(270 * DegsToRads);
-    MVP = projectionMat * viewMat * modelMat;
-    MVP.Transpose();
-    lightBuffer.Render(MVP);
-
-    mat4 identity;
-    finalRenderBuffer.Render(identity);
-
-    BufferObject::DisplayFullscreenTexture(finalRenderBuffer.GetBuffer("fragColor"));
-
-    window.Swap(); // Swap Window
-    FrameRate::Update();
-  }
+PhysicsObject PhysicsWorld::AddSphere(vec3 position, float radius, float mass)
+{
+  btCollisionShape *shape = new btSphereShape(radius);
+  btTransform worldTransform;
+  worldTransform.setIdentity();
+  worldTransform.setOrigin(ToBT(position));
+  btVector3 localInertia(0, 0, 0);
+  if (mass > 0.0f) shape->calculateLocalInertia(mass, localInertia);
+  btDefaultMotionState *myMotionState = new btDefaultMotionState(worldTransform);
+  btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, shape, localInertia);
+  btRigidBody* body = new btRigidBody(rbInfo);
+  world->addRigidBody(body);
+  return PhysicsObject(body);
 }

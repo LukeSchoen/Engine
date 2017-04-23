@@ -214,8 +214,14 @@
     <ClCompile Include="src\Compression.cpp">
       <Filter>Projects\Compression</Filter>
     </ClCompile>
+    <ClCompile Include="src\PhysicsTest.cpp">
+      <Filter>Engine\PhysicsTest</Filter>
+    </ClCompile>
     <ClCompile Include="src\Physics.cpp">
-      <Filter>Projects\Physics</Filter>
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModelView.cpp">
+      <Filter>Projects\ModelView</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -492,8 +498,20 @@
     <ClInclude Include="src\Compression.h">
       <Filter>Projects\Compression</Filter>
     </ClInclude>
+    <ClInclude Include="src\PhysicsTest.h">
+      <Filter>Engine\PhysicsTest</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Quaternion.h">
+      <Filter>Engine\Maths\Algebra\Abstract\Quaternion</Filter>
+    </ClInclude>
+    <ClInclude Include="src\matrix.h">
+      <Filter>Engine\Maths\Algebra\Abstract\Matrix</Filter>
+    </ClInclude>
     <ClInclude Include="src\Physics.h">
-      <Filter>Projects\Physics</Filter>
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModelView.h">
+      <Filter>Projects\ModelView</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -713,8 +731,17 @@
     <Filter Include="Projects\Compression">
       <UniqueIdentifier>{48fe5076-fa04-46d9-a8e7-be0c8ed74bc5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Projects\Physics">
+    <Filter Include="Engine\Maths\Algebra\Abstract\Quaternion">
+      <UniqueIdentifier>{da2127f9-0f7a-4325-8786-ab2f2a4a562e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PhysicsTest">
       <UniqueIdentifier>{2f6d26b8-fd8e-477c-b32d-7786a08a5aed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics">
+      <UniqueIdentifier>{0fcc1cef-2e90-4452-9ed9-04b33142665f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\ModelView">
+      <UniqueIdentifier>{4b1e47c1-46e3-4eab-a496-ec69399da863}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

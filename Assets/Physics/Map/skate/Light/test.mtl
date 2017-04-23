@@ -1,0 +1,67 @@
+# 
+# Wavefront material file
+# Created with Kaydara FBX
+# 
+
+newmtl Model_0Mat_ncl1_1
+map_Kd lmap-Model_0.png
+Ka 0.200000 0.200000 0.200000
+Kd 0.800000 0.800000 0.800000
+Ks 0.200000 0.200000 0.200000
+illum 2
+Ns 20.000000
+Tr 1.000000
+
+newmtl Group_1Mat_ncl1_1
+map_Kd lmap-Group_1.png
+Ka 0.200000 0.200000 0.200000
+Kd 0.800000 0.800000 0.800000
+Ks 0.200000 0.200000 0.200000
+illum 2
+Ns 20.000000
+Tr 1.000000
+
+newmtl Group_2Mat_ncl1_1
+map_Kd lmap-Group_2.png
+Ka 0.200000 0.200000 0.200000
+Kd 0.800000 0.800000 0.800000
+Ks 0.200000 0.200000 0.200000
+illum 2
+Ns 20.000000
+Tr 1.000000
+
+newmtl Group_3Mat_ncl1_1
+map_Kd lmap-Group_3.png
+Ka 0.200000 0.200000 0.200000
+Kd 0.800000 0.800000 0.800000
+Ks 0.200000 0.200000 0.200000
+illum 2
+Ns 20.000000
+Tr 1.000000
+
+newmtl Group_4Mat_ncl1_1
+map_Kd lmap-Group_4.png
+Ka 0.200000 0.200000 0.200000
+Kd 0.800000 0.800000 0.800000
+Ks 0.200000 0.200000 0.200000
+illum 2
+Ns 20.000000
+Tr 1.000000
+
+newmtl Group_5Mat_ncl1_1
+map_Kd lmap-Group_5.png
+Ka 0.200000 0.200000 0.200000
+Kd 0.800000 0.800000 0.800000
+Ks 0.200000 0.200000 0.200000
+illum 2
+Ns 20.000000
+Tr 1.000000
+
+newmtl Group_6Mat_ncl1_1
+map_Kd lmap-Group_6.png
+Ka 0.200000 0.200000 0.200000
+Kd 0.800000 0.800000 0.800000
+Ks 0.200000 0.200000 0.200000
+illum 2
+Ns 20.000000
+Tr 1.000000

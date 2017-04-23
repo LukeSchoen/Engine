@@ -39,8 +39,7 @@ bool Triangle::PointInTriangle(vec3 point) const
 float Triangle::OnSweepSphere(const Sphere &sphere, const vec3 &velocity) const
 {
   // Front face check
-  if (velocity.DotProduct(normal) > 0) return 2;
-
+  //if (velocity.DotProduct(normal) > 0) return 2;
   // Sphere Hits Plane (Test 1) //
   // Move sphere center velocity Ray
   // towards Triangle by one and
@@ -48,9 +47,11 @@ float Triangle::OnSweepSphere(const Sphere &sphere, const vec3 &velocity) const
   // if it falls withing the Triangle.
 
   vec3 newSpherePos = sphere.position - (normal * sphere.radius);
-  float t = OnRay(Ray(newSpherePos, velocity.Normalized()));
-  //float t = Ray(newSpherePos, velocity).OnPlane(Plane(p1, normal));
-  vec3 planeHitSpot = newSpherePos + velocity * t;
+  float t = OnRay(Ray(newSpherePos, velocity.Normalized())) / velocity.Length();
+  float pt = Ray(newSpherePos, velocity.Normalized()).OnPlane(Plane(p1, normal)) / velocity.Length();
+  //vec3 planeHitSpot = newSpherePos + velocity.Normalized() * pt;
+  vec3 planeHitSpot = sphere.position + velocity.Normalized() * pt;
+
   //if (t >= 0 && t < 1.0) if (PointInTriangle(planeHitSpot)) return t;
   //if (t > 1.0) return 2; // too far to collide at all
 
@@ -58,22 +59,23 @@ float Triangle::OnSweepSphere(const Sphere &sphere, const vec3 &velocity) const
   if (t >= 0 && t < 1.0)
     ft = t;
 
-  // Sphere Hits Edges (Test 2) //
+  // Sphere Hits Edges (Test 2)
   // Project sphere center onto
   // H-plane then move to lines
   // and project ray back along
   // velocity and check against
   // the sphere at start pos
+
   float closestEdge = 1000000000;
   for (int edge = 0; edge < 3; edge++)
   {
     float edgeDist = sphere.OnRay(Ray(Line(getVert()[edge], getVert()[(edge + 1) % 3]).OnPoint(planeHitSpot), vec3() - velocity.Normalized()));
-    if (edgeDist > 0 && edgeDist < closestEdge) closestEdge = edgeDist;
+    if (edgeDist >= 0 && edgeDist < closestEdge) closestEdge = edgeDist;
   }
-  if (closestEdge > 0 && closestEdge < 1000000000)
+  if (closestEdge >= 0 && closestEdge < 1000000000)
   {
     t = closestEdge / velocity.Length();
-    if (t >= 0 && t < 1.0)
+    if (t >= 0.f && t < 1.f)
       if (t < ft)
         return t;
   }
