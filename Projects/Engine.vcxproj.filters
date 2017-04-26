@@ -223,6 +223,9 @@
     <ClCompile Include="src\ModelView.cpp">
       <Filter>Projects\ModelView</Filter>
     </ClCompile>
+    <ClCompile Include="src\MarchingCubes.cpp">
+      <Filter>Projects\MarchingCubes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -513,6 +516,9 @@
     <ClInclude Include="src\ModelView.h">
       <Filter>Projects\ModelView</Filter>
     </ClInclude>
+    <ClInclude Include="src\MarchingCubes.h">
+      <Filter>Projects\MarchingCubes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -742,6 +748,9 @@
     </Filter>
     <Filter Include="Projects\ModelView">
       <UniqueIdentifier>{4b1e47c1-46e3-4eab-a496-ec69399da863}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\MarchingCubes">
+      <UniqueIdentifier>{61ac7cf5-0fff-4369-8243-72a0baafa53e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

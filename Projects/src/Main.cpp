@@ -12,6 +12,7 @@
 #include "Compression.h"
 #include "PhysicsTest.h"
 #include "ModelView.h"
+#include "MarchingCubes.h"
 
 void main() // console entry
 {
@@ -27,8 +28,9 @@ void main() // console entry
   //Minecraft();
   //OpenGL();
   //Compression();
-  PhysicsTest();
+  //PhysicsTest();
   //ModelView();
+  MarchingCubes();
 }
 
 int wmain(int pc, char* ps){main();} // windows entry

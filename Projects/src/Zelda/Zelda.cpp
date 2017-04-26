@@ -62,7 +62,7 @@ void Zelda()
   mat4 modelMat;
   Shaders::Report();
 
-  float superSample = 1;
+  float superSample = 2;
 
    // Frame buffering
   BufferObject hyruleColorBuffer(window.width * superSample, window.height * superSample);
@@ -86,10 +86,7 @@ void Zelda()
   {
     window.Clear(0, 190, 255);
 
-    vec3 oldCamPos = vec3() - Camera::Position();
-    Camera::Update(6);
-    vec3 newCamPos = vec3() - Camera::Position();
-    Camera::SetPosition(vec3() - hyruleCollisionMesh.SlideSweepSphere(Sphere(oldCamPos), newCamPos - oldCamPos));
+    Camera::Update(40);
 
     // Skybox
     mat4 skyMVP;
@@ -104,7 +101,7 @@ void Zelda()
 
     modelMat.LoadIdentity();
     MVP = projectionMat * viewMat * modelMat;
-    MVP.Transpose();
+    //MVP.Transpose();
 
     // Create Hyrule color buffer
     float useDetail = 1;
@@ -116,7 +113,7 @@ void Zelda()
     modelMat.LoadIdentity();
     modelMat.RotateX(270 * DegsToRads);
     MVP = projectionMat * viewMat * modelMat;
-    MVP.Transpose();
+    //MVP.Transpose();
     hyruleLightBuffer.Render(MVP);
 
     mat4 identity;

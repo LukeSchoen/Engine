@@ -44,6 +44,7 @@
     <ClCompile Include="src\Insight.cpp" />
     <ClCompile Include="src\LogicMonday.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\MarchingCubes.cpp" />
     <ClCompile Include="src\math\Exponent.cpp" />
     <ClCompile Include="src\Math\Maths.cpp" />
     <ClCompile Include="src\Math\Matrix4x4.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="src\BTCBot.h" />
     <ClInclude Include="src\btcFunctions.h" />
     <ClInclude Include="src\btcTypes.h" />
+    <ClInclude Include="src\MarchingCubes.h" />
     <ClInclude Include="src\ModelView.h" />
     <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\Cache.h" />
