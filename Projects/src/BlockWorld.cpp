@@ -88,7 +88,7 @@ bool BlockWorld::RayTrace(vec3 _pos, vec3 _dir, float length, vec3i *FirstOccupi
     // Determine first dimension crossed
     int FirstCross = (((crossDist.x >= crossDist.y)*(crossDist.z > crossDist.y))) + (((crossDist.x >= crossDist.z)*(crossDist.y >= crossDist.z)) * 2);
 
-    // step across dimension
+    // step across dimensions
     switch (FirstCross)
     {
     case 0:

@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include "BlockWorld.h"
 #include "Assets.h"
-
+#include "PI.h"
 
 static struct
 {
@@ -45,10 +45,21 @@ struct Entity
 
     mat4 model;
     model.Translate(position);
+
+    vec3 capPos = vec3() - Camera::Position();
+    float headYaw = -atan2(position.x - capPos.x, position.z - capPos.z);
+    float headPitch = DegsToRads * 270 + atan2(vec2(position.x - capPos.x, position.z - capPos.z).Length(), position.y - capPos.y);
+    model.RotateY(headYaw);
+    model.RotateX(headPitch);
     mat4 headMVP = VP * model;
+    model.RotateX(-headPitch);
+    model.RotateY(-headYaw);
     headMVP.Transpose();
     BipedModel.Head.Render(headMVP);
-    BipedModel.Torso.Render(headMVP);
+
+    mat4 torsoMVP = VP * model;
+    torsoMVP.Transpose();
+    BipedModel.Torso.Render(torsoMVP);
 
     model.Translate(vec3(-armOut, armDwn, 0));
     mat4 armR = VP * model;
