@@ -25,12 +25,12 @@ void main() // console entry
   //NovaCosm();
   //Cosmic();
   //Zelda();
-  //Minecraft();
+  Minecraft();
   //OpenGL();
   //Compression();
   //PhysicsTest();
   //ModelView();
-  MarchingCubes();
+  //MarchingCubes();
 }
 
 int wmain(int pc, char* ps){main();} // windows entry

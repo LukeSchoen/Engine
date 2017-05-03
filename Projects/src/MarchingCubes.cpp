@@ -460,6 +460,34 @@ std::vector<Tri> MarchingCubesTriangleList(float *grid, int gridRes, float isoLe
   return triangles;
 }
 
+void BlurGrid(float *grid, int gridRes, int steps)
+{
+  float *grid2 = new float[gridRes * gridRes * gridRes];
+  for (int step = 0; step < steps; step++)
+  {
+  for (int x = 0; x < gridRes - 1; x++)
+    for (int y = 0; y < gridRes - 1; y++)
+      for (int z = 0; z < gridRes - 1; z++)
+      {
+        float neighbourCount = 0;
+        float sumValue = 0;
+        for (int ix = -1; ix <= 1; ix++)
+          for (int iy = -1; iy <= 1; iy++)
+            for (int iz = -1; iz <= 1; iz++)
+              if (x + ix >= 0 && y + iy >= 0 && z + iz >= 0 && x + ix < gridRes && y + iy < gridRes  && z + iz < gridRes)
+              {
+                neighbourCount++;
+                int i = (x + ix) + (y + iy) * gridRes + (z + iz) * gridRes  * gridRes;
+                sumValue += grid[i];
+              }
+        int i = x + y * gridRes + z * gridRes  * gridRes;
+        grid2[i] = (sumValue / neighbourCount);
+      }
+  memcpy(grid, grid2, sizeof(float) * gridRes * gridRes * gridRes);
+  }
+  delete[] grid2;
+}
+
 float *pcfToGrid(const char *pcfPath, int gridRes)
 {
   float *grid = new float[gridRes * gridRes * gridRes];
@@ -470,7 +498,8 @@ float *pcfToGrid(const char *pcfPath, int gridRes)
     int32_t x = p.x;
     int32_t y = p.y;
     int32_t z = p.z;
-    grid[x + y * gridRes + z * gridRes * gridRes] = 1.0;
+    int32_t index = x + y * gridRes + z * gridRes * gridRes;
+    grid[index] = Min(grid[index] + 0.005, 1);
   }
   return grid;
 }
@@ -496,10 +525,10 @@ void MarchingCubes()
   int gridSize = 256;
   float *grid;
   { // convert
-    //Convertor::ResamplePCF(inputPath, outputPath, gridSize);
-    //grid = pcfToGrid(outputPath, gridSize);
-    //StreamFileWriter stream("F:/temp/carrick256.grid");
-    //stream.WriteBytes(grid, sizeof(float) * gridSize * gridSize *gridSize);
+    Convertor::ResamplePCF(inputPath, outputPath, gridSize);
+    grid = pcfToGrid(outputPath, gridSize);
+    StreamFileWriter stream("F:/temp/carrick256.grid");
+    stream.WriteBytes(grid, sizeof(float) * gridSize * gridSize *gridSize);
     //exit(0);
   }
   { // fast load
@@ -507,6 +536,9 @@ void MarchingCubes()
     StreamFileReader stream("F:/temp/carrick256.grid");
     stream.ReadBytes(grid, sizeof(float) * gridSize * gridSize *gridSize);
   }
+  //BlurGrid(grid, gridSize, 2);
+
+  // Blur Grid
 
   std::vector<Tri> tris = MarchingCubesTriangleList(grid, gridSize, 0.5);
 

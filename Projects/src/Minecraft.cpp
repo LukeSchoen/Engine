@@ -25,12 +25,12 @@ static volatile bool streaming = true;
 #ifdef _DEBUG
 int viewDist = 4;
 #else
-int viewDist = 20;
+int viewDist = 60;
 #endif
 
 BlockWorld *world = nullptr;
 
-static int updateExchangeData(void *ptr)
+static int updateWorldThread(void *ptr)
 {
   while (running)
   {
@@ -47,7 +47,8 @@ void Minecraft()
 
   Threads::SetSlowMode(); // Don't starve OpenGLs driver while rendering
 #ifdef _DEBUG
-  Window window("Game", true, 640, 480, false); // Create Debug Game Window
+  //Window window("Game", true, 640, 480, false); // Create Debug Game Window
+  Window window("Game", true, 1920, 1080, true); // Create Game Window
 #else
   Window window("Game", true, 1920, 1080, true); // Create Game Window
 #endif
@@ -66,12 +67,12 @@ void Minecraft()
   //Textures::SetTextureFilterMode(false);
 
   // Create World
-  //world = new BlockWorld("C:/Users/Luke/Desktop/region/", viewDist);
-  world = new BlockWorld("C:/Users/Luke/Desktop/kanto/", viewDist);
+  world = new BlockWorld("C:/Users/Luke/Desktop/flat/region/", viewDist);
+  Camera::SetPosition(vec3(956, -7.58, 1201));
 
   // Stream chunks (on another thread)
   if (MultiThread)
-    SDL_CreateThread(updateExchangeData, "streamer", nullptr);
+    SDL_CreateThread(updateWorldThread, "streamer", nullptr);
 
   Entity player(world);
 
@@ -92,7 +93,7 @@ void Minecraft()
   {
     window.Clear(0, 190, 255);
     // Update Camera & World
-    Camera::Update(6);
+    Camera::Update(10);
 
     // Smash blocks !
     static bool smashDown = false;
@@ -123,7 +124,6 @@ void Minecraft()
     else placeDown = false;
 
 
-
     //Textures::SetTextureFilterMode(false);
     // Skybox
     glDepthMask(GL_FALSE);
@@ -146,6 +146,7 @@ void Minecraft()
 
     world->Render(MVP);
 
+    player.Draw(projectionMat * viewMat);
 
     // Draw Cross hair
     glDepthMask(GL_FALSE);
@@ -165,11 +166,9 @@ void Minecraft()
     }
 
     if (!MultiThread)
-    {
       world->Stream(vec3() - Camera::Position());
-    }
 
-    window.Swap(); // Swap Window
+    window.Swap(!Controls::KeyDown(SDL_SCANCODE_2)); // Swap Window
 
     FrameRate::Update();
   }

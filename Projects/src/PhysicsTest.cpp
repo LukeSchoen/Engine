@@ -181,7 +181,7 @@ void PhysicsTest()
 
     // Shooting
     static bool shooting = false;
-    if (Controls::GetControllerButton(12))
+    if (Controls::GetControllerButton(12) || Controls::KeyDown(SDL_SCANCODE_1))
     {
       if (!shooting)
       {
@@ -197,6 +197,14 @@ void PhysicsTest()
       shooting = false;
     }
 
+    if (Controls::KeyDown(SDL_SCANCODE_2))
+    {
+      for (auto cube : cubes)
+      {
+        cube.ApplyForce(vec3(rand() % 1000 - 500, 500, rand() % 1000 - 500));
+      }
+    }
+
     // Jumping
     bool FeetNearGround = false;
     for (int x = -4; x < 4; x++)
@@ -204,9 +212,8 @@ void PhysicsTest()
         FeetNearGround |= world.RayCast(CamSphere.GetPos() + vec3(x, -4, y), CamSphere.GetPos() + vec3(x, -8, y));
 
     bool OnGround = FeetNearGround;
-    if (Controls::GetControllerButton(10) && OnGround && abs(CamSphere.GetSpeed().y) < 0.1)
-          CamSphere.ApplyForce(vec3(0, 500, 0));
-
+    if ((Controls::KeyDown(SDL_SCANCODE_SPACE) || Controls::GetControllerButton(10)) && OnGround && abs(CamSphere.GetSpeed().y) < 0.1)
+          CamSphere.ApplyForce(vec3(0, 500 * 1.5, 0));
 
     vec3 lastCam = Camera::Position();
     Camera::Update(20, true);

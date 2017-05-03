@@ -48,6 +48,7 @@ mat4 PhysicsObject::GetModelMat() const
 void PhysicsObject::ApplyForce(vec3 force, vec3 offset)
 {
   btRigidBody *body = btRigidBody::upcast(pObject);
+  body->activate();
   body->applyForce(ToBT(force), ToBT(offset));
 }
 
@@ -67,7 +68,7 @@ PhysicsWorld::PhysicsWorld()
   btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
   btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
   world = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-  world->setGravity(btVector3(0, -10, 0));
+  world->setGravity(btVector3(0, -25, 0));
 }
 
 void PhysicsWorld::UpdateWorld(float StepSize, int subSteps)

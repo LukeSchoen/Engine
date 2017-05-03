@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "math/Maths.h"
 
 Window::Window(char * windowTitle /*= "Program"*/, bool OpenGL /*= false*/, int Width /*= 800*/, int Height /*= 600*/, bool Fullscreen /*= false*/)
 {
@@ -16,18 +17,18 @@ Window::Window(char * windowTitle /*= "Program"*/, bool OpenGL /*= false*/, int 
     // Do these help?
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_LINE_SMOOTH);
-    glEnable(GL_POLYGON_SMOOTH);
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-    glEnable(GL_MULTISAMPLE);
+    //glEnable(GL_LINE_SMOOTH);
+    //glEnable(GL_POLYGON_SMOOTH);
+    //glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    //glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+    //glEnable(GL_MULTISAMPLE);
 
     //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3); // OpenGL 3.1 core
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1); // Anti Aliasing
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+    //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1); // Anti Aliasing
+    //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 2);
   }
 
   int windowPos = SDL_WINDOWPOS_UNDEFINED;
@@ -68,12 +69,22 @@ void Window::Clear(unsigned char red, unsigned char green, unsigned char blue)
   }
 }
 
-void Window::Swap()
+__declspec(noinline) void Window::Swap(bool responsive)
 {
   if (OpenGLEnabled)
   {
     SDL_GL_SwapWindow(window);
-    //glFinish();
+
+    if (responsive)
+    {
+      static int drawTime = 0;
+      glFinish();
+      drawTime = SDL_GetTicks() - drawTime;
+      int freshWait = Min(Max(15 - drawTime, 0), 15);
+      SDL_Delay(freshWait);
+      drawTime = SDL_GetTicks();
+    }
+
   }
   else
     SDL_UpdateWindowSurface(window);
