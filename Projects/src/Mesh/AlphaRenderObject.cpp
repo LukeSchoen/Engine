@@ -31,9 +31,9 @@ static int CompareFaces(const void* pA, const void* pB)
 {
   uint16_t A = ((FaceInstance*)pA)->distance;
   uint16_t B = ((FaceInstance*)pB)->distance;
-  if (A < B) return 1;
+  if (A < B) return -1;
   if (A == B) return 0;
-  if (A > B) return -1;
+  if (A > B) return 1;
 }
 
 static std::vector<RenderInstance> renderInstances;
@@ -50,6 +50,7 @@ struct SortedRenderer
   }
   static void Render()
   {
+    glDepthMask(false);
     faceInstances.clear();
     for (uint32_t roItr = 0; roItr < renderInstances.size(); ++roItr)
     {
@@ -74,6 +75,7 @@ struct SortedRenderer
       faceInstances[faceItr].pRenderInstance->pRenderObject->Render(faceInstances[faceItr].pRenderInstance->mvp, firstVertex, 3);
     }
     renderInstances.clear();
+    glDepthMask(true);
   }
 };
 

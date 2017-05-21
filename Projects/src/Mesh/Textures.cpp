@@ -36,6 +36,58 @@ GLuint Textures::CreateTexture(uint32_t width, uint32_t height, bool depthTextur
   return ret;
 }
 
+GLuint Textures::LoadTextureWithScaleup(char *imagePath, int scaleRatio)
+{
+  uint32_t w;
+  uint32_t h;
+  float iscaleRatio = 1.0 / scaleRatio;
+  uint32_t *img = ImageFile::ReadImage(imagePath, &w, &h);
+  { // rescale image
+    uint32_t nw = w * scaleRatio;
+    uint32_t nh = h * scaleRatio;
+    uint32_t *nimg = new uint32_t[nw * nh];
+    for (uint32_t ny = 0; ny < nh; ny++)
+      for (uint32_t nx = 0; nx < nw; nx++)
+        nimg[nx + ny * nw] = img[int(nx * iscaleRatio) + int(ny * iscaleRatio) * w];
+    delete[] img;
+    img = nimg;
+    w = nw;
+    h = nh;
+  }
+
+  if (!img) return glUndefined;
+
+  GLuint ret;
+  glGenTextures(1, &ret);
+  glBindTexture(GL_TEXTURE_2D, ret);
+
+  if (nearestNeighbour)
+  {
+    GLfloat maximumAnistrophy;
+    glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maximumAnistrophy);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maximumAnistrophy);
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  }
+  else
+  {
+    GLfloat maximumAnistrophy;
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maximumAnistrophy);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maximumAnistrophy);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  }
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
+  delete[] img;
+  return ret;
+}
 
 GLuint Textures::LoadTexture(char *imagePath)
 {

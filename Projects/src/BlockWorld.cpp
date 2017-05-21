@@ -9,10 +9,38 @@
 #include "CustomRenderObjects.h"
 #include "ChunkHandler.h"
 #include "Controls.h"
+#include "Shaders.h"
 
-RenderObject *MeshChunk(BlockWorld *world, int chunkX, int chunkZ)
+RenderObject *TexelMeshChunk(BlockWorld *world, int chunkX, int chunkZ)
 {
-  // Crate mesh structure
+  // Transparent blocks
+  ColouredArrayTexturedRenderObjectMaker mesh;
+  for (int y = 0; y < Chunk::height; y++)
+    for (int z = 0; z < Chunk::length; z++)
+      for (int x = 0; x < Chunk::width; x++)
+        BlockMesher::CreateTexelVoxelMesh(world, vec3i(x + chunkX * Chunk::width, y, z + chunkZ * Chunk::length), &mesh);
+
+  RenderObject *model = mesh.AssembleRenderObject();
+  model->AssignShader(ASSETDIR "Minecraft/shaders/texelWorld.vert", ASSETDIR "Minecraft/shaders/texelWorld.frag");
+  return model;
+}
+
+RenderObject *AlphaMeshChunk(BlockWorld *world, int chunkX, int chunkZ)
+{
+  // Transparent blocks
+  ColouredArrayTexturedRenderObjectMaker mesh;
+  for (int y = 0; y < Chunk::height; y++)
+    for (int z = 0; z < Chunk::length; z++)
+      for (int x = 0; x < Chunk::width; x++)
+        BlockMesher::CreateAlphaVoxelMesh(world, vec3i(x + chunkX * Chunk::width, y, z + chunkZ * Chunk::length), &mesh);
+
+  RenderObject *model = mesh.AssembleRenderObject();
+  model->AssignShader(ASSETDIR "Minecraft/shaders/alphaWorld.vert", ASSETDIR "Minecraft/shaders/alphaWorld.frag");
+  return model;
+}
+
+RenderObject *SolidMeshChunk(BlockWorld *world, int chunkX, int chunkZ)
+{
   ColouredArrayTexturedRenderObjectMaker mesh;
 
   // Setup face lists
@@ -31,14 +59,14 @@ RenderObject *MeshChunk(BlockWorld *world, int chunkX, int chunkZ)
       }
 
   // Optimize face lists
-  if (false)
+  if (world->combineFaces)
   {
-    FaceOptimizer::SplitOptimizeCombineFaces(world, tops, blockTop);
-    FaceOptimizer::SplitOptimizeCombineFaces(world, bots, blockBot);
-    FaceOptimizer::SplitOptimizeCombineFaces(world, fronts, blockFront);
-    FaceOptimizer::SplitOptimizeCombineFaces(world, backs, blockBack);
-    FaceOptimizer::SplitOptimizeCombineFaces(world, rights, blockRight);
-    FaceOptimizer::SplitOptimizeCombineFaces(world, lefts, blockLeft);
+    FaceOptimizer::OptimizeFaces(world, tops, blockTop);
+    FaceOptimizer::OptimizeFaces(world, bots, blockBot);
+    FaceOptimizer::OptimizeFaces(world, fronts, blockFront);
+    FaceOptimizer::OptimizeFaces(world, backs, blockBack);
+    FaceOptimizer::OptimizeFaces(world, rights, blockRight);
+    FaceOptimizer::OptimizeFaces(world, lefts, blockLeft);
   }
 
   // Mesh face lists
@@ -49,7 +77,9 @@ RenderObject *MeshChunk(BlockWorld *world, int chunkX, int chunkZ)
   BlockMesher::CreateFaceListMesh(world, rights, &mesh, blockRight); rights.clear();
   BlockMesher::CreateFaceListMesh(world, lefts, &mesh, blockLeft); lefts.clear();
 
-  return mesh.AssembleRenderObject();
+  RenderObject *model = mesh.AssembleRenderObject();
+  model->AssignShader(ASSETDIR "Minecraft/shaders/solidWorld.vert", ASSETDIR "Minecraft/shaders/solidWorld.frag");
+  return model;
 }
 
 
@@ -107,7 +137,7 @@ bool BlockWorld::RayTrace(vec3 _pos, vec3 _dir, float length, vec3i *FirstOccupi
       travelTime -= crossDist.z;
       break;
     }
-    if (blockTypes.IsBlockEnabled(GetBlock(wholePos)))
+    if (blockTypes.IsBlockEnabled(GetBlock(wholePos)) && blockTypes.GetBlockModel(GetBlock(wholePos)) != liquid)
     {
       if (FirstOccupiedBlock) *FirstOccupiedBlock = wholePos;
       if (LastEmptyBlock) *LastEmptyBlock = prevWPos;
@@ -118,6 +148,27 @@ bool BlockWorld::RayTrace(vec3 _pos, vec3 _dir, float length, vec3i *FirstOccupi
   return false;
 }
 
+bool BlockWorld::BoxCollides(vec3 _pos, vec3 _size)
+{
+  _pos -= _size * 0.5; // centre
+  for (int64_t x = floor(_pos.x); x < ceil(_pos.x + _size.x); x++)
+    for (int64_t y = floor(_pos.y); y < ceil(_pos.y + _size.y); y++)
+      for (int64_t z = floor(_pos.z); z < ceil(_pos.z + _size.z); z++)
+        if (blockTypes.IsBlockSolid(GetBlock(vec3i(x, y, z))))
+          return true;
+  return false;
+}
+
+bool BlockWorld::BoxContains(vec3 _pos, vec3 _size, uint8_t blockID)
+{
+  _pos -= _size * 0.5; // centre
+  for (int64_t x = floor(_pos.x); x < ceil(_pos.x + _size.x); x++)
+    for (int64_t y = floor(_pos.y); y < ceil(_pos.y + _size.y); y++)
+      for (int64_t z = floor(_pos.z); z < ceil(_pos.z + _size.z); z++)
+        if (GetBlock(vec3i(x, y, z)) == blockID)
+          return true;
+  return false;
+}
 
 void BlockWorld::SetBlock(vec3i blockPos, uint8_t blockID)
 {
@@ -139,7 +190,6 @@ void BlockWorld::SetBlock(vec3i blockPos, uint8_t blockID)
 }
 
 
-
 // Optimized implementation
 uint8_t BlockWorld::GetBlock(vec3i blockPos)
 {
@@ -155,7 +205,6 @@ uint8_t BlockWorld::GetBlock(vec3i blockPos)
   return 0;
 }
 
-
 // Reference implementation
 // uint8_t BlockWorld::GetBlock(vec3i blockPos)
 // {
@@ -166,17 +215,34 @@ uint8_t BlockWorld::GetBlock(vec3i blockPos)
 //   return 0;
 // }
 
-
-void BlockWorld::Render(mat4 &MVP)
+void BlockWorld::Render(mat4 &VP)
 {
   renderListLock.lock();
+
+  // Toggle combine Mode !
+  static bool combineDown = false;
+  if (Controls::KeyDown(SDL_SCANCODE_2) || Controls::GetControllerButton(9))
+  {
+    if (!combineDown)
+    {
+      combineFaces = !combineFaces;
+      for (auto &chunkID : meshedChunks)
+      {
+        loadedChunks.push_back(chunkID);
+        chunks.GetChunkInstance(chunkID)->DeleteMesh();
+      }
+      meshedChunks.clear();
+    }
+    combineDown = true;
+  }
+  else combineDown = false;
 
   lightingAtlas.UploadToGPU();
 
   // Toggle Wire frame Mode !
   static bool wireDown = false;
   static bool wire = false;
-  if (Controls::KeyDown(SDL_SCANCODE_Q) || Controls::GetControllerButton(11))
+  if (Controls::KeyDown(SDL_SCANCODE_1) || Controls::GetControllerButton(13))
   {
     if (!wireDown)
       wire = !wire;
@@ -184,31 +250,58 @@ void BlockWorld::Render(mat4 &MVP)
   }
   else wireDown = false;
 
+  mat4 TVP = VP;
+  TVP.Transpose();
+
   // Draw World
   if (wire)
   {
+    glLineWidth(4);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glPolygonOffset(0, 1024);
     glEnable(GL_POLYGON_OFFSET_FILL);
     for (int cID = 0; cID < meshedChunks.size(); cID++)
     {
       //chunks.GetChunkInstance(meshedChunks[cID])->mesh->AssignTexture("texture0", lightingAtlas.texture, TT_2D);
-      chunks.GetChunkInstance(meshedChunks[cID])->mesh->AssignTexture("texture0", blackTexture, TT_2D_ARRAY);
-      chunks.GetChunkInstance(meshedChunks[cID])->mesh->Render(MVP);
+      chunks.GetChunkInstance(meshedChunks[cID])->solidMesh->AssignTexture("texture0", blackTexture, TT_2D_ARRAY);
+      chunks.GetChunkInstance(meshedChunks[cID])->solidMesh->Render(TVP);
+      chunks.GetChunkInstance(meshedChunks[cID])->alphaMesh->AssignTexture("texture0", blackTexture, TT_2D_ARRAY);
+      chunks.GetChunkInstance(meshedChunks[cID])->alphaMesh->Render(TVP);
+      chunks.GetChunkInstance(meshedChunks[cID])->texelMesh->AssignTexture("texture0", blackTexture, TT_2D_ARRAY);
+      chunks.GetChunkInstance(meshedChunks[cID])->texelMesh->Render(TVP);
     }
     glDisable(GL_POLYGON_OFFSET_FILL);
   }
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   for (int cID = 0; cID < meshedChunks.size(); cID++)
-  {
+  { // Solid Blocks
     //chunks.GetChunkInstance(meshedChunks[cID])->mesh->AssignTexture("texture0", lightingAtlas.texture, TT_2D);
-    chunks.GetChunkInstance(meshedChunks[cID])->mesh->AssignTexture("texture0", atlastexture, TT_2D_ARRAY);
     chunks.GetChunkInstance(meshedChunks[cID])->lifeTime *= 1.2;
     chunks.GetChunkInstance(meshedChunks[cID])->lifeTime += 0.03;
     float f = Min(chunks.GetChunkInstance(meshedChunks[cID])->lifeTime, 1);
-    chunks.GetChunkInstance(meshedChunks[cID])->mesh->AssignUniform("fade", UT_1f, &f);
-    chunks.GetChunkInstance(meshedChunks[cID])->mesh->Render(MVP);
+
+    chunks.GetChunkInstance(meshedChunks[cID])->solidMesh->AssignTexture("texture0", atlastexture, TT_2D_ARRAY);
+    chunks.GetChunkInstance(meshedChunks[cID])->solidMesh->AssignUniform("fade", UT_1f, &f);
+    chunks.GetChunkInstance(meshedChunks[cID])->solidMesh->Render(TVP);
   }
+
+  for (int cID = 0; cID < meshedChunks.size(); cID++)
+  { // Texel Blocks
+    float f = Min(chunks.GetChunkInstance(meshedChunks[cID])->lifeTime, 1);
+    chunks.GetChunkInstance(meshedChunks[cID])->texelMesh->AssignTexture("texture0", atlastexture, TT_2D_ARRAY);
+    chunks.GetChunkInstance(meshedChunks[cID])->texelMesh->AssignUniform("fade", UT_1f, &f);
+    chunks.GetChunkInstance(meshedChunks[cID])->texelMesh->Render(TVP);
+  }
+
+  glDepthMask(false);
+  for (int cID = 0; cID < meshedChunks.size(); cID++)
+  { // Alpha Blocks
+    float f = Min(chunks.GetChunkInstance(meshedChunks[cID])->lifeTime, 1);
+    chunks.GetChunkInstance(meshedChunks[cID])->alphaMesh->AssignTexture("texture0", atlastexture, TT_2D_ARRAY);
+    chunks.GetChunkInstance(meshedChunks[cID])->alphaMesh->AssignUniform("fade", UT_1f, &f);
+    chunks.GetChunkInstance(meshedChunks[cID])->alphaMesh->Render(TVP);
+  }
+  glDepthMask(true);
 
   // Cleanup unused resources for the GPU
   if (oldMeshes.size())
@@ -217,6 +310,8 @@ void BlockWorld::Render(mat4 &MVP)
       oldMeshes[mID]->Clear();
     oldMeshes.clear();
   }
+
+  entities.Draw(VP);
   
   renderListLock.unlock();
 }
@@ -271,8 +366,8 @@ void BlockWorld::Stream(vec3 camPos)
     {
       if (renderListLock.try_lock())
       {
-        oldMeshes.push_back(c.mesh);
-        c.mesh = nullptr;
+        oldMeshes.push_back(c.solidMesh);
+        c.solidMesh = nullptr;
         loadedChunks.push_back(meshedChunks[i]);
         meshedChunks.erase(meshedChunks.begin() + i);
         renderListLock.unlock();
@@ -301,14 +396,18 @@ void BlockWorld::Stream(vec3 camPos)
 
   // Update all chunks which have been changed at once
   static std::vector<int> updateChunkList;
-  static std::vector<RenderObject*> updateMeshList;
+  static std::vector<RenderObject*> updateSolidMeshList;
+  static std::vector<RenderObject*> updateAlphaMeshList;
+  static std::vector<RenderObject*> updateTexelMeshList;
   for (int i = 0; i < meshedChunks.size(); i++)
   {
     ChunkInstance &c = *chunks.GetChunkInstance(meshedChunks[i]);
     if (c.hasChanged)
     {
       updateChunkList.push_back(meshedChunks[i]);
-      updateMeshList.push_back(MeshChunk(this, c.xPos, c.zPos));
+      updateSolidMeshList.push_back(SolidMeshChunk(this, c.xPos, c.zPos));
+      updateAlphaMeshList.push_back(AlphaMeshChunk(this, c.xPos, c.zPos));
+      updateTexelMeshList.push_back(TexelMeshChunk(this, c.xPos, c.zPos));
       c.hasChanged = false;
     }
   }
@@ -318,16 +417,20 @@ void BlockWorld::Stream(vec3 camPos)
     for (int i = 0; i < updateChunkList.size(); i++)
     {
       ChunkInstance &c = *chunks.GetChunkInstance(updateChunkList[i]);
-      if (c.mesh)
+      if (c.solidMesh)
       {
-        oldMeshes.push_back(c.mesh);
-        c.mesh = updateMeshList[i];
+        oldMeshes.push_back(c.solidMesh);
+        c.solidMesh = updateSolidMeshList[i];
+        c.alphaMesh = updateAlphaMeshList[i];
+        c.texelMesh = updateTexelMeshList[i];
       }
     }
     renderListLock.unlock();
   }
   updateChunkList.clear();
-  updateMeshList.clear();
+  updateSolidMeshList.clear();
+  updateAlphaMeshList.clear();
+  updateTexelMeshList.clear();
 
   // Mesh loaded chunks who's neighbors are also loaded
   foundChunk = false;
@@ -357,7 +460,9 @@ void BlockWorld::Stream(vec3 camPos)
   {
     // Store Meshed Chunk
     ChunkInstance &c = *chunks.GetChunkInstance(bestChunkID);
-    c.mesh = MeshChunk(this, bestChunkXpos, bestChunkZpos);
+    c.solidMesh = SolidMeshChunk(this, bestChunkXpos, bestChunkZpos);
+    c.alphaMesh = AlphaMeshChunk(this, bestChunkXpos, bestChunkZpos);
+    c.texelMesh = TexelMeshChunk(this, bestChunkXpos, bestChunkZpos);
 
     // Delete Loaded Chunk
     loadedChunks.erase(loadedChunks.begin() + bestChunkListID);

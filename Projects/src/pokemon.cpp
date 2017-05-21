@@ -31,7 +31,6 @@ void Pokemon()
 
   window.Swap();
   PolyModel model;
-  //model.LoadModel("../Assets/Hyrule Map/Over_World.obj");
 
   mat4 modelMat;
   Shaders::Report();

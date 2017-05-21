@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include <stdlib.h>
 #include "Controls.h"
+#include "Assets.h"
 
 struct voxel 
 {
@@ -169,7 +170,7 @@ private:
     free(data);
 
     // GPU
-    block->model.AssignShader("../Assets/NovaCosm/shaders/NovaCosm.vert", "../Assets/NovaCosm/shaders/NovaCosm.frag", "../Assets/NovaCosm/shaders/NovaCosm.geom");
+    block->model.AssignShader(ASSETDIR "NovaCosm/shaders/NovaCosm.vert", ASSETDIR "NovaCosm/shaders/NovaCosm.frag", ASSETDIR "NovaCosm/shaders/NovaCosm.geom");
     block->model.AssignAttribute("position", GLAttributeType::AT_UNSIGNED_BYTE, block->voxelPosData, 3, block->voxelCount);
     block->model.AssignAttribute("color", GLAttributeType::AT_UNSIGNED_BYTE_NORM, block->voxelColData, 3, block->voxelCount);
 

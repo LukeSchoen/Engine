@@ -21,6 +21,7 @@ struct Matrix4x4
   void Translate(const vec3 &vec);
   void Scale(float x, float y, float z);
   void Scale(float num);
+  void Scale(const vec3 &vec);
   void Rotate(float x, float y, float z);
   void Rotate(const vec3 &rot);
   void RotateDegrees(float x, float y, float z);

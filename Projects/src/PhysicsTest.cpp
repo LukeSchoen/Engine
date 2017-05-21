@@ -251,7 +251,7 @@ void PhysicsTest()
 
     Camera::SetPosition(vec3() - CamSphere.GetPos());
 
-    window.Swap();
+    window.Swap(true);
     FrameRate::Update();
   }
 

@@ -15,8 +15,8 @@ Window::Window(char * windowTitle /*= "Program"*/, bool OpenGL /*= false*/, int 
     SDL_GL_SetSwapInterval(1);
 
     // Do these help?
-    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
     //glEnable(GL_LINE_SMOOTH);
     //glEnable(GL_POLYGON_SMOOTH);
     //glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
@@ -69,20 +69,70 @@ void Window::Clear(unsigned char red, unsigned char green, unsigned char blue)
   }
 }
 
-__declspec(noinline) void Window::Swap(bool responsive)
+int Window::GetRefreshRate()
+{
+  static int RR = 0;
+  if (RR == 0)
+  {
+    SDL_Init(SDL_INIT_EVERYTHING);
+    SDL_DisplayMode mode;
+    for (int i = 0; i < SDL_GetNumVideoDisplays(); ++i)
+    {
+      SDL_GetCurrentDisplayMode(i, &mode);
+      RR = Max(mode.refresh_rate, RR);
+    }
+  }
+  return RR;
+}
+
+vec2i Window::GetScreenRes()
+{
+  SDL_Init(SDL_INIT_EVERYTHING);
+  static int w = 0;
+  static int h = 0;
+  if (w == 0)
+  {
+    SDL_DisplayMode mode;
+    for (int i = 0; i < SDL_GetNumVideoDisplays(); ++i)
+    {
+      SDL_GetCurrentDisplayMode(i, &mode);
+      w = Max(w, mode.w);
+      h = Max(h, mode.h);
+    }
+  }
+  return vec2i(w, h);
+}
+
+void Window::Swap(bool responsive)
 {
   if (OpenGLEnabled)
   {
     SDL_GL_SwapWindow(window);
-
     if (responsive)
     {
+      static float averageFPS = 0;
+
       static int drawTime = 0;
-      glFinish();
+      if (averageFPS > GetRefreshRate() / 2) // If were running well then decrease latency!
+        glFinish();
       drawTime = SDL_GetTicks() - drawTime;
-      int freshWait = Min(Max(15 - drawTime, 0), 15);
-      SDL_Delay(freshWait);
+      averageFPS = ((averageFPS * 9) + (1000 / drawTime)) / 10;
+      static int refreshTime = floor(1000.0f / GetRefreshRate()) - 2;
+      int freshWait = Min(Max(refreshTime - drawTime, 0), refreshTime);
+      if(averageFPS + 5 > GetRefreshRate()) // If were running really well then further decrease latency!
+        SDL_Delay(freshWait);
       drawTime = SDL_GetTicks();
+
+      // simple perfotce measure
+      if(false)
+      {
+        if (averageFPS + 5 > GetRefreshRate())
+          printf("great\n");
+        else if (averageFPS > GetRefreshRate() / 2)
+          printf("good\n");
+        else
+          printf("bad\n");
+      }
     }
 
   }

@@ -100,5 +100,3 @@ AssimpModel AssimpLoadModel(const char *filePath)
     model.faces[faceItr] = modelData[faceItr];
   return model;
 }
-
-

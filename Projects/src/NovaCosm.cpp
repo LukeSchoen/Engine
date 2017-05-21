@@ -65,9 +65,6 @@ void NovaCosm()
   mat4 projectionMat;
   projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 0.02, 8000.0f);
 
-  //PolyModel skybox;
-  //skybox.LoadModel("../Assets/skybox/skybox.obj");
-
   while (Controls::Update()) // Main Game Loop
   {
     window.Clear(0, 190, 255);

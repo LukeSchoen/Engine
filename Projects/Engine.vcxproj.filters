@@ -226,6 +226,18 @@
     <ClCompile Include="src\MarchingCubes.cpp">
       <Filter>Projects\MarchingCubes</Filter>
     </ClCompile>
+    <ClCompile Include="src\Entities.cpp">
+      <Filter>Projects\Minecraft\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityHandler.cpp">
+      <Filter>Projects\Minecraft\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Biped.cpp">
+      <Filter>Projects\Minecraft\Entities\Biped</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityMaker.cpp">
+      <Filter>Projects\Minecraft\Entities\Maker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -519,6 +531,15 @@
     <ClInclude Include="src\MarchingCubes.h">
       <Filter>Projects\MarchingCubes</Filter>
     </ClInclude>
+    <ClInclude Include="src\EntityHandler.h">
+      <Filter>Projects\Minecraft\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Biped.h">
+      <Filter>Projects\Minecraft\Entities\Biped</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityMaker.h">
+      <Filter>Projects\Minecraft\Entities\Maker</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -751,6 +772,12 @@
     </Filter>
     <Filter Include="Projects\MarchingCubes">
       <UniqueIdentifier>{61ac7cf5-0fff-4369-8243-72a0baafa53e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Minecraft\Entities\Biped">
+      <UniqueIdentifier>{183f9453-39de-4404-b4a4-1cdd946533cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Minecraft\Entities\Maker">
+      <UniqueIdentifier>{4f174055-cc63-4efd-a081-01d137f6fb72}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

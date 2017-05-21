@@ -7,6 +7,7 @@ struct Textures
   static void SetTextureFilterMode(bool smooth);
   static GLuint CreateTexture(uint32_t width, uint32_t height, bool depthTexture = false);
   static GLuint LoadTexture(char *imagePath);
+  static GLuint LoadTextureWithScaleup(char *imagePath, int scaleRatio);
   static GLuint LoadTextureArray(char *imagePath, const int tileSizeX, const int tileSizeY);
   static bool GetTextureArrayMode();
 };

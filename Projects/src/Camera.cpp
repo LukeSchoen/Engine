@@ -19,7 +19,7 @@ vec3 Camera::Direction()
   return vec3(camSinY * camCosX, camSinX, camCosY * camCosX).Normalized();
 }
 
-void Camera::Update(float speed, bool only2D)
+void Camera::Update(float speed, bool only2D, bool useTimeDelta)
 {
   const float MouseTurnSensitivity = 1.0f / 1000.0f;
   const float ControllerTurnSensitivity = 1.0f / 1000.0f * 2000;
@@ -32,6 +32,8 @@ void Camera::Update(float speed, bool only2D)
   int time = clock();
   float timeDelta = (time - lastClock) / 1000.0;
   lastClock = clock();
+  if (!useTimeDelta)
+    timeDelta = 1;
 
   vec2 controllerTurn = Controls::GetController2DAxis(1);
   controllerTurn = vec2(controllerTurn.y, -controllerTurn.x);

@@ -10,6 +10,7 @@
 #include "PolyModel.h"
 #include "Textures.h"
 #include "CosmicModel.h"
+#include "Assets.h"
 
 void Cosmic()
 {
@@ -25,7 +26,7 @@ void Cosmic()
   projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 1.0f, 80000.0f);
 
   PolyModel skybox;
-  skybox.LoadModel("../Assets/skybox/skybox.obj");
+  skybox.LoadModel(ASSETDIR "skybox/skybox.obj");
 
 
   while (Controls::Update()) // Main Game Loop

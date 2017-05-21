@@ -7,6 +7,7 @@
 #include "SDL.h"
 #include <SDL_opengl.h>
 #include "SDL_opengles2.h"
+#include "Math/Maths.h"
 
 struct Window
 {
@@ -19,6 +20,8 @@ struct Window
   Window(char * windowTitle = "Program", bool OpenGL = false, int width = 800, int height = 600, bool fullscreen = false);
   void Clear(unsigned char red = 0, unsigned char green = 0, unsigned char blue = 0);
   void Swap(bool responsive = false);
+  static int GetRefreshRate();
+  static vec2i GetScreenRes();
   ~Window();
 private:
   bool OpenGLEnabled;

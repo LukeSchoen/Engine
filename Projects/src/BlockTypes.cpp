@@ -3,206 +3,210 @@
 MinecraftBlockTypes::MinecraftBlockTypes()
 {
   //stone
-  AddBlockType(1, 1);
+  AddSolidBlockType(1, 1);
   //grass
-  AddBlockType(2, 0, 2, 3, 3, 3, 3);
+  AddSolidBlockType(2, 0, 2, 3, 3, 3, 3);
   //dirt
-  AddBlockType(3, 2);
+  AddSolidBlockType(3, 2);
   //Cobble Stone
-  AddBlockType(4, 16);
+  AddSolidBlockType(4, 16);
   //Planks
-  AddBlockType(5, 4);
+  AddSolidBlockType(5, 4);
   //Bedrock
-  AddBlockType(7, 17);
+  AddSolidBlockType(7, 17);
+
   //water
-  AddBlockType(8, 205);
-  AddBlockType(9, 205);
+  AddAlphaBlockType(8, liquid, false, 205);
+  AddAlphaBlockType(9, liquid, false, 205);
 
   //Lava
-  AddBlockType(10, 237);
-  AddBlockType(11, 237);
+  AddAlphaBlockType(10, liquid, false, 237);
+  AddAlphaBlockType(11, liquid, false, 237);
 
   //Sand
-  AddBlockType(12, 18);
+  AddSolidBlockType(12, 18);
   //Gravel
-  AddBlockType(13, 19);
+  AddSolidBlockType(13, 19);
   //Gold
-  AddBlockType(14, 32);
+  AddSolidBlockType(14, 32);
   //Iron
-  AddBlockType(15, 33);
+  AddSolidBlockType(15, 33);
   //Coal
-  AddBlockType(16, 34);
+  AddSolidBlockType(16, 34);
   //Wood
-  AddBlockType(17, 20);
+  AddSolidBlockType(17, 20);
   //leaves
-  AddBlockType(18, 52);
-
+  AddAlphaBlockType(18, cube, true, 52);
 
   //Glass
-  AddBlockType(20, 49);
+  AddAlphaBlockType(20, cube, true, 49);
 
   //Lapis ore
-  AddBlockType(21, 160);
+  AddSolidBlockType(21, 160);
   //Lapis block
-  AddBlockType(22, 144);
+  AddSolidBlockType(22, 144);
   
   //Dispenser
-  AddBlockType(23, 62, 62, 46, 45, 45, 45);
+  AddSolidBlockType(23, 62, 62, 46, 45, 45, 45);
 
   //Bed
-  AddBlockType(26, 135);
+  AddAlphaBlockType(26, cube, true, 135);
 
   //Smooth sand stone
-  AddBlockType(24, 176);
+  AddSolidBlockType(24, 176);
 
   //Note Block
-  AddBlockType(25, 74, 74, 74, 74, 74, 74);
+  AddSolidBlockType(25, 74, 74, 74, 74, 74, 74);
 
   //Powered rail
-  AddBlockType(27, 179);
+  AddSolidBlockType(27, 179);
 
   //Tall grass
-  AddBlockType(31, 39);
+  AddAlphaBlockType(31, cross, false, 39);
 
   //Wool
-  AddBlockType(35, 64);
+  AddSolidBlockType(35, 64);
 
   //Dandelions
-  AddBlockType(37, 13);
+  AddAlphaBlockType(37, cross, false, 13);
   //Roses
-  AddBlockType(38, 12);
+  AddAlphaBlockType(38, cross, false, 12);
   //Brown Mushrooms
-  AddBlockType(39, 29);
-  //Brown Mushrooms
-  AddBlockType(40, 28);
+  AddAlphaBlockType(39, cross, false, 29);
+  //Red Mushrooms
+  AddAlphaBlockType(40, cross, false, 28);
   //Gold block
-  AddBlockType(41, 23);
+  AddSolidBlockType(41, 23);
   //Iron Block
-  AddBlockType(42, 22);
+  AddSolidBlockType(42, 22);
   //double Slab
-  AddBlockType(43, 5);
+  AddSolidBlockType(43, 5);
+
   //Slab
-  AddBlockType(44, 5);
+  AddAlphaBlockType(44, cube, true, 5);
 
   //Bricks
-  AddBlockType(45, 7);
+  AddSolidBlockType(45, 7);
 
   //TNT
-  AddBlockType(46, 8);
+  AddSolidBlockType(46, 8);
 
   //book shelf
-  AddBlockType(47, 35);
+  AddSolidBlockType(47, 35);
 
   //Mossy CobbleStone
-  AddBlockType(48, 36);
+  AddSolidBlockType(48, 36);
+
   //Obsidian
-  AddBlockType(49, 37);
+  AddSolidBlockType(49, 37);
 
   //Torch
-  AddBlockType(50, 80);
+  AddAlphaBlockType(50, cross, false, 80);
 
   //Fire
-  AddBlockType(51, 47);
+  AddSolidBlockType(51, 47);
 
 
 
   //Mob Spawner
-  AddBlockType(52, 65);
+  AddSolidBlockType(52, 65);
 
   //wood stairs
-  AddBlockType(53, 4);
+  AddSolidBlockType(53, 4);
 
   //Chest
-  AddBlockType(54, 25);
+  AddSolidBlockType(54, 25);
 
   //Diamond Ore
-  AddBlockType(56, 50);
+  AddSolidBlockType(56, 50);
 
   //Diamond Block
-  AddBlockType(57, 24);
+  AddSolidBlockType(57, 24);
 
   //Crafting table
-  AddBlockType(58, 43, 4, 60, 60, 59, 59);
+  AddSolidBlockType(58, 43, 4, 60, 60, 59, 59);
 
   //Wheat Crop
-  AddBlockType(59, 95);
+  AddAlphaBlockType(59, cross, false, 95);
 
   //Farm Land
-  AddBlockType(60, 86);
+  AddSolidBlockType(60, 86);
 
   //Furnace off
-  AddBlockType(61, 62, 62, 43, 45, 45, 45);
+  AddSolidBlockType(61, 62, 62, 43, 45, 45, 45);
+
   //Furnace on
-  AddBlockType(62, 62, 62, 60, 45, 45, 45);
+  AddSolidBlockType(62, 62, 62, 60, 45, 45, 45);
 
   //Standing Sign
-  AddBlockType(63, 4);
+  AddSolidBlockType(63, 4);
 
   //Stone Stairs
-  AddBlockType(67, 16);
+  AddSolidBlockType(67, 16);
 
   //Wood Door
-  AddBlockType(64, 97);
+  AddSolidBlockType(64, 97);
   
   //Ladder
-  AddBlockType(65, 83);
+  AddAlphaBlockType(65, cube, false, 83);
   
   //Rail
-  AddBlockType(66, 128);
+  AddAlphaBlockType(66, plane, false, 128);
 
   //Wall Sign
-  AddBlockType(68, 4);
+  AddSolidBlockType(68, 4);
 
   //Lever
-  AddBlockType(69, 16);
+  AddAlphaBlockType(69, cross, false, 16);
 
   //Stone Pressure plate
-  AddBlockType(70, 1);
+  AddAlphaBlockType(70, plane, false, 1);
 
   //Wood pressure plate
-  AddBlockType(72, 4);
+  AddAlphaBlockType(72, plane, false, 4);
 
   //Redstone Ore
-  AddBlockType(73, 51);
+  AddSolidBlockType(73, 51);
+
   //Snow
-  AddBlockType(78, 66);
+  AddSolidBlockType(78, 66);
 
   //Redstone Torch
-  AddBlockType(76, 99);
+  AddAlphaBlockType(76, cross, false, 99);
 
   //Stone button
-  AddBlockType(77, 1);
+  AddAlphaBlockType(77, cube, false, 1);
 
   //Ice
-  AddBlockType(79, 67);
+  AddSolidBlockType(79, 67);
   //Cactus
-  AddBlockType(81, 69);
+  AddSolidBlockType(81, 69);
   //Clay
-  AddBlockType(82, 72);
+  AddSolidBlockType(82, 72);
   //Sugar Cane
-  AddBlockType(83, 73);
+  AddAlphaBlockType(83, cube, true, 73);
 
   //Juke box
-  AddBlockType(84, 75, 74, 74, 74, 74, 74);
+  AddSolidBlockType(84, 75, 74, 74, 74, 74, 74);
   //Wood Fence
-  AddBlockType(85, 4);
+  AddSolidBlockType(85, 4);
   //Pumpkin
-  AddBlockType(86, 102);
+  AddSolidBlockType(86, 102);
 
   // Nether rack
-  AddBlockType(87, 104);
+  AddSolidBlockType(87, 104);
 
   // Soul Sand 
-  AddBlockType(88, 105);
+  AddSolidBlockType(88, 105);
 
   //Glow stone
-  AddBlockType(89, 105);
+  AddSolidBlockType(89, 105);
 
   //Cake
-  AddBlockType(92, 121);
+  AddSolidBlockType(92, 121);
 }
 
-void MinecraftBlockTypes::AddBlockType(uint8_t blockID, int topTex, int botTex, int frontTex, int backTex, int rightTex, int leftTex)
+void MinecraftBlockTypes::AddSolidBlockType(uint8_t blockID, int topTex, int botTex, int frontTex, int backTex, int rightTex, int leftTex)
 {
   botTex   = botTex   == -1 ? topTex : botTex;
   frontTex = frontTex == -1 ? topTex : frontTex;
@@ -211,6 +215,9 @@ void MinecraftBlockTypes::AddBlockType(uint8_t blockID, int topTex, int botTex, 
   leftTex  = leftTex  == -1 ? topTex : leftTex;
 
   blockData[blockID].used = true;
+  blockData[blockID].solid = true;
+  blockData[blockID].alpha = false;
+  blockData[blockID].model = cube;
 
   blockData[blockID].tile[0] = topTex;
     blockData[blockID].tile[1] = botTex;
@@ -221,6 +228,29 @@ void MinecraftBlockTypes::AddBlockType(uint8_t blockID, int topTex, int botTex, 
 }
 
 
+
+
+void MinecraftBlockTypes::AddAlphaBlockType(uint8_t blockID, modelType model, bool solid, int topTex, int botTex /*= -1*/, int frontTex /*= -1*/, int backTex /*= -1*/, int leftTex /*= -1*/, int rightTex /*= -1*/)
+{
+  botTex = botTex == -1 ? topTex : botTex;
+  frontTex = frontTex == -1 ? topTex : frontTex;
+  backTex = backTex == -1 ? topTex : backTex;
+  rightTex = rightTex == -1 ? topTex : rightTex;
+  leftTex = leftTex == -1 ? topTex : leftTex;
+
+  blockData[blockID].used = true;
+  blockData[blockID].alpha = true;
+  blockData[blockID].solid = solid;
+  blockData[blockID].model = model;
+
+  blockData[blockID].tile[0] = topTex;
+  blockData[blockID].tile[1] = botTex;
+  blockData[blockID].tile[2] = frontTex;
+  blockData[blockID].tile[3] = backTex;
+  blockData[blockID].tile[4] = rightTex;
+  blockData[blockID].tile[5] = leftTex;
+}
+
 int MinecraftBlockTypes::GetBlockTile(uint8_t blockID, int side)
 {
   return blockData[blockID].tile[side];
@@ -230,4 +260,19 @@ bool MinecraftBlockTypes::IsBlockEnabled(uint8_t blockID)
 {
   //if (blockID > 0) if (!blockData[blockID].used) printf("unknown %d\n", blockID); // Report unknwon blocks
   return blockData[blockID].used;
+}
+
+bool MinecraftBlockTypes::IsBlockAlphaed(uint8_t blockID)
+{
+  return blockData[blockID].alpha;
+}
+
+bool MinecraftBlockTypes::IsBlockSolid(uint8_t blockID)
+{
+  return blockData[blockID].solid;
+}
+
+modelType MinecraftBlockTypes::GetBlockModel(uint8_t blockID)
+{
+  return blockData[blockID].model;
 }

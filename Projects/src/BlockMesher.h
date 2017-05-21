@@ -23,11 +23,17 @@ struct BlockMesher
 {
   static bool GetBlockInShadow(BlockWorld *world, vec3i blockPos, int searchSize = 40);
 
+  static vec3 GetBlockWaterColorEffect(BlockWorld *world, vec3i blockPos);
+
   static uint8_t GetAONeighbourhood(BlockWorld *world, vec3i blockPos, blockSide side);
 
   static float ApplyAOtoVert(uint8_t neighbourhood, uint8_t vert, float occlusionFactor = 0.75f);
 
-  static void CreateVoxelFace(BlockWorld *world, vec3i blockPos, std::vector<Face> &faceList, blockSide side);
+  static void CreateVoxelFace(BlockWorld *world, vec3i blockPos, std::vector<Face> &faceList, blockSide side, bool AlphaMode = false);
+
+  static void CreateAlphaVoxelMesh(BlockWorld *world, vec3i blockPos, ColouredArrayTexturedRenderObjectMaker *mesh);
+
+  static void CreateTexelVoxelMesh(BlockWorld *world, vec3i blockPos, ColouredArrayTexturedRenderObjectMaker *mesh);
 
   static void CreateFaceListMesh(BlockWorld *world, std::vector<Face> &faces, ColouredArrayTexturedRenderObjectMaker *mesh, blockSide side);
 };

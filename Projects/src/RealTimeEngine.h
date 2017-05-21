@@ -6,7 +6,6 @@
 struct RealTimeEngine
 {
   uint32_t m_lastTicks;
-  uint32_t m_ticks;
   uint32_t m_coreSpeed;
 
   RealTimeEngine(int coreSpeed = 100);

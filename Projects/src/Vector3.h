@@ -40,7 +40,7 @@ struct Vector3
   T *Data() { return &x; }
   T Length() const { return sqrt(x * x + y * y + z * z); }
   T LengthSquared() const { return x * x + y * y + z * z; }
-  Vector3 Normalized() const { return Vector3(x, y, z) / Length(); }
+  Vector3 Normalized() const { return LengthSquared() > 0.0 ? Vector3(x, y, z) / Length() : *this; }
   T DotProduct(const Vector3 &o) const { return T(x * o.x + y * o.y + z * o.z); }
   Vector3 CrossProduct(const Vector3 &o) const { return Vector3(y * o.z - z * o.y, z * o.x - x * o.z, x * o.y - y * o.x); }
   uint32_t ConvertTo32BitRGBA() const { return int(x * 255) + (int(y * 255) << 8) + (int(z * 255) << 16) + (255 << 24); }

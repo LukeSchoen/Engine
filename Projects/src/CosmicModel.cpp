@@ -1,5 +1,6 @@
 #include "CosmicModel.h"
 #include "Shaders.h"
+#include "Assets.h"
 
 CosmicModel::CosmicModel(const char *PathToCVS /*= nullptr*/)
 {
@@ -121,7 +122,7 @@ void CosmicModel::StreamFromDist(Block &block, uint32_t layer)
 void CosmicModel::StreamToGPU(Block &block)
 {
   block.model.Clear();
-  block.model.AssignShader("../Assets/Cosmic/shaders/cosmic.vert", "../Assets/Cosmic/shaders/cosmic.frag", "../Assets/Cosmic/shaders/cosmic.geom");
+  block.model.AssignShader(ASSETDIR "Assets/Cosmic/shaders/cosmic.vert", ASSETDIR "Cosmic/shaders/cosmic.frag", ASSETDIR "Assets/Cosmic/shaders/cosmic.geom");
   block.model.AssignAttribute("position", GLAttributeType::AT_FLOAT, posData, 3, block.layers[block.CurrentLayer].VertexCount);
   block.model.AssignAttribute("color", GLAttributeType::AT_FLOAT, colData, 3, block.layers[block.CurrentLayer].VertexCount);
   block.StreamedIn = false;

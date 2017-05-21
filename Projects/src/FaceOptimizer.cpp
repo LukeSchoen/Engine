@@ -128,8 +128,8 @@ void FaceOptimizer::OptimizeFaces(BlockWorld *world, std::vector<Face> &faces, b
             faces[me].pos.z = bottom;
             faces[me].width = right - left;
             faces[me].height = top - bottom;
-            SwapAndPop(faces, he--);
-            //faces.erase(faces.begin() + he--);
+            //SwapAndPop(faces, he--);
+            faces.erase(faces.begin() + he--);
             success = true;
             break;
           }

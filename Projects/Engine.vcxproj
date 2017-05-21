@@ -1,13 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Final|Win32">
+      <Configuration>Final</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Final|x64">
       <Configuration>Final</Configuration>
       <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
@@ -16,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Audio.cpp" />
+    <ClCompile Include="src\Biped.cpp" />
     <ClCompile Include="src\BlockMesher.cpp" />
     <ClCompile Include="src\BlockTypes.cpp" />
     <ClCompile Include="src\Box.cpp" />
@@ -31,6 +44,9 @@
     <ClCompile Include="src\Decimator.cpp" />
     <ClCompile Include="src\DLux.cpp" />
     <ClCompile Include="src\Effect Object.cpp" />
+    <ClCompile Include="src\Entities.cpp" />
+    <ClCompile Include="src\EntityHandler.cpp" />
+    <ClCompile Include="src\EntityMaker.cpp" />
     <ClCompile Include="src\FaceOptimizer.cpp" />
     <ClCompile Include="src\FastPack.cpp" />
     <ClCompile Include="src\File\File.cpp" />
@@ -90,20 +106,26 @@
     <ClCompile Include="src\Vector.cpp" />
     <ClCompile Include="src\Window.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Final|x64'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="src\Zelda\Zelda.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Assets.h" />
     <ClInclude Include="src\Audio.h" />
+    <ClInclude Include="src\Biped.h" />
     <ClInclude Include="src\BlockMesher.h" />
     <ClInclude Include="src\BlockTypes.h" />
     <ClInclude Include="src\Box.h" />
     <ClInclude Include="src\BTCBot.h" />
     <ClInclude Include="src\btcFunctions.h" />
     <ClInclude Include="src\btcTypes.h" />
+    <ClInclude Include="src\EntityHandler.h" />
+    <ClInclude Include="src\EntityMaker.h" />
     <ClInclude Include="src\MarchingCubes.h" />
     <ClInclude Include="src\ModelView.h" />
     <ClInclude Include="src\Physics.h" />
@@ -208,7 +230,20 @@
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
@@ -221,6 +256,15 @@
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -228,29 +272,54 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(ProjectDir)\Output\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
     <CustomBuildBeforeTargets>
     </CustomBuildBeforeTargets>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
+    <CustomBuildBeforeTargets />
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir)\Output\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir)\Output\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -267,7 +336,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -279,7 +348,43 @@ xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\SDL2_im
 xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\zlib1.dll" "$(OutDir)" /d /y /i
 xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\libpng16-16.dll" "$(OutDir)" /d /y /i
 xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\libjpeg-9.dll" "$(OutDir)" /d /y /i
-xcopy "$(SolutionDir)3rdParty\Assimp\Lib\Debug\assimp-vc140-mt.dll" "$(OutDir)" /d /y /i</Command>
+xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc140-mt.dll" "$(OutDir)" /d /y /i</Command>
+    </PreBuildEvent>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRTDBG_MAP_ALLOC; WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\Bullet\src;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\ZLIB;$(SolutionDir)3rdParty\SDL2Image\include;$(ProjectDir)src;$(ProjectDir)src\Mesh;$(ProjectDir)src\Math;$(ProjectDir)src\File;$(ProjectDir)src\VoxelBoy;$(ProjectDir)src\Zelda;$(ProjectDir)src\Glorious</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\Lib\$(Platform)\$(Configuration)\SDL2.DLL" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\SDL2_image.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\zlib1.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\libpng16-16.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\libjpeg-9.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc140-mt.dll" "$(OutDir)" /d /y /i</Command>
     </PreBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -316,7 +421,7 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\Debug\assimp-vc140-mt.dll" "$(OutDir)" 
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
@@ -329,7 +434,51 @@ xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\SDL2_im
 xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\zlib1.dll" "$(OutDir)" /d /y /i
 xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\libpng16-16.dll" "$(OutDir)" /d /y /i
 xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\libjpeg-9.dll" "$(OutDir)" /d /y /i
-xcopy "$(SolutionDir)3rdParty\Assimp\Lib\Release\assimp-vc140-mt.dll" "$(OutDir)" /d /y /i</Command>
+xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc140-mt.dll" "$(OutDir)" /d /y /i</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/Oa %(AdditionalOptions)</AdditionalOptions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\Bullet\src;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\ZLIB;$(SolutionDir)3rdParty\SDL2Image\include;$(ProjectDir)src;$(ProjectDir)src\Mesh;$(ProjectDir)src\Math;$(ProjectDir)src\File;$(ProjectDir)src\VoxelBoy;$(ProjectDir)src\Zelda;$(ProjectDir)src\Glorious</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\Lib\$(Platform)\$(Configuration)\SDL2.DLL" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\SDL2_image.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\zlib1.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\libpng16-16.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\$(Configuration)\libjpeg-9.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc140-mt.dll" "$(OutDir)" /d /y /i</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'">
@@ -360,7 +509,7 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\Release\assimp-vc140-mt.dll" "$(OutDir)
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\Release;$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\Release;$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\Release;$(SolutionDir)3rdParty\Assimp\lib\Release;$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\Release;$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\Release;$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\Release;$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\Release;$(SolutionDir)3rdParty\bullet\lib\$(Platform)\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
@@ -373,7 +522,57 @@ xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\Release\SDL2_image.dll" 
 xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\Release\zlib1.dll" "$(OutDir)" /d /y /i
 xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\Release\libpng16-16.dll" "$(OutDir)" /d /y /i
 xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\Release\libjpeg-9.dll" "$(OutDir)" /d /y /i
-xcopy "$(SolutionDir)3rdParty\Assimp\Lib\Release\assimp-vc140-mt.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\Release\assimp-vc140-mt.dll" "$(OutDir)" /d /y /i
+
+xcopy "$(SolutionDir)Projects\src\mesh\shaders" "$(OutDir)shaders" /d /y /i
+xcopy "$(SolutionDir)Projects\splits" "$(OutDir)splits" /d /y /i
+xcopy "$(SolutionDir)Projects\house.Gm" "$(OutDir)" /d /y /i
+
+xcopy "$(SolutionDir)Assets" "$(OutDir)Assets" /d /y /i /e</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;FINAL;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/Oa %(AdditionalOptions)</AdditionalOptions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\Bullet\src;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\ZLIB;$(SolutionDir)3rdParty\SDL2Image\include;$(ProjectDir)src;$(ProjectDir)src\Mesh;$(ProjectDir)src\Math;$(ProjectDir)src\File;$(ProjectDir)src\VoxelBoy;$(ProjectDir)src\Zelda;$(ProjectDir)src\Glorious</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\Release;$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\Release;$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\Release;$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\Release;$(SolutionDir)3rdParty\bullet\lib\$(Platform)\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\Lib\$(Platform)\Release\SDL2.DLL" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\Release\SDL2_image.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\Release\zlib1.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\Release\libpng16-16.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\SDL2image\Lib\$(Platform)\Release\libjpeg-9.dll" "$(OutDir)" /d /y /i
+xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\Release\assimp-vc140-mt.dll" "$(OutDir)" /d /y /i
 
 xcopy "$(SolutionDir)Projects\src\mesh\shaders" "$(OutDir)shaders" /d /y /i
 xcopy "$(SolutionDir)Projects\splits" "$(OutDir)splits" /d /y /i
