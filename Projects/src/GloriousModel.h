@@ -117,7 +117,7 @@ private:
 
     bool leaf = true;
     // Close enough to split ?
-    if (dist < 360 * layerSize)
+    if (dist < 256 * layerSize)
     {
       bool kidsAllReady = true;
       renderLock.lock();
@@ -267,14 +267,14 @@ private:
           }
         }
 
-    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 1);
-    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 2);
-    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 3);
-    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 4);
-     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 5);
-     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 6);
-     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 7);
-     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 8);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 1);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 2);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 3);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 4);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 5);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 6);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 7);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 8);
 
     //printf("built block\n");
     std::vector<int> tiles;

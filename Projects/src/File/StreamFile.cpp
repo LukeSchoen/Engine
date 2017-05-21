@@ -63,25 +63,37 @@ void StreamFileReader::FlushStream()
 
 void *StreamFileReader::ReadBytes(int64_t a_requestSize, int64_t *a_bytesRead)
 {
-  if (a_requestSize <= 0)
+  static void *pBuffer = nullptr;
+  static int64_t BuffSize = 0;
+  if (a_requestSize > BuffSize)
   {
-    if (a_bytesRead) *a_bytesRead = 0;
-    return nullptr; // bad request
+    BuffSize = a_requestSize;
+    pBuffer = realloc(pBuffer, BuffSize);
   }
-  if (m_fileHead + a_requestSize > m_fileSize) a_requestSize = m_fileSize - m_fileHead; // eof 
-  if (a_requestSize > m_bufferSize) // expand buffer
-  {
-    m_bufferSize = a_requestSize;
-    free(m_buffer);
-    m_buffer = malloc(m_bufferSize);
-    m_bufferHead = 0;
-  }
-  if (m_bufferHead + a_requestSize > m_bufferSize) m_bufferHead = 0; // request more data
-  if (m_bufferHead == 0) fread(m_buffer, 1, m_bufferSize, m_pFile); // Read Data
-  m_fileHead += a_requestSize;
-  m_bufferHead += a_requestSize;
-  if (a_bytesRead) *a_bytesRead = a_requestSize;
-  return (char*)m_buffer + m_bufferHead - a_requestSize;
+  int64_t br = fread(pBuffer, 1, a_requestSize, m_pFile);
+  if (a_bytesRead)
+    *a_bytesRead = br;
+  return pBuffer;
+  //if (a_requestSize <= 0)
+  //{
+  //  if (a_bytesRead) *a_bytesRead = 0;
+  //  return nullptr; // bad request
+  //}
+  //if (m_fileHead + a_requestSize > m_fileSize) a_requestSize = m_fileSize - m_fileHead; // eof 
+  //if (a_requestSize > m_bufferSize) // expand buffer
+  //{
+  //  m_bufferSize = a_requestSize;
+  //  m_buffer = realloc(m_buffer, m_bufferSize);
+  //  //free(m_buffer);
+  //  //m_buffer = malloc(m_bufferSize);
+  //  //m_bufferHead = 0;
+  //}
+  //if (m_bufferHead + a_requestSize > m_bufferSize) m_bufferHead = 0; // request more data
+  //if (m_bufferHead == 0) fread(m_buffer, 1, m_bufferSize, m_pFile); // Read Data
+  //m_fileHead += a_requestSize;
+  //m_bufferHead += a_requestSize;
+  //if (a_bytesRead) *a_bytesRead = a_requestSize;
+  //return (char*)m_buffer + m_bufferHead - a_requestSize;
 }
 
 

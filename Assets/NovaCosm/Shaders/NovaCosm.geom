@@ -9,7 +9,9 @@ uniform mat4 MVP;
 in vec3 VERTCOLOR[];
 out vec3 GEOMCOLOR;
 
-float voxelSize = LAYER * 1.2;
+float voxelSize = LAYER * 1.333 * 0.8;
+
+
 
 void main()
 {
@@ -17,15 +19,15 @@ void main()
 
     vec4 vPos = MVP * gl_in[0].gl_Position;
 	
-    gl_Position = vPos + vec4(-voxelSize, -voxelSize, 0.0, 0.0);
+    gl_Position = vPos + vec4(-voxelSize * 0.563, -voxelSize, 0.0, 0.0);
     EmitVertex();
 				
-    gl_Position = vPos + vec4(voxelSize, -voxelSize, 0.0, 0.0);
+    gl_Position = vPos + vec4(voxelSize * 0.563, -voxelSize, 0.0, 0.0);
     EmitVertex();
 				
-    gl_Position = vPos + vec4(-voxelSize, voxelSize, 0.0, 0.0);
+    gl_Position = vPos + vec4(-voxelSize * 0.563, voxelSize, 0.0, 0.0);
     EmitVertex();
 				
-    gl_Position = vPos + vec4(voxelSize, voxelSize, 0.0, 0.0);
+    gl_Position = vPos + vec4(voxelSize * 0.563, voxelSize, 0.0, 0.0);
     EmitVertex();
 }

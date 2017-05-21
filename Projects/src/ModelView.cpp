@@ -33,17 +33,17 @@ void ModelView()
   window.Swap();
 
   PolyModel model;
-  model.LoadModel("C:/Users/Luke/Desktop/3ds/Field.obj");
+  model.LoadModel("C:/Users/lschoen/Desktop/Models/cat.obj");
 
   while (Controls::Update())
   {
     window.Clear(0, 190, 255);
-    Camera::Update(100);
+    Camera::Update(10);
     
     mat4 viewMat = Camera::Matrix();
     mat4 MVP;
     mat4 modelMat;
-    modelMat.Scale(0.1);
+    modelMat.Scale(1);
     MVP = projectionMat * viewMat * modelMat;
     MVP.Transpose();
     model.Render(MVP);

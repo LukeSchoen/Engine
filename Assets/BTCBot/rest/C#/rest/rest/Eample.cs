@@ -111,24 +111,6 @@ namespace com.okcoin.rest
                     {
                         Console.WriteLine(getRequest.future_trades("btc_usd", "this_week"));
                         string res = getRequest.future_trades("btc_usd", "this_week");
-                        
-                        BinaryWriter writer = new BinaryWriter(File.OpenWrite("MarketBuy.dat"));
-                        writer.Write(bids.Count);
-                        foreach (order bid in bids)
-                        {
-                            writer.Write(bid.price);
-                            writer.Write(bid.volume);
-                        }
-                        writer.Close();
-
-                        writer = new BinaryWriter(File.OpenWrite("MarketSell.dat"));
-                        writer.Write(asks.Count);
-                        foreach (order ask in asks)
-                        {
-                            writer.Write(ask.price);
-                            writer.Write(ask.volume);
-                        }
-                        writer.Close();
                     }
                     catch
                     {

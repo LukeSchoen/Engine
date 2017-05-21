@@ -25,11 +25,11 @@ void main() // console entry
   //NovaCosm();
   //Cosmic();
   //Zelda();
-  Minecraft();
+  //Minecraft();
   //OpenGL();
   //Compression();
   //PhysicsTest();
-  //ModelView();
+  ModelView();
   //MarchingCubes();
 }
 

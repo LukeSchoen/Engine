@@ -7,7 +7,7 @@
 #include "Controls.h"
 #include "Assets.h"
 
-struct voxel 
+struct voxel
 {
   uint8_t x, y, z, r, g, b;
 };
@@ -59,7 +59,46 @@ struct NovaCosmModel
     RecursiveAddPoint(root, 0, pos, col);
   }
 
+  void ExportPCF(const char *filePath)
+  {
+    StreamFileWriter stream(filePath);
+
+    RecursiveExportPCF(&stream, root);
+  }
+
 private:
+  void RecursiveExportPCF(StreamFileWriter *stream, NovaCosmBlock *block)
+  {
+    bool leaf = true;
+    for (uint8_t cItr = 0; cItr < 8; cItr++)
+    {
+      int64_t childAddress = block->children[cItr];
+      if (childAddress > 0)
+      {
+        if (!block->childPtr[cItr])
+          block->childPtr[cItr] = LoadBlock(childAddress);
+        RecursiveExportPCF(stream, block->childPtr[cItr]);
+        //UnloadBlock(block->childPtr[cItr]);
+        leaf = false;
+      }
+    }
+    if (leaf)
+      for (int64_t vItr = 0; vItr < block->voxelCount; vItr++)
+      {
+        int32_t x = ((uint8_t*)block->voxelPosData)[vItr * 3 + 0] + block->position.x;
+        int32_t y = ((uint8_t*)block->voxelPosData)[vItr * 3 + 1] + block->position.y;
+        int32_t z = ((uint8_t*)block->voxelPosData)[vItr * 3 + 2] + block->position.z;
+        int32_t r = ((uint8_t*)block->voxelColData)[vItr * 3 + 0];
+        int32_t g = ((uint8_t*)block->voxelColData)[vItr * 3 + 1];
+        int32_t b = ((uint8_t*)block->voxelColData)[vItr * 3 + 2];
+        uint32_t c = b | (g << 8) | (r << 16);
+        stream->WriteBytes(&x, sizeof(x));
+        stream->WriteBytes(&y, sizeof(y));
+        stream->WriteBytes(&z, sizeof(z));
+        stream->WriteBytes(&c, sizeof(c));
+      }
+  }
+
   void RecursiveAddPoint(NovaCosmBlock *block, int layer, vec3 pos, uint32_t col)
   {
     vec3 localPos = (pos * (1LL << layer)) - block->position;
@@ -108,8 +147,8 @@ private:
 
     bool leaf = true;
     // Close enough to split ?
-    if (dist < 326 * layerSize)
-    //if (false)
+    if (dist < 512 * layerSize)
+      //if (false)
     {
       for (uint8_t cItr = 0; cItr < 8; cItr++)
         if (block->childPtr[cItr])
@@ -123,8 +162,6 @@ private:
           if (childAddress > 0)
             block->childPtr[cItr] = LoadBlock(childAddress);
         }
-
-
     }
     if (leaf)
     {

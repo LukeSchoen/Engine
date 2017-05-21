@@ -233,7 +233,7 @@ struct Convertor
     for (int i = 0; i < 8; i++)
     {
       FilePath outFileName = lTask.filePath;
-      
+
       char nodeIDtxt[2];
       sprintf(nodeIDtxt, "%d", i + 1);
       std::string fullName = outFileName.GetNameNoExt() + nodeIDtxt + outFileName.GetExtension();
@@ -320,7 +320,9 @@ struct Convertor
     }
 
     // Create Transformed Point Cloud File
-    return Max(Max(maxX - minX + 1, maxY - minY + 1), maxZ - minZ + 1);
+    int len = Max(Max(maxX - minX + 1, maxY - minY + 1), maxZ - minZ + 1);
+    printf("%d voxels long\n", len);
+    return len;
   }
 
   static void ResamplePCF(const char *inputPath, const char *outputPath, uint32_t newSize)
@@ -464,6 +466,7 @@ struct Convertor
 
   }
 
+
   static int64_t CloudToCosmBlock(const char *inputPath, StreamFileWriter &NovaCosmModel, uint32_t cloudSize, uint32_t gridSize, vec3i gridPos)
   {
     if (!File::FileExists(inputPath)) return 0;
@@ -474,7 +477,173 @@ struct Convertor
     uint32_t *Bgrid = (uint32_t*)calloc(gridSize * gridSize * gridSize, sizeof(uint32_t));
     uint32_t *Sgrid = (uint32_t*)calloc(gridSize * gridSize * gridSize, sizeof(uint32_t));
 
-    const int holFillSize = 2;
+    const int gapRadius = 2;
+
+    printf("blitting!\n");
+
+    // Read PCF
+    int64_t handSize = sizeof(point) * 65536;
+    StreamFileReader inputPCF(inputPath, nullptr, handSize);
+    // Calculate Models Extents
+    int64_t maxX, maxY, maxZ, minX, minY, minZ;
+    maxX = maxY = maxZ = -1000000000;
+    minX = minY = minZ = 1000000000;
+    while (true)
+    {
+      // Read PCF
+      int64_t pointCount;
+      point *points = (point*)inputPCF.ReadBytes(handSize, &pointCount);;
+      if (pointCount == 0) break;
+      pointCount /= sizeof(point);
+
+      // Populate Grid
+      for (int64_t i = 0; i < pointCount; i++)
+      {
+        point &p = points[i];
+        // Normalize into grid space
+        int32_t x = (p.x - gridPos.x) * gridSize / cloudSize;
+        int32_t y = (p.y - gridPos.y) * gridSize / cloudSize;
+        int32_t z = (p.z - gridPos.z) * gridSize / cloudSize;
+
+        uint32_t pR = (p.color >> 16) & 255;
+        uint32_t pG = (p.color >> 8) & 255;
+        uint32_t pB = (p.color >> 0) & 255;
+
+        int index = x + y * gridSize + z * gridSize * gridSize;
+        Rgrid[index] += pR;
+        Ggrid[index] += pG;
+        Bgrid[index] += pB;
+        Sgrid[index] += 1.0;
+        grid[index] = 1;
+      }
+    }
+
+
+    // Gap Fix - [Christoph's method]
+    printf("Checking normals!\n");
+    std::vector<vec3> neighbours;
+    std::vector<vec4> neighbourColors;
+    if (gapRadius)
+      for (int z = 0; z < gridSize; z++)
+        for (int y = 0; y < gridSize; y++)
+          for (int x = 0; x < gridSize; x++)
+          if (grid[x + y * gridSize + z * gridSize * gridSize] == 0)
+          {
+            bool fill = false;
+            neighbours.clear();
+            neighbourColors.clear();
+            for (int iz = -gapRadius; iz <= gapRadius; iz++)
+              for (int iy = -gapRadius; iy <= gapRadius; iy++)
+                for (int ix = -gapRadius; ix <= gapRadius; ix++)
+                  if (ix != 0 || iy != 0 || iz != 0)
+                    if (x + ix >= 0 && y + iy >= 0 && z + iz >= 0 && x + ix < gridSize && y + iy < gridSize  && z + iz < gridSize)
+                    {
+                      int index = (x + ix) + (y + iy) * gridSize + (z + iz) * gridSize * gridSize;
+                      if (grid[index] > 0)
+                      {
+                        neighbours.push_back(vec3(ix, iy, iz));
+                        neighbourColors.push_back(vec4(Rgrid[index], Ggrid[index], Bgrid[index], Sgrid[index]));
+                      }
+
+                    }
+
+            for (int i = 0; i+1 < neighbours.size(); i++)
+              for (int j = i; j < neighbours.size(); j++)
+                if (neighbours[i].Normalized().DotProduct(neighbours[j].Normalized()) < -0.75)
+                  fill = true;
+
+            if (fill)
+            {
+              // Calculate average neighbors color
+              float r, g, b; r = g = b = 0;
+              int index = x + y * gridSize + z * gridSize * gridSize;
+              for (auto &col : neighbourColors)
+              {
+                Rgrid[index] += col.x;
+                Ggrid[index] += col.y;
+                Bgrid[index] += col.z;
+                Sgrid[index] += col.w;
+              }
+            }
+          }
+
+
+
+
+
+    printf("combining!\n");
+    for (int z = 0; z < gridSize; z++)
+      for (int y = 0; y < gridSize; y++)
+        for (int x = 0; x < gridSize; x++)
+        {
+          uint32_t gS = Sgrid[x + y * gridSize + z * gridSize * gridSize];
+          if (gS)
+          {
+            uint32_t gR = Rgrid[x + y * gridSize + z * gridSize * gridSize] / gS;
+            uint32_t gG = Ggrid[x + y * gridSize + z * gridSize * gridSize] / gS;
+            uint32_t gB = Bgrid[x + y * gridSize + z * gridSize * gridSize] / gS;
+            grid[x + y * gridSize + z * gridSize * gridSize] = gR + gG * 256 + gB * 256 * 256;
+          }
+          else
+          {
+            grid[x + y * gridSize + z * gridSize * gridSize] = 0;
+          }
+        }
+
+
+    int64_t voxelCount = 0;
+    struct { uint8_t x, y, z, r, g, b; } voxel;
+    for (int z = 0; z < gridSize; z++)
+      for (int y = 0; y < gridSize; y++)
+        for (int x = 0; x < gridSize; x++)
+        {
+          uint32_t c = grid[x + y * gridSize + z * gridSize * gridSize];
+          if (c)
+          {
+            // Bury Algorithm
+            bool visable = true;
+            //bool visable = false;
+            //if (x * y * z == 0 || (gridSize - 1 - x) * (gridSize - 1 - y) * (gridSize - 1 - z) == 0) visable = true; // edge 
+            //if (!visable) visable = grid[(x - 1) + y * gridSize + z * gridSize * gridSize]; // left exposed
+            //if (!visable) visable = grid[(x + 1) + y * gridSize + z * gridSize * gridSize]; // right exposed
+            //if (!visable) visable = grid[x + (y - 1) * gridSize + z * gridSize * gridSize]; // up exposed
+            //if (!visable) visable = grid[x + (y + 1) * gridSize + z * gridSize * gridSize]; // down exposed
+            //if (!visable) visable = grid[x + y * gridSize + (z + 1) * gridSize * gridSize]; // front exposed
+            //if (!visable) visable = grid[x + y * gridSize + (z - 1) * gridSize * gridSize]; // back exposed
+            //if (visable)
+            {
+              voxel.x = x;
+              voxel.y = y;
+              voxel.z = z;
+              voxel.r = c & 0xFF;
+              voxel.g = (c >> 8) & 0xFF;
+              voxel.b = (c >> 16) & 0xFF;
+              NovaCosmModel.WriteBytes(&voxel, sizeof(voxel));
+              voxelCount++;
+            }
+          }
+        }
+
+    free(grid);
+    free(Rgrid);
+    free(Ggrid);
+    free(Bgrid);
+    free(Sgrid);
+
+    return voxelCount;
+  }
+
+  static int64_t old_CloudToCosmBlock(const char *inputPath, StreamFileWriter &NovaCosmModel, uint32_t cloudSize, uint32_t gridSize, vec3i gridPos)
+  {
+    if (!File::FileExists(inputPath)) return 0;
+    // Create Grid
+    uint32_t *grid = (uint32_t*)calloc(gridSize * gridSize * gridSize, sizeof(uint32_t));
+    uint32_t *Rgrid = (uint32_t*)calloc(gridSize * gridSize * gridSize, sizeof(uint32_t));
+    uint32_t *Ggrid = (uint32_t*)calloc(gridSize * gridSize * gridSize, sizeof(uint32_t));
+    uint32_t *Bgrid = (uint32_t*)calloc(gridSize * gridSize * gridSize, sizeof(uint32_t));
+    uint32_t *Sgrid = (uint32_t*)calloc(gridSize * gridSize * gridSize, sizeof(uint32_t));
+
+    const int holeFillSize = 4;
 
     printf("blitting!\n");
 
@@ -513,19 +682,28 @@ struct Convertor
         //Sgrid[x + y * gridSize + z * gridSize * gridSize]++;
 
         // Hole filler
-        for (int iz = -holFillSize; iz <= holFillSize; iz++)
-          for (int iy = -holFillSize; iy <= holFillSize; iy++)
-            for (int ix = -holFillSize; ix <= holFillSize; ix++)
-              if (x + ix >= 0 && y + iy >= 0 && z + iz >= 0 && x + ix < gridSize && y + iy < gridSize  && z + iz < gridSize)
-              {
-                float l = vec3(ix * 2, iy * 2, iz * 2).LengthSquared() + 1;
-                int dm = Min(Max(256.0f / (l * l * l * l), 1), 256);
-                int i = (x + ix) + (y + iy) * gridSize + (z + iz) * gridSize * gridSize;
-                Rgrid[i] += pR * dm;
-                Ggrid[i] += pG * dm;
-                Bgrid[i] += pB * dm;
-                Sgrid[i] += dm;
-              }
+        if (holeFillSize == 0)
+        {
+          int i = x + y * gridSize + z * gridSize * gridSize;
+          Rgrid[i] += pR;
+          Ggrid[i] += pG;
+          Bgrid[i] += pB;
+          Sgrid[i] += 1.0;
+        }
+        else
+          for (int iz = -holeFillSize; iz <= holeFillSize; iz++)
+            for (int iy = -holeFillSize; iy <= holeFillSize; iy++)
+              for (int ix = -holeFillSize; ix <= holeFillSize; ix++)
+                if (x + ix >= 0 && y + iy >= 0 && z + iz >= 0 && x + ix < gridSize && y + iy < gridSize  && z + iz < gridSize)
+                {
+                  float l = vec3(ix * 2, iy * 2, iz * 2).LengthSquared() + 1;
+                  int dm = Min(Max(256.0f / (l * l * l * l), 1), 256);
+                  int i = (x + ix) + (y + iy) * gridSize + (z + iz) * gridSize * gridSize;
+                  Rgrid[i] += pR * dm;
+                  Ggrid[i] += pG * dm;
+                  Bgrid[i] += pB * dm;
+                  Sgrid[i] += dm;
+                }
       }
     }
 
@@ -545,20 +723,21 @@ struct Convertor
         }
 
     // Corrosion pass
-    for (int z = 0; z < gridSize; z++)
-      for (int y = 0; y < gridSize; y++)
-        for (int x = 0; x < gridSize; x++)
-          if (grid[x + y * gridSize + z * gridSize * gridSize])
-          {
-            bool c = false;
-            for (int iz = -holFillSize; iz <= holFillSize; iz++)
-              for (int iy = -holFillSize; iy <= holFillSize; iy++)
-                for (int ix = -holFillSize; ix <= holFillSize; ix++)
-                  if (x + ix >= 0 && y + iy >= 0 && z + iz >= 0 && x + ix < gridSize && y + iy < gridSize  && z + iz < gridSize)
-                    if (Sgrid[(x + ix) + (y + iy) * gridSize + (z + iz) * gridSize * gridSize] == 0)
-                      c = true;
-            if (c) grid[x + y * gridSize + z * gridSize * gridSize] = 0;
-          }
+    if (holeFillSize)
+      for (int z = 0; z < gridSize; z++)
+        for (int y = 0; y < gridSize; y++)
+          for (int x = 0; x < gridSize; x++)
+            if (Sgrid[x + y * gridSize + z * gridSize * gridSize] > 0.0)
+            {
+              bool c = false;
+              for (int iz = -holeFillSize; iz <= holeFillSize; iz++)
+                for (int iy = -holeFillSize; iy <= holeFillSize; iy++)
+                  for (int ix = -holeFillSize; ix <= holeFillSize; ix++)
+                    if (x + ix >= 0 && y + iy >= 0 && z + iz >= 0 && x + ix < gridSize && y + iy < gridSize  && z + iz < gridSize)
+                      if (Sgrid[(x + ix) + (y + iy) * gridSize + (z + iz) * gridSize * gridSize] == 0)
+                        c = true;
+              if (c) grid[x + y * gridSize + z * gridSize * gridSize] = 0;
+            }
 
     int64_t voxelCount = 0;
     struct { uint8_t x, y, z, r, g, b; } voxel;
@@ -570,15 +749,16 @@ struct Convertor
           if (c)
           {
             // Bury Algorithm
-            bool visable = false;
-            if (x * y * z == 0 || (gridSize - 1 - x) * (gridSize - 1 - y) * (gridSize - 1 - z) == 0) visable = true; // edge 
-            if (!visable) visable = grid[(x - 1) + y * gridSize + z * gridSize * gridSize]; // left exposed
-            if (!visable) visable = grid[(x + 1) + y * gridSize + z * gridSize * gridSize]; // right exposed
-            if (!visable) visable = grid[x + (y - 1) * gridSize + z * gridSize * gridSize]; // up exposed
-            if (!visable) visable = grid[x + (y + 1) * gridSize + z * gridSize * gridSize]; // down exposed
-            if (!visable) visable = grid[x + y * gridSize + (z + 1) * gridSize * gridSize]; // front exposed
-            if (!visable) visable = grid[x + y * gridSize + (z - 1) * gridSize * gridSize]; // back exposed
-            if (visable)
+            bool visable = true;
+            //bool visable = false;
+            //if (x * y * z == 0 || (gridSize - 1 - x) * (gridSize - 1 - y) * (gridSize - 1 - z) == 0) visable = true; // edge 
+            //if (!visable) visable = grid[(x - 1) + y * gridSize + z * gridSize * gridSize]; // left exposed
+            //if (!visable) visable = grid[(x + 1) + y * gridSize + z * gridSize * gridSize]; // right exposed
+            //if (!visable) visable = grid[x + (y - 1) * gridSize + z * gridSize * gridSize]; // up exposed
+            //if (!visable) visable = grid[x + (y + 1) * gridSize + z * gridSize * gridSize]; // down exposed
+            //if (!visable) visable = grid[x + y * gridSize + (z + 1) * gridSize * gridSize]; // front exposed
+            //if (!visable) visable = grid[x + y * gridSize + (z - 1) * gridSize * gridSize]; // back exposed
+            //if (visable)
             {
               voxel.x = x;
               voxel.y = y;

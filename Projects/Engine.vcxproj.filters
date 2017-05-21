@@ -471,9 +471,6 @@
     <ClInclude Include="src\FastPack.h">
       <Filter>Engine\Packer</Filter>
     </ClInclude>
-    <ClInclude Include="src\SortedList.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\pokemon.h">
       <Filter>Projects\Pokemon</Filter>
     </ClInclude>
@@ -531,6 +528,8 @@
     <ClInclude Include="src\MarchingCubes.h">
       <Filter>Projects\MarchingCubes</Filter>
     </ClInclude>
+    <ClInclude Include="src\SortedList.h">
+      <Filter>Projects\Glorious</Filter>
     <ClInclude Include="src\EntityHandler.h">
       <Filter>Projects\Minecraft\Entities</Filter>
     </ClInclude>
