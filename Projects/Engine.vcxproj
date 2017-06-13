@@ -57,6 +57,8 @@
     <ClCompile Include="src\Glorious\Glorious.cpp" />
     <ClCompile Include="src\Glorious\LeastRects.cpp" />
     <ClCompile Include="src\GamePads.cpp" />
+    <ClCompile Include="src\GPix.cpp" />
+    <ClCompile Include="src\Grass.cpp" />
     <ClCompile Include="src\Insight.cpp" />
     <ClCompile Include="src\LogicMonday.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -126,6 +128,9 @@
     <ClInclude Include="src\btcTypes.h" />
     <ClInclude Include="src\EntityHandler.h" />
     <ClInclude Include="src\EntityMaker.h" />
+    <ClInclude Include="src\EntityModel.h" />
+    <ClInclude Include="src\GPix.h" />
+    <ClInclude Include="src\Grass.h" />
     <ClInclude Include="src\MarchingCubes.h" />
     <ClInclude Include="src\ModelView.h" />
     <ClInclude Include="src\Physics.h" />

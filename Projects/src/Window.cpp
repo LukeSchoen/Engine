@@ -116,7 +116,7 @@ void Window::Swap(bool responsive)
       if (averageFPS > GetRefreshRate() / 2) // If were running well then decrease latency!
         glFinish();
       drawTime = SDL_GetTicks() - drawTime;
-      averageFPS = ((averageFPS * 9) + (1000 / drawTime)) / 10;
+      averageFPS = ((averageFPS * 9) + (1000 / Max(drawTime, 1))) / 10;
       static int refreshTime = floor(1000.0f / GetRefreshRate()) - 2;
       int freshWait = Min(Max(refreshTime - drawTime, 0), refreshTime);
       if(averageFPS + 5 > GetRefreshRate()) // If were running really well then further decrease latency!
