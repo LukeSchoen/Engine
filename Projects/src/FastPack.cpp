@@ -20,7 +20,7 @@ struct Node
 
     steps++;
     if (full || rect.width > myRect.width || rect.height > myRect.height) return nullptr;
-    // if (fails > 4) full = true; // this node just sucks!
+    if (fails > 64) full = true; // this node just sucks!
     if (left)
     {
       Node *node = left->AddRect(rect);

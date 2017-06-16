@@ -20,34 +20,35 @@ void NovaCosm()
   //_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
   //Threads::SetFastMode(); // Work in real time mode while loading
 
-  uint32_t w, h;
-  uint32_t *img = ImageFile::ReadImage("C:/Users/Luke/Desktop/Image.jpg", &w, &h);
+//   uint32_t w, h;
+//   uint32_t *img = ImageFile::ReadImage("C:/Users/Luke/Desktop/Image.jpg", &w, &h);
+// 
+//   StreamFileWriter stream("D:/temp/Image.pcf");
+//   for (int32_t y = 0; y < h; y++)
+//     for (int32_t x = 0; x < w; x++)
+//       for (int32_t iy = 0; iy < 10; iy++)
+//         for (int32_t ix = 0; ix < 10; ix++)
+//     {
+//       int32_t z = 0;
+//       int32_t ox = x + ix * w;
+//       int32_t oy = y + iy * h;
+//       stream.WriteBytes(&ox, sizeof(x));
+//       stream.WriteBytes(&z, sizeof(z));
+//       stream.WriteBytes(&oy, sizeof(y));
+//       uint32_t c = img[x + y * w];
+//       uint8_t r, g, b;
+//       b = c & 255;
+//       g = (c >> 8) & 255;
+//       r = (c >> 16) & 255;
+//       c = r | (g << 8) | (b << 16);
+//       stream.WriteBytes(&c, sizeof(c));
+//     }
+//   stream.StopStream();
+// 
+//   Threads::SetSlowMode(); // Don't starve OpenGLs driver while rendering
+//   Convertor::ExportPCFtoNovaCosm("D:/temp/Image.pcf", "D:/temp/Image.ncs", "D:/temp/export/");
+//   exit(0);
 
-  StreamFileWriter stream("D:/temp/Image.pcf");
-  for (int32_t y = 0; y < h; y++)
-    for (int32_t x = 0; x < w; x++)
-      for (int32_t iy = 0; iy < 10; iy++)
-        for (int32_t ix = 0; ix < 10; ix++)
-    {
-      int32_t z = 0;
-      int32_t ox = x + ix * w;
-      int32_t oy = y + iy * h;
-      stream.WriteBytes(&ox, sizeof(x));
-      stream.WriteBytes(&z, sizeof(z));
-      stream.WriteBytes(&oy, sizeof(y));
-      uint32_t c = img[x + y * w];
-      uint8_t r, g, b;
-      b = c & 255;
-      g = (c >> 8) & 255;
-      r = (c >> 16) & 255;
-      c = r | (g << 8) | (b << 16);
-      stream.WriteBytes(&c, sizeof(c));
-    }
-  stream.StopStream();
-
-  Threads::SetSlowMode(); // Don't starve OpenGLs driver while rendering
-  Convertor::ExportPCFtoNovaCosm("D:/temp/Image.pcf", "D:/temp/Image.ncs", "D:/temp/export/");
-  exit(0);
   //Convertor::ExportPCFtoNovaCosm("D:/Luke/Programming/Visual Studio/pixelly/Software Tracer/CarrickHill.pcf", "D:/temp/CarrickHillFull.ncs", "D:/temp/export/", 255);
   //Convertor::ExportPCFtoNovaCosm("D:/Luke/Programming/Visual Studio/pixelly/Software Tracer/sorrento.pcf", "D:/temp/sorrento.ncs", "D:/temp/export/", 2048);
   //Convertor::ExportPCFtoNovaCosm("D:/Luke/Programming/Visual Studio/pixelly/Software Tracer/Expressway.pcf", "D:/temp/Expressway.ncs", "D:/temp/export/", 8192);

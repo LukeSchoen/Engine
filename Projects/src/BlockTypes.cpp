@@ -15,6 +15,7 @@ MinecraftBlockTypes::MinecraftBlockTypes()
   //Bedrock
   AddSolidBlockType(7, 17);
 
+
   //water
   AddAlphaBlockType(8, liquid, false, 205);
   AddAlphaBlockType(9, liquid, false, 205);
@@ -27,6 +28,9 @@ MinecraftBlockTypes::MinecraftBlockTypes()
   AddSolidBlockType(12, 18);
   //Gravel
   AddSolidBlockType(13, 19);
+
+  AddSolidBlockType(159, 19); // should be clay
+
   //Gold
   AddSolidBlockType(14, 32);
   //Iron
@@ -36,7 +40,7 @@ MinecraftBlockTypes::MinecraftBlockTypes()
   //Wood
   AddSolidBlockType(17, 20);
   //leaves
-  AddAlphaBlockType(18, cube, true, 52);
+  AddSolidBlockType(18, 52);
 
   //Glass
   AddAlphaBlockType(20, cube, true, 49);
@@ -69,6 +73,9 @@ MinecraftBlockTypes::MinecraftBlockTypes()
 
   //Dandelions
   AddAlphaBlockType(37, cross, false, 13);
+
+  AddAlphaBlockType(175, cross, false, 13); // should be sun flower
+
   //Roses
   AddAlphaBlockType(38, cross, false, 12);
   //Brown Mushrooms
@@ -170,6 +177,7 @@ MinecraftBlockTypes::MinecraftBlockTypes()
 
   //Snow
   AddSolidBlockType(78, 66);
+  AddSolidBlockType(80, 66);
 
   //Redstone Torch
   AddAlphaBlockType(76, cross, false, 99);
@@ -179,6 +187,8 @@ MinecraftBlockTypes::MinecraftBlockTypes()
 
   //Ice
   AddSolidBlockType(79, 67);
+  AddSolidBlockType(174, 67); // packed ice
+   
   //Cactus
   AddSolidBlockType(81, 69);
   //Clay
@@ -226,9 +236,6 @@ void MinecraftBlockTypes::AddSolidBlockType(uint8_t blockID, int topTex, int bot
     blockData[blockID].tile[4] = rightTex;
     blockData[blockID].tile[5] = leftTex;
 }
-
-
-
 
 void MinecraftBlockTypes::AddAlphaBlockType(uint8_t blockID, modelType model, bool solid, int topTex, int botTex /*= -1*/, int frontTex /*= -1*/, int backTex /*= -1*/, int leftTex /*= -1*/, int rightTex /*= -1*/)
 {

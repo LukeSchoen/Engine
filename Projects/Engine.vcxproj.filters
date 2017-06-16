@@ -248,6 +248,15 @@
     <ClCompile Include="src\DrawTree.cpp">
       <Filter>Projects\DrawTree</Filter>
     </ClCompile>
+    <ClCompile Include="src\Reductio.cpp">
+      <Filter>Projects\reductio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simple.cpp">
+      <Filter>Projects\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Substance.cpp">
+      <Filter>Projects\Substance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -566,6 +575,15 @@
     <ClInclude Include="src\DrawTree.h">
       <Filter>Projects\DrawTree</Filter>
     </ClInclude>
+    <ClInclude Include="src\Reductio.h">
+      <Filter>Projects\reductio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simple.h">
+      <Filter>Projects\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Substance.h">
+      <Filter>Projects\Substance</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -816,6 +834,15 @@
     </Filter>
     <Filter Include="Projects\DrawTree">
       <UniqueIdentifier>{2cb29adf-939a-4058-bc7c-63bc5c75096a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\reductio">
+      <UniqueIdentifier>{a6031ccc-83db-46a3-a4f4-70ddaf1cdacd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\simple">
+      <UniqueIdentifier>{86f35a1d-a3eb-4774-bc53-f5e2f4a21651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Substance">
+      <UniqueIdentifier>{26725f2f-9c54-4b4b-a172-45114f07a784}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

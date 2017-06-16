@@ -68,6 +68,24 @@ static void _PlayerUpdate(Entity *entity)
 }
 
 
+
+
+struct Agent
+{
+  
+};
+
+
+Entity EntityMaker::CreateAgentNear(BlockWorld *world, vec3 pos, const char *entityTextureFile)
+{
+  uint32_t entTexture = _LoadTex(entityTextureFile);
+  Entity entity(world);
+  entity.textureID = entTexture;
+  entity.position = pos + vec3(rand() % 16 - 8, 0, rand() % 16 - 8);
+  return entity;
+
+}
+
 Entity EntityMaker::CreatePlayer(BlockWorld *world, vec3 pos /*= vec3()*/)
 {
   static unsigned int entTexture = glUndefined; if (entTexture == glUndefined) entTexture = _LoadTex(ASSETDIR "Minecraft/Mobs/textures/Steve.png");
@@ -97,7 +115,7 @@ Entity EntityMaker::CreateOrcBerzerker(BlockWorld *world, vec3 pos /*= vec3()*/)
   return entity;
 }
 
-unsigned int EntityMaker::_LoadTex(char *file)
+unsigned int EntityMaker::_LoadTex(const char *file)
 {
   return Textures::LoadTextureWithScaleup(file, 1);
 }

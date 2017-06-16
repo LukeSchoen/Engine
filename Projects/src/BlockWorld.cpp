@@ -150,7 +150,7 @@ bool BlockWorld::RayTrace(vec3 _pos, vec3 _dir, float length, vec3i *FirstOccupi
 
 bool BlockWorld::BoxCollides(vec3 _pos, vec3 _size)
 {
-  _pos -= _size * 0.5; // centre
+  _pos -= _size * 0.5; // center
   for (int64_t x = floor(_pos.x); x < ceil(_pos.x + _size.x); x++)
     for (int64_t y = floor(_pos.y); y < ceil(_pos.y + _size.y); y++)
       for (int64_t z = floor(_pos.z); z < ceil(_pos.z + _size.z); z++)

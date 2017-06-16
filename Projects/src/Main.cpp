@@ -16,9 +16,16 @@
 #include "Grass.h"
 #include "PixelLife.h"
 #include "DrawTree.h"
+#include "reductio.h"
+#include "Simple.h"
+#include "Substance.h"
 
 void main() // console entry
 {
+  Substance();
+  //NovaCosm();
+  //Simple();
+  //Reductio();
   //Grass();
   //PixeLife();
   //DLux();
@@ -26,9 +33,8 @@ void main() // console entry
   //BTCBot();
   //SecondStream();
   //StreamTest();
-  Glorious();
+  //Glorious();
   //DrawTree();
-  //NovaCosm();
   //Cosmic();
   //Zelda();
   //Minecraft();

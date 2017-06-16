@@ -232,6 +232,7 @@ void FaceOptimizer::SimpleOptimizeFaces(std::vector<Face> &faces, blockSide side
         //if (faces[me].pos.y == faces[he].pos.y && faces[me].Type == faces[he].Type) // Faces have same height and type
         //if (faces[me].pos.y == faces[he].pos.y) // Faces have same height
         { // Attempt to merge
+
           int left = Min(faces[me].pos.x, faces[he].pos.x);
           int right = Max(faces[me].pos.x + faces[me].width, faces[he].pos.x + faces[he].width);
           int bottom = Min(faces[me].pos.z, faces[he].pos.z);

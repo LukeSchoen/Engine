@@ -36,7 +36,7 @@ GLuint Textures::CreateTexture(uint32_t width, uint32_t height, bool depthTextur
   return ret;
 }
 
-GLuint Textures::LoadTextureWithScaleup(char *imagePath, int scaleRatio)
+GLuint Textures::LoadTextureWithScaleup(const char *imagePath, int scaleRatio)
 {
   uint32_t w;
   uint32_t h;

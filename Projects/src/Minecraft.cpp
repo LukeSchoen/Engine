@@ -28,7 +28,7 @@ static volatile bool streaming = true;
 #ifdef _DEBUG
 int viewDist = 8;
 #else
-int viewDist = 8;
+int viewDist = 10;
 #endif
 
 BlockWorld *world = nullptr;
@@ -88,7 +88,7 @@ void Minecraft()
 {
   //Threads::SetFastMode(); // Work in real time mode while loading
 
-  Audio::PlayMP3(ASSETDIR "minecraft/music/great sea.mp3");
+  //Audio::PlayMP3(ASSETDIR "minecraft/music/great sea.mp3", 1000, nullptr, true);
 
   Threads::SetSlowMode(); // Don't starve OpenGLs driver while rendering
 #ifdef _DEBUG
@@ -122,8 +122,13 @@ void Minecraft()
     SDL_CreateThread(updateWorldThread, "streamer", nullptr);
 
   Textures::SetTextureFilterMode(false);
-  for (int i = 0; i < 3; i++) world->entities.Add(EntityMaker::CreateOrcWarrior(world, playerPos + vec3(rand() % 50 - 25, 50, rand() % 50 - 25)));
-  for (int i = 0; i < 3; i++) world->entities.Add(EntityMaker::CreateOrcBerzerker(world, playerPos + vec3(rand() % 50 - 25, 50, rand() % 50 - 25)));
+  //for (int i = 0; i < 3; i++) world->entities.Add(EntityMaker::CreateOrcWarrior(world, playerPos + vec3(rand() % 50 - 25, 50, rand() % 50 - 25)));
+  //for (int i = 0; i < 3; i++) world->entities.Add(EntityMaker::CreateOrcBerzerker(world, playerPos + vec3(rand() % 50 - 25, 50, rand() % 50 - 25)));
+
+  world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/textures/1.png"));
+  world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/textures/2.png"));
+  world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/textures/3.png"));
+
   Textures::SetTextureFilterMode(true);
 
   // Create Cross Hair Model

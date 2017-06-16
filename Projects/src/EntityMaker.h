@@ -5,6 +5,8 @@
 
 struct EntityMaker
 {
+  static Entity CreateAgentNear(BlockWorld *world, vec3 pos, const char *entityTextureFile);
+
   static Entity CreatePlayer(BlockWorld *world, vec3 pos = vec3());
 
   static Entity CreateOrcWarrior(BlockWorld *world, vec3 pos = vec3());
@@ -12,7 +14,7 @@ struct EntityMaker
   static Entity CreateOrcBerzerker(BlockWorld *world, vec3 pos = vec3());
 
 private:
-  static unsigned int _LoadTex(char *file);
+  static unsigned int _LoadTex(const char *file);
 };
 
 #endif // EntityMaker_h__
