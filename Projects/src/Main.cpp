@@ -29,8 +29,8 @@ void main() // console entry
   //Minecraft();
   //OpenGL();
   //PhysicsTest();
-  Compression();
-  //ModelView();
+  //Compression();
+  ModelView();
   //MarchingCubes();
   //Grass();
 }

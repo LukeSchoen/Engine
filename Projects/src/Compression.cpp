@@ -20,7 +20,7 @@ void Compression()
 {
   Window window("Magic Brush");
 
-  const int RegionSize = 4;
+  const int regionSize = 4;
   const int drawingSize = 3;
 
   // Load image
@@ -46,7 +46,7 @@ void Compression()
         for (int x = -drawingSize; x <= drawingSize; x++)
         {
           vec2i pos(mouse.x + x, mouse.y + y);
-          if ((pos.x >= RegionSize && pos.x < w - RegionSize) && (pos.y >= RegionSize && pos.y < h - RegionSize))
+          if ((pos.x >= regionSize && pos.x < w - regionSize) && (pos.y >= regionSize && pos.y < h - regionSize))
           {
             _AddUnique(pos, sky);
             window.pixels[pos.x + pos.y * window.width] = 0xFFFFFFFF;
@@ -58,7 +58,7 @@ void Compression()
         for (int x = -drawingSize; x <= drawingSize; x++)
         {
           vec2i pos(mouse.x + x, mouse.y + y);
-          if ((pos.x >= RegionSize && pos.x < w - RegionSize) && (pos.y >= RegionSize && pos.y < h - RegionSize))
+          if ((pos.x >= regionSize && pos.x < w - regionSize) && (pos.y >= regionSize && pos.y < h - regionSize))
           {
             _AddUnique(vec2i(mouse.x + x, mouse.y + y), nonSky);
             window.pixels[pos.x + pos.y * window.width] = 0xFFFFFFFF;
@@ -71,7 +71,7 @@ void Compression()
       printf("Working...");
       for (int y = 0; y < h; y++) for (int x = 0; x < w; x++) window.pixels[x + y * window.width] = image[x + y * w]; // Draw Image
 
-      const int RegionCrossSection = RegionSize * 2 + 1;
+      const int RegionCrossSection = regionSize * 2 + 1;
       const int RegionArea = RegionCrossSection * RegionCrossSection;
 
       Insight cerebro(sizeof(uint32_t) * RegionArea, 1);
@@ -81,8 +81,8 @@ void Compression()
         static std::vector<uint32_t> input;
         static char t = 255;
         input.clear();
-        for (int y = v.y - RegionSize; y <= v.y + RegionSize; y++)
-          for (int x = v.x - RegionSize; x <= v.x + RegionSize; x++)
+        for (int y = v.y - regionSize; y <= v.y + regionSize; y++)
+          for (int x = v.x - regionSize; x <= v.x + regionSize; x++)
             input.push_back(image[x + y * w]);
         cerebro.AddExample(input.data(), &t);
       }
@@ -92,21 +92,21 @@ void Compression()
         static std::vector<uint32_t> input;
         static char f = 0;
         input.clear();
-        for (int y = v.y - RegionSize; y <= v.y + RegionSize; y++)
-          for (int x = v.x - RegionSize; x <= v.x + RegionSize; x++)
+        for (int y = v.y - regionSize; y <= v.y + regionSize; y++)
+          for (int x = v.x - regionSize; x <= v.x + regionSize; x++)
             input.push_back(image[x + y * w]);
         cerebro.AddExample(input.data(), &f);
       }
 
       cerebro.Train();
 
-      for (int y = RegionSize; y < h - RegionSize; y++)
-        for (int x = RegionSize; x < w - RegionSize; x++)
+      for (int y = regionSize; y < h - regionSize; y++)
+        for (int x = regionSize; x < w - regionSize; x++)
         {
           static std::vector<uint32_t> input;
           input.clear();
-          for (int iy = y - RegionSize; iy <= y + RegionSize; iy++)
-            for (int ix = x - RegionSize; ix <= x + RegionSize; ix++)
+          for (int iy = y - regionSize; iy <= y + regionSize; iy++)
+            for (int ix = x - regionSize; ix <= x + regionSize; ix++)
               input.push_back(image[ix + iy * w]);
           char res = 0;
           cerebro.Execute(input.data(), &res);
