@@ -61,23 +61,14 @@ void Accelerator::MatVec(const float *input, float *output, const float *matrix,
   assert(!cudaMemcpy(matrixGPU, matrix, sizeof(float) * 16, cudaMemcpyHostToDevice));
   assert(!cudaMemcpy(inputGPU, input, numVerts * 3 * sizeof(float), cudaMemcpyHostToDevice));
 
+  const int threadsPerBlock = 512;
+
+  printf("Launch configuration %d blocks %d threads\n", numVerts / threadsPerBlock, threadsPerBlock);
   // Setup execution parameters
-  for (int64_t i = 0; i < 1; i++)
-    cudaError_t code = matrixMulCUDA<<<numVerts / 256, 256>>>(matrixGPU, inputGPU, outputGPU);
-    if(code != cudaSuccess)
-    {
+  for (int64_t i = 0; i < 20000; i++)
+    matrixMulCUDA<<<numVerts / threadsPerBlock, threadsPerBlock >>>(matrixGPU, inputGPU, outputGPU);
 
-    }
-  
-
-if ()
-{
-  std::stringstream ss;
-  ss << file << "(" << line << ")";
-  std::string file_and_line;
-  ss >> file_and_line;
-  throw thrust::system_error(code, thrust::cuda_category(), file_and_line);
-}
+  printf("GPUassert: %s\n", cudaGetErrorString(cudaPeekAtLastError()));
 
   //cudaDeviceSynchronize();
 

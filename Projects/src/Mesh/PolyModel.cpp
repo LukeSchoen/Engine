@@ -70,9 +70,11 @@ bool PolyModel::LoadModel(const char *fileName, bool forceReload)
       vec3 nor1 = model.faces[faceID].v1.nor;
       vec3 nor2 = model.faces[faceID].v2.nor;
       vec3 nor3 = model.faces[faceID].v3.nor;
-      pColMeshMakers[material].AddVertex(model.faces[faceID].v1.pos, model.materials[material].color);
-      pColMeshMakers[material].AddVertex(model.faces[faceID].v2.pos, model.materials[material].color);
-      pColMeshMakers[material].AddVertex(model.faces[faceID].v3.pos, model.materials[material].color);
+      vec4 color = model.materials[material].color;
+      color = vec4(rand() / (RAND_MAX + 0.0f), rand() / (RAND_MAX + 0.0f), rand() / (RAND_MAX + 0.0f), 1.0f);
+      pColMeshMakers[material].AddVertex(model.faces[faceID].v1.pos, color);
+      pColMeshMakers[material].AddVertex(model.faces[faceID].v2.pos, color);
+      pColMeshMakers[material].AddVertex(model.faces[faceID].v3.pos, color);
     }
   }
 

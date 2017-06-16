@@ -80,7 +80,7 @@ void ModelView()
   Window windowSoft("Software", false, 800, 600, false);
 #else
   Window window("OpenGL", true, 800, 600, false);
-  Window windowSoft("Software", false, 800, 600, false);
+  //Window windowSoft("Software", false, 800, 600, false);
 #endif
   Controls::SetMouseLock(true);
   mat4 projectionMat;
@@ -89,14 +89,14 @@ void ModelView()
   window.Swap();
 
   PolyModel model;
-  model.LoadModel(ASSETDIR "raster/TeaPot.dae");
+  model.LoadModel("C:/Users/Luke/Desktop/map/map.obj", true);
+  //model.LoadModel("C:/Users/Luke/Documents/3DReaperDX/Frames/out/Out.obj", true);
 
   while (Controls::Update())
   {
     window.Clear(0, 0, 0);
-    windowSoft.Clear(0, 0, 0);
-    Camera::Update(10);
-
+    //windowSoft.Clear(0, 0, 0);
+    Camera::Update(1000);
     
     mat4 viewMat = Camera::Matrix();
     mat4 MVP;
@@ -104,13 +104,13 @@ void ModelView()
     modelMat.Translate(vec3(0, 0, -30));
     modelMat.Rotate(vec3(DegsToRads * -90, 0, 0));
     MVP = projectionMat * viewMat * modelMat;
-    DrawPolyModelCPU(model, MVP, windowSoft);
+    //DrawPolyModelCPU(model, MVP, windowSoft);
 
     MVP.Transpose();
     model.Render(MVP);
 
     window.Swap();
-    windowSoft.Swap();
+    //windowSoft.Swap();
     FrameRate::Update();
   }
 }

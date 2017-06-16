@@ -49,7 +49,7 @@ struct DynamicTextureArrayAtlas
     {
       glGenTextures(1, &texture);
       glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
-      glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
       glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -58,6 +58,11 @@ struct DynamicTextureArrayAtlas
     }
     if (updates.size() == 0) return;
     glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
+
+    // Fast rect upload
+    // Combine and upload once!
+
+    // Slow rect upload
     for (int rectID = 0; rectID < updates.size(); rectID++)
     {
       if (rectID == 8041)
@@ -75,6 +80,8 @@ struct DynamicTextureArrayAtlas
 
   bool AddTile(uint32_t *_image, int _width, int _height, int _layer, vec2 *TopLeftUVs, vec2 *BotRightUVs)
   {
+    if (_layer == layers)
+      _layer = layers;
     Rect rect(_width, _height);
     rect.layer = _layer;
     if (!packers[_layer].InsertRect(rect))

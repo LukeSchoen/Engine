@@ -21,7 +21,8 @@ static int GloriousStreamThread(void *ptr)
 {
   while (running)
   {
-    MainModel->Stream();
+    if(!Controls::KeyDown(SDL_SCANCODE_3))
+      MainModel->Stream();
     //Sleep(1);
   }
   streaming = false;
@@ -30,33 +31,32 @@ static int GloriousStreamThread(void *ptr)
 
 void Glorious()
 {
-  
 #ifdef _DEBUG
   Window window("Game", true, 640, 480, false); // Create Debug Game Window
 #else
-  //Window window("Game", true, 1920, 1080, true); // Create Game Window
-  Window window("Game", true, 800, 600, false); // Create Game Window
+  Window window("Game", true, 1920, 1080, true); // Create Game Window
+  //Window window("Game", true, 800, 600, false); // Create Game Window
 #endif
 
   Controls::SetMouseLock(true);
 
-  //GloriousModel model("D:/temp/CarrickHillSmall.ncs");
-  //GloriousModel model("D:/temp/CarrickHillMid.ncs");
-  //GloriousModel model("D:/temp/CarrickHillFull.ncs");
+  //GloriousModel model("F:/temp/CarrickHillSmall.ncs");
+  //GloriousModel model("F:/temp/CarrickHillMid.ncs");
+  //GloriousModel model("F:/temp/CarrickHillFull.ncs");
+  //GloriousModel model("F:/temp/Colledge.ncs");
+  //GloriousModel model("F:/temp/Image.ncs");
+  //GloriousModel model("F:/temp/CarrickHill.ncs");
   GloriousModel model("F:/temp/Colledge.ncs");
-  //GloriousModel model("D:/temp/Image.ncs");
-  //GloriousModel model("D:/temp/CarrickHill.ncs");
-  //GloriousModel model("D:/temp/Colledge.ncs");
-  //GloriousModel model("D:/temp/Expressway.ncs");
+  //GloriousModel model("F:/temp/Expressway.ncs");
 
   MainModel = &model;
 
   mat4 projectionMat;
-  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 1.0 / 32.0, 8192.0);
-  mat4 modelMat;
+  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 1.0 / 2.0, 515);
 
   Textures::SetTextureFilterMode(false);
 
+  Controls::Update();
   SDL_CreateThread(GloriousStreamThread, "streamer", nullptr);
 
   while (Controls::Update()) // Main Game Loop
@@ -102,7 +102,6 @@ void Glorious()
       model.Render(MVP);
     }
 
-
     if (Controls::KeyDown(SDL_SCANCODE_0))
     {
       for (int i = 0; i < model.atlasFreeTiles.UseCount; i++)
@@ -111,7 +110,6 @@ void Glorious()
         sprintf(imgFile, "C:/Users/Luke/Desktop/Atlas%d.png", i);
         ImageFile::WriteImagePNG(imgFile, model.atlas.image + (i * model.atlas.width * model.atlas.height), model.atlas.width, model.atlas.height);
       }
-
       system("start C:/Users/Luke/Desktop/Atlas0.png");
       break;
     }

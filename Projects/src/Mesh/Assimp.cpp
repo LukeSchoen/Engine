@@ -1,6 +1,7 @@
 #include "Assimp.h"
 #include "Math.h"
 #include "assimp\Importer.hpp"
+#include "assimp\Exporter.hpp"
 #include "assimp\scene.h"
 #include "assimp\postProcess.h"
 #include <vector>
@@ -24,7 +25,10 @@ void SceneAddMesh(aiMesh *mesh, aiMatrix4x4 transformationMatrix)
         for (int vertItr = 0; vertItr < 3; vertItr++)
         {
           aiVector3D vertPos = transformationMatrix * mesh->mVertices[indicies[vertItr]];
-          aiVector3D vertNorm = mesh->mNormals[indicies[vertItr]];
+
+          aiVector3D vertNorm;
+          if(mesh->HasNormals())
+            aiVector3D vertNorm = mesh->mNormals[indicies[vertItr]];
           if (mesh->HasTextureCoords(0))
           {
             aiVector3D* pTexCoords = &(mesh->mTextureCoords[0][indicies[vertItr]]);
@@ -63,8 +67,21 @@ AssimpModel AssimpLoadModel(const char *filePath)
   Assimp::Importer importer;
   const aiScene *pScene;
   aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
-  pScene = importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_GenUVCoords );
+
+  int ec = aiGetExportFormatCount();
+
+  Assimp::Exporter exporter;
   
+  for (int i = 0; i < ec; i++)
+  {
+    auto ed = exporter.GetExportFormatDescription(i);
+    int z = 4;
+    z = z;
+  }
+  pScene = importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_GenUVCoords );
+
+  //exporter.Export(pScene, "collada", "C:/temp/export.dae");
+
   // Parse Materials & textures
   int texCount = pScene->mNumMaterials;
   model.materials = new Material[texCount];

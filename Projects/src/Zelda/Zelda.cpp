@@ -15,6 +15,7 @@
 #include "Framebuffer.h"
 #include "Effect Object.h"
 #include "Assets.h"
+#include "Audio.h"
 
 void Zelda()
 {
@@ -30,7 +31,7 @@ void Zelda()
   Controls::SetMouseLock(true);
 
   mat4 projectionMat;
-  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 1.0f, 50000.0f);
+  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 20.0f, 20000.0f);
 
   PolyModel skybox;
   skybox.LoadModel(ASSETDIR "skybox/skybox.obj");
@@ -38,8 +39,13 @@ void Zelda()
   window.Swap();
   PolyModel hyruleColorModel, hyruleLightModel;
 
-  hyruleColorModel.LoadModel(ASSETDIR "zelda/Hyrule/Color/Hyrule.obj");
-  hyruleLightModel.LoadModel(ASSETDIR "zelda/Hyrule/Light/Hyrule.obj");
+  //hyruleColorModel.LoadModel(ASSETDIR "zelda/Hyrule/Color/Hyrule.obj");
+  //hyruleLightModel.LoadModel(ASSETDIR "zelda/Hyrule/Light/Hyrule.obj");
+
+  Audio::PlayMP3(ASSETDIR "Halo/Journal.mp3", 1000, "Journal", true);
+
+  hyruleColorModel.LoadModel(ASSETDIR "Halo/Bridge/Color/Color.obj");
+  hyruleLightModel.LoadModel(ASSETDIR "Halo/Bridge/Light/Light.obj");
 
   PolyMesh hyruleCollisionMesh;
 
@@ -86,7 +92,7 @@ void Zelda()
   {
     window.Clear(0, 190, 255);
 
-    Camera::Update(40);
+    Camera::Update(50);
 
     // Skybox
     mat4 skyMVP;
@@ -101,6 +107,7 @@ void Zelda()
 
     modelMat.LoadIdentity();
     MVP = projectionMat * viewMat * modelMat;
+    mat4 fMVP = MVP;
     //MVP.Transpose();
 
     // Create Hyrule color buffer
@@ -114,12 +121,21 @@ void Zelda()
     modelMat.RotateX(270 * DegsToRads);
     MVP = projectionMat * viewMat * modelMat;
     //MVP.Transpose();
+
     hyruleLightBuffer.Render(MVP);
 
     mat4 identity;
     finalRenderBuffer.Render(identity);
 
-    BufferObject::DisplayFullscreenTexture(finalRenderBuffer.GetBuffer("fragColor"));
+    if (Controls::KeyDown(SDL_SCANCODE_2))
+    {
+      fMVP.Transpose();
+      hyruleColorModel.Render(fMVP);
+    }
+    else
+    {
+      BufferObject::DisplayFullscreenTexture(finalRenderBuffer.GetBuffer("fragColor"));
+    }
 
     // Render Everything
     window.Swap(); // Swap Window

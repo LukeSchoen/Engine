@@ -39,7 +39,7 @@ uint32_t *ImageFile::ReadImage(const char *imagePath, uint32_t *width, uint32_t 
       b = imgData[address + bOffset];
       //a = 255;
       a = imgData[address + aOffset];
-      img[x + y * w] = b | (g << 8) | (r << 16) | (a << 24);
+      img[x + y * w] = r | (g << 8) | (b << 16) | (a << 24);
     }
   }
 

@@ -566,6 +566,9 @@
     <ClInclude Include="src\DrawTree.h">
       <Filter>Projects\DrawTree</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sol.hpp">
+      <Filter>Engine\Lua</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -816,6 +819,9 @@
     </Filter>
     <Filter Include="Projects\DrawTree">
       <UniqueIdentifier>{2cb29adf-939a-4058-bc7c-63bc5c75096a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Lua">
+      <UniqueIdentifier>{892e2b8b-23f9-4c72-91e4-82ecc500bc4a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -213,6 +213,7 @@
     <ClInclude Include="src\Region.h" />
     <ClInclude Include="src\Round.h" />
     <ClInclude Include="src\SecondStream.h" />
+    <ClInclude Include="src\Sol.hpp" />
     <ClInclude Include="src\SortedList.h" />
     <ClInclude Include="src\StreamTest.h" />
     <ClInclude Include="src\FilePath.h" />

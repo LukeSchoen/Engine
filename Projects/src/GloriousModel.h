@@ -12,7 +12,6 @@
 #include "Assets.h"
 #include "SortedList.h"
 
-
 struct voxel
 {
   uint8_t x, y, z, r, g, b;
@@ -28,12 +27,15 @@ struct GloriousBlock
   int64_t voxelCount;
   void *voxelPosData;
   void *voxelColData;
-  RenderObject model;
+  //RenderObject model;
   RenderObject *Smodel;
+  std::vector<int> tiles;
 };
 
 struct GloriousModel
 {
+  int64_t quality = 128;
+
   std::mutex renderLock;
 
   GloriousBlock *root;
@@ -41,7 +43,7 @@ struct GloriousModel
   StreamFileReader *fileStream;
 
   GloriousModel(const char *NCSfile)
-    : atlas(512, 512, 512)
+    : atlas(128, 128, 128)
   {
     atlas.UploadToGPU();
     Load(NCSfile);
@@ -79,7 +81,7 @@ private:
     float dist = Max(Max(fabs(camPos.x - blockPos.x), fabs(camPos.y - blockPos.y)), fabs(camPos.z - blockPos.z));
 
     // Close enough to split ?
-    if (dist < 256 * layerSize)
+    if (dist < quality * layerSize)
     {
       // Create children
       for (uint8_t cItr = 0; cItr < 8; cItr++)
@@ -117,15 +119,15 @@ private:
 
     bool leaf = true;
     // Close enough to split ?
-    if (dist < 360 * layerSize)
+    if (dist < quality * layerSize)
     {
       bool kidsAllReady = true;
-      renderLock.lock();
+      //renderLock.lock();
       for (uint8_t cItr = 0; cItr < 8; cItr++)
         if (block->children[cItr])
           if (!block->childPtr[cItr] || !block->childPtr[cItr]->Ready)
             kidsAllReady = false;
-      renderLock.unlock();
+      //renderLock.unlock();
       if (kidsAllReady)
       {
         SortedList childList;
@@ -144,15 +146,43 @@ private:
         }
       }
     }
+    else
+    {
+      // Unload distant child blocks
+      for (uint8_t cItr = 0; cItr < 8; cItr++)
+        if (block->childPtr[cItr])
+        {
+          //renderLock.lock();
+          RecursiveUnload(block->childPtr[cItr]);
+          block->childPtr[cItr] = nullptr;
+          //renderLock.unlock();
+        }
+    }
+
     if (leaf)
     {
-      renderLock.lock();
-      atlas.UploadToGPU();
+      //renderLock.lock();
       block->Smodel->AssignUniform("LAYER", UT_1f, &layerSize);
       block->Smodel->AssignUniform("regionPos", UT_3f, block->position.Data());
+
+      // Slow bits
+      if (!Controls::KeyDown(SDL_SCANCODE_4))
+      {
+        block->Smodel->UploadToGPU();
+        atlas.UploadToGPU();
+      }
+
       block->Smodel->Render(MVP);
-      renderLock.unlock();
+      //renderLock.unlock();
     }
+  }
+
+  void RecursiveUnload(GloriousBlock *block)
+  {
+    for (uint8_t cItr = 0; cItr < 8; cItr++)
+      if (block->childPtr[cItr])
+        RecursiveUnload(block->childPtr[cItr]);
+    UnloadBlock(block);
   }
 
   GloriousBlock *LoadBlock(int64_t discLocation)
@@ -184,10 +214,11 @@ private:
     free(data);
 
     // Create Grid
-    uint32_t *grid = new uint32_t[256 * 256 * 256];
-    uint32_t *ugrid = new uint32_t[256 * 256 * 256];
-    memset(grid, 0, sizeof(uint32_t) * 256 * 256 * 256);
-    memset(ugrid, 0, sizeof(uint32_t) * 256 * 256 * 256);
+    uint32_t *grid = (uint32_t*)calloc(256 * 256 * 256, sizeof(uint32_t));
+    uint32_t *ugrid = (uint32_t*)calloc(256 * 256 * 256, sizeof(uint32_t));
+
+    uint8_t minX = 255, minY = 255, minZ = 255;
+    uint8_t maxX = 0, maxY = 0, maxZ = 0;
 
     for (int v = 0; v < block->voxelCount; v++)
     {
@@ -201,6 +232,12 @@ private:
       uint32_t c = r + g * 256 + b * 256 * 256;
       grid[i] = c;
       ugrid[i] = c;
+      minX = Min(minX, x);
+      minY = Min(minY, y);
+      minZ = Min(minZ, z);
+      maxX = Max(maxX, x);
+      maxY = Max(maxY, y);
+      maxZ = Max(maxZ, z);
     }
 
     //uint8_t *ugrid = new uint8_t[256 * 256 * 256];
@@ -234,9 +271,9 @@ private:
 //         }
 
     // Rects
-    for (int y = 0; y < 256; y++)
-      for (int z = 0; z < 256; z++)
-        for (int x = 0; x < 256; x++)
+    for (int y = minY; y <= maxY; y++)
+      for (int z = minZ; z <= maxZ; z++)
+        for (int x = minX; x <= maxX; x++)
         {
           uint32_t u = ugrid[x + y * 256 + z * 256 * 256];
           if (u)
@@ -267,17 +304,20 @@ private:
           }
         }
 
-    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 1);
-    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 2);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 3);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 4);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 5);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 6);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 7);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 8);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 1);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 2);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 4);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 8);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 16);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 32);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 64);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 128);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 256);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 1, 0);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 2, 0);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 4, 0);
 
     //printf("built block\n");
-    std::vector<int> tiles;
     int tile = -1;
 
     for (int i = 0; i < tops.size(); i++)
@@ -294,9 +334,9 @@ private:
           img[x + z * tops[i].width] = c;
         }
 
-      renderLock.lock();
+      //renderLock.lock();
       bool added = false;
-      for (int t : tiles)
+      for (int t : block->tiles)
         if (atlas.AddTile(img, tops[i].width, tops[i].height, t, &tl, &br))
         {
           added = true;
@@ -306,14 +346,14 @@ private:
       if (!added)
       {
         tile = atlasFreeTiles.New();
-        tiles.emplace_back(tile);
+        block->tiles.emplace_back(tile);
         atlas.AddTile(img, tops[i].width, tops[i].height, tile, &tl, &br);
       }
       delete[] img;
-      renderLock.unlock();
+      //renderLock.unlock();
 
-      vec3 c(rand() / (RAND_MAX + 0.0), rand() / (RAND_MAX + 0.0), rand() / (RAND_MAX + 0.0));
-      c = vec3(1, 1, 1);
+      //vec3 c(rand() / (RAND_MAX + 0.0), rand() / (RAND_MAX + 0.0), rand() / (RAND_MAX + 0.0));
+      vec3 c(1, 1, 1);
       maker.AddVertex(tops[i].pos + vec3(0, 0, 0), vec3(tl.x, tl.y, tile), c);
       maker.AddVertex(tops[i].pos + vec3(tops[i].width, 0, 0), vec3(br.x, tl.y, tile), c);
       maker.AddVertex(tops[i].pos + vec3(0, 0, tops[i].height), vec3(tl.x, br.y, tile), c);
@@ -322,21 +362,21 @@ private:
       maker.AddVertex(tops[i].pos + vec3(tops[i].width, 0, tops[i].height), vec3(br.x, br.y, tile), c);
       maker.AddVertex(tops[i].pos + vec3(0, 0, tops[i].height), vec3(tl.x, br.y, tile), c);
     }
-    delete[] grid;
-    delete[] ugrid;
-    for (int t : tiles) atlas.ClearLayer(t);
+    free(grid);
+    free(ugrid);
+    for (int t : block->tiles) atlas.ClearLayer(t);
     block->Smodel = maker.AssembleRenderObject();
     block->Smodel->AssignShader(ASSETDIR "Glorious/shaders/Glorious.vert", ASSETDIR "Glorious/shaders/Glorious.frag");
     block->Smodel->AssignTexture("texture0", atlas.texture, TT_2D_ARRAY);
 
     // GPU
-    block->model.AssignShader(ASSETDIR "NovaCosm/shaders/NovaCosm.vert", ASSETDIR "NovaCosm/shaders/NovaCosm.frag", ASSETDIR "NovaCosm/shaders/NovaCosm.geom");
-    block->model.AssignAttribute("position", GLAttributeType::AT_UNSIGNED_BYTE, block->voxelPosData, 3, block->voxelCount);
-    block->model.AssignAttribute("color", GLAttributeType::AT_UNSIGNED_BYTE_NORM, block->voxelColData, 3, block->voxelCount);
+    //block->model.AssignShader(ASSETDIR "NovaCosm/shaders/NovaCosm.vert", ASSETDIR "NovaCosm/shaders/NovaCosm.frag", ASSETDIR "NovaCosm/shaders/NovaCosm.geom");
+    //block->model.AssignAttribute("position", GLAttributeType::AT_UNSIGNED_BYTE, block->voxelPosData, 3, block->voxelCount);
+    //block->model.AssignAttribute("color", GLAttributeType::AT_UNSIGNED_BYTE_NORM, block->voxelColData, 3, block->voxelCount);
 
-    renderLock.lock();
+    //renderLock.lock();
     block->Ready = true;
-    renderLock.unlock();
+    //renderLock.unlock();
 
     return block;
   }
@@ -344,7 +384,10 @@ private:
   void UnloadBlock(GloriousBlock *block)
   {
     free(block->voxelPosData);
-    delete[] block;
+    free(block->voxelColData);
+    block->Smodel->Clear();
+    for (int t : block->tiles) atlasFreeTiles.Old(t);
+    delete block;
   }
 };
 

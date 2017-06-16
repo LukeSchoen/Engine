@@ -98,7 +98,7 @@ void Entity::ApplyPhysics()
   // Apply friction
   vec3 newMomentum = momentum * (OnFloor() ? 0.8f : 0.9f);
   newMomentum.y = momentum.y;
-  if (InWater(position)) newMomentum = newMomentum * 0.8;
+  if (InWater(position)) newMomentum = newMomentum * 0.9;
   momentum = newMomentum;
 
 

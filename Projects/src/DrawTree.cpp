@@ -32,6 +32,11 @@ void WritePixel(const int &xpos, const int &ypos, const Window &window, const ui
 //   }
 // }
 
+bool OverLaps(int l1, int r1, int t1, int b1, int l2, int r2, int t2, int b2)
+{
+  return !(l1 > r2 || r1 < l2 || b1 < t2 || t1 > b2);
+}
+
 void DrawNode(Octree &tree, const Node &node, const float &size, const Window &window, const vec3 &position, const mat4 &MVP)
 {
   // Apply Viewing Matrices
@@ -46,12 +51,17 @@ void DrawNode(Octree &tree, const Node &node, const float &size, const Window &w
   float screenSize = size * invZ * (window.width * 0.5);
   vec2i lowScreenPos = { int(xp - screenSize), int(yp - screenSize) };
   vec2i highScreenPos = { int(xp + screenSize), int(yp + screenSize) };
+
   bool lowOnScreen = !(lowScreenPos.x < 0 | lowScreenPos.y < 0 | lowScreenPos.x >= window.width | lowScreenPos.y >= window.height) & (invZ > 0.1);
   bool highOnScreen = !(highScreenPos.x < 0 | highScreenPos.y < 0 | highScreenPos.x >= window.width | highScreenPos.y >= window.height) & (invZ > 0.1);
-  if (lowOnScreen | highOnScreen) // Either on screen ?
+
+  if(OverLaps(lowScreenPos.x, highScreenPos.x, lowScreenPos.y, highScreenPos.y, 0, window.width, 0, window.height))
+
+  //if (lowOnScreen | highOnScreen) // Either on screen ?
+  //if (invZ < 10.0f) // Either on screen ?
   {
     //if (screenSize > 0.5f)
-    if (screenSize > 1.2)
+    if (screenSize > 2)
     //vec2i diff = (highScreenPos - lowScreenPos);
     //if (diff.x > 3 || diff.y > 3);
     {
@@ -92,6 +102,7 @@ void DrawTree()
 
   printf("Loading Octree... ");
   Window window("DrawTree", false, 800, 600, false); // Create Game Window
+  //Window window("DrawTree", false, 1024, 768, true); // Create Game Window
   printf("Done\n");
 
   Controls::SetMouseLock(true);

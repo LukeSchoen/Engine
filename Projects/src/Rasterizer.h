@@ -69,20 +69,19 @@ private:
 
     if (shortLine.y == 0 || longLine.y == 0) return;
 
-    float gradS = (shortLine.x / shortLine.y);
     float gradL = (longLine.x / longLine.y);
+    float gradS = (shortLine.x / shortLine.y);
 
     int yStart = (int)ceil(shortSpan.m_v1.y);
     int yEnd = (int)ceil(shortSpan.m_v2.y);
 
-    float startOffset = (yStart - shortSpan.m_v1.y); // offset here to follow openGL fill conventions
-
-    float sx = gradS * startOffset;
-    float lx = gradL * startOffset;
-
     float longTstart = (shortSpan.m_v1.y - longSpan.m_v1.y) / longLine.y;
-    sx += shortSpan.m_v1.x;
-    lx += longSpan.m_v1.x * (1.0f - longTstart) + longSpan.m_v2.x * (longTstart);
+    float lx = longSpan.m_v1.x * (1.0f - longTstart) + longSpan.m_v2.x * (longTstart);
+    float sx = shortSpan.m_v1.x;
+
+    float startOffset = (yStart - shortSpan.m_v1.y); // offset here to follow openGL fill conventions
+    lx += gradL * startOffset;
+    sx += gradS * startOffset;
 
     for (int y = yStart; y < yEnd; y++)
     {

@@ -19,6 +19,7 @@
 
 void main() // console entry
 {
+  //Lua();
   //Grass();
   //PixeLife();
   //DLux();
@@ -26,11 +27,11 @@ void main() // console entry
   //BTCBot();
   //SecondStream();
   //StreamTest();
-  Glorious();
+  //Glorious();
   //DrawTree();
   //NovaCosm();
   //Cosmic();
-  //Zelda();
+  Zelda();
   //Minecraft();
   //OpenGL();
   //PhysicsTest();

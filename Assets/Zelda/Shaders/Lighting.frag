@@ -17,5 +17,5 @@ vec3 saturation(vec3 rgb, float adjustment)
 void main()
 {
 	vec3 color = (texture(texture0, passTexcoord0) * texture(texture1, passTexcoord0)).rgb;
-	fragColor = vec4( saturation(color, 1) * 1.0 , 1.0 );
+	fragColor = vec4( saturation(color, 1), 1.0 );
 }

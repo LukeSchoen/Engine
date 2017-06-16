@@ -6,20 +6,23 @@
 
 int main()
 {
-  const int64_t numVerts = 16 * 1024 * 1024; // Vector Count
+  const int64_t numVerts = 1 * 1024 * 1024; // Vector Count
   float * __restrict input = new float[numVerts * 3]; // Input
   float * __restrict output = new float[numVerts * 3]; // Output
   float matrix[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };  // Matrix
 
-  printf("Making Random Data!\n");
+  printf("Lukwas performance measure...\n");
+
+  printf("Generating Random Data!\n");
   for (int64_t i = 0; i < numVerts * 3; i++) input[i] = (float)rand() / RAND_MAX; // Random Data
 
-  printf("\nCPU Started!\n");
   auto startTime = clock();
-  // CPU Version
-  float * __restrict m = matrix;
-  if (true)
-    for (int64_t l = 0; l < 20; l++)
+  if (true) // CPU
+  {
+    printf("\nCPU Started with 2 billion points !\n");
+    // CPU Version
+    float * __restrict m = matrix;
+    for (int64_t l = 0; l < 2000; l++)
     {
       float * __restrict i = input;
       float * __restrict o = output;
@@ -34,22 +37,27 @@ int main()
       }
     }
 
-  printf("CPU Finished!\n");
-  printf( "In %d ms.\n", clock() - startTime);
+    printf("CPU Finished!\n");
+    //printf("Output zero was %f, %f, %f\n", output[0], output[1], output[2]);
+    printf( "In %d ms.\n", clock() - startTime);
 
-  printf("\n\nGPU Initializing...\n");
-  Accelerator accelerator;
-  printf("\nGPU Starting!\n");
-  printf("%f\n", *input);
+    delete[] output; output = new float[numVerts * 3]; // Reset Output
+  }
 
-  // GPU Version
-  startTime = clock();
+  if (true) // GPU
+  {
+    printf("\n\nGPU Initializing...\n");
+    Accelerator accelerator;
+    printf("\nGPU Starting with 20 billion points!\n");
 
-  if (true)
+    // GPU Version
+    startTime = clock();
     for (int64_t l = 0; l < 1; l++)
       accelerator.MatVec(input, output, matrix, numVerts);
-  printf("%f\n", *output);
-  printf("GPU Finished!\n");
-  printf("In %d ms.\n", clock() - startTime);
+
+    printf("GPU Finished!\n");
+    //printf("Output zero was %f, %f, %f\n", output[0], output[1], output[2]);
+    printf("In %d ms.\n", clock() - startTime);
+  }
   getchar();
 }

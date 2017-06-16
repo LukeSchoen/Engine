@@ -218,7 +218,7 @@ void PhysicsTest()
     vec3 lastCam = Camera::Position();
     Camera::Update(20, true);
     vec3 newCam = Camera::Position();
-    newCam.y = lastCam.y;
+    //newCam.y = lastCam.y;
 
     vec3 moveDir = vec3() - (newCam - lastCam);
     bool IsMoving = (newCam - lastCam).Length() > 0.005;
