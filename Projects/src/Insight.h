@@ -1,7 +1,6 @@
+#include <vector>
 #ifndef Insight_h__
 #define Insight_h__
-
-#include <vector>
 
 struct InsightExample;
 class LogicMonday;
@@ -21,6 +20,7 @@ public:
 
 private:
 
+  int64_t rawInputBits, rawOutputBits;
   int64_t inputBitCount, outputBitCount;
   std::vector<InsightExample> *examples = nullptr;
   LogicMonday *cerebro = nullptr;

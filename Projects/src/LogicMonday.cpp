@@ -32,6 +32,9 @@ void LogicMonday::Train(std::vector<InsightExample> *examples)
   m_scores = nullptr;
   delete m_nodeMap;
   m_nodeMap = nullptr;
+
+//   printf("%d", nodes.size());
+//   getchar();
 }
 
 void LogicMonday::Query(BitBuffer &input, BitBuffer &output)
