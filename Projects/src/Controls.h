@@ -10,7 +10,9 @@ struct Controls
   
   static bool KeyDown(SDL_Scancode key);
 
-  static vec2 GetMouse();
+  static vec2i GetMouse();
+
+  static vec2 GetMouseRelative();
 
   static bool GetLeftClick();
 

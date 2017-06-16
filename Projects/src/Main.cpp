@@ -29,10 +29,10 @@ void main() // console entry
   //Minecraft();
   //OpenGL();
   //PhysicsTest();
-  //Compression();
+  Compression();
   //ModelView();
   //MarchingCubes();
-  Grass();
+  //Grass();
 }
 
 int wmain(int pc, char* ps){main();} // windows entry

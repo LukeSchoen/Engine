@@ -25,7 +25,7 @@ void Camera::Update(float speed, bool only2D, bool useTimeDelta)
   const float ControllerTurnSensitivity = 1.0f / 1000.0f * 2000;
   const float controllerDeadZone = 0.2;
 
-  vec2 mouseTurn = Controls::GetMouse();
+  vec2 mouseTurn = Controls::GetMouseRelative();
   dir.y -= mouseTurn.x * MouseTurnSensitivity;
   dir.x += mouseTurn.y * MouseTurnSensitivity;
 

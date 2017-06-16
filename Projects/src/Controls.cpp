@@ -33,7 +33,13 @@ bool Controls::KeyDown(SDL_Scancode key)
   return keyboardState[key];
 }
 
-vec2 Controls::GetMouse()
+vec2i Controls::GetMouse()
+{
+  SDL_GetMouseState(&mouseX, &mouseY);
+  return vec2i(mouseX, mouseY);
+}
+
+vec2 Controls::GetMouseRelative()
 {
   vec2 ret = vec2(mouseX, mouseY);
   mouseX = 0;
