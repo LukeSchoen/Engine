@@ -43,8 +43,8 @@ void Glorious()
   //GloriousModel model("D:/temp/CarrickHillSmall.ncs");
   //GloriousModel model("D:/temp/CarrickHillMid.ncs");
   //GloriousModel model("D:/temp/CarrickHillFull.ncs");
-  //GloriousModel model("D:/temp/Colledge.ncs");
-  GloriousModel model("D:/temp/Image.ncs");
+  GloriousModel model("F:/temp/Colledge.ncs");
+  //GloriousModel model("D:/temp/Image.ncs");
   //GloriousModel model("D:/temp/CarrickHill.ncs");
   //GloriousModel model("D:/temp/Colledge.ncs");
   //GloriousModel model("D:/temp/Expressway.ncs");

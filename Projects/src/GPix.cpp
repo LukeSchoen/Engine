@@ -1,6 +1,15 @@
 #include "GPix.h"
+#include <basetsd.h>
+
+int RandBuff[65536];
 
 extern GrassWorld grassWorld;
+
+int FastRand()
+{
+  static uint16_t r = 0;
+  return RandBuff[r++];
+}
 
 ActionType GPix::Brain::Think(const GPix& gPix)
 {
@@ -49,7 +58,11 @@ bool GPix::isFree(const GPix &o)
 
 bool GPix::isKin(const GPix &o) const
 {
-  return o.useable && o.red == red && o.green == green && o.blue == blue;
+  if (!o.useable)
+    return false;
+
+  int error = abs(o.red - red) + abs(o.green - green) + abs(o.blue - blue);
+  return error / 5;
 }
 
 bool GPix::ConditionMet(const ConditionType &condition) const
@@ -79,14 +92,65 @@ bool GPix::ConditionMet(const ConditionType &condition) const
   return true;
 }
 
-GPix &GetGPix(uint16_t x, uint16_t y)
+const GPix &GetGPix(uint16_t x, uint16_t y)
 {
   if (x < 0 || y < 0 || x >= grassWorld.gridWidth || y >= grassWorld.gridHeight)
     return grassWorld.emptyGPix;
   return grassWorld.grid[x + y * grassWorld.gridWidth];
 }
 
-GPix &GetGPixOffset(int16_t x, int16_t y)
+GPix &SetNewGPix(uint16_t x, uint16_t y)
+{
+  if (x < 0 || y < 0 || x >= grassWorld.gridWidth || y >= grassWorld.gridHeight)
+    return grassWorld.emptyGPix;
+  return grassWorld.newgrid[x + y * grassWorld.gridWidth];
+}
+
+const GPix &GetGPixOffset(int16_t x, int16_t y)
 {
   return GetGPix(grassWorld.xpos + x, grassWorld.ypos + y);
+}
+
+GPix &SetNewGPixOffset(int16_t x, int16_t y)
+{
+  return SetNewGPix(grassWorld.xpos + x, grassWorld.ypos + y);
+}
+
+void MutateAgent(GPix *agent)
+{
+  int64_t colorMutationRate = 1;
+  int64_t brainMutationRate = 10;
+
+  // mutate color
+  for (int64_t i = 0; i < colorMutationRate; i++)
+  {
+    agent->red = agent->red - 1 + rand() % 3;
+    agent->green = agent->green - 1 + rand() % 3;
+    agent->blue = agent->blue - 1 + rand() % 3;
+  }
+
+  float mutationSpeed = (float)rand() / RAND_MAX * 128;
+
+  // mutate brain
+  for (int64_t i = 0; i < brainMutationRate; i++)
+    for (auto & thought : agent->brain.thoughts)
+      for (auto & idea : thought.ideas)
+        for (auto & condition : idea.conditions)
+        {
+          if ((FastRand() % brainMutationRate / mutationSpeed) < 1.0f)
+            condition = ConditionType(FastRand() % ConditionNum);
+          if ((FastRand() % brainMutationRate * idea.conditions.size() / mutationSpeed) < 1.0f)
+            idea.action = ActionType(FastRand() % ActionNum);
+        }
+        std::vector<ConditionType> conditions;
+        ActionType action;
+}
+
+void GrassWorld::RandomizeBuffer()
+{
+  for (uint16_t i = 0; i < ((UINT16)~((UINT16)0)); i++)
+  {
+    RandBuff[i] = rand();
+  }
+  
 }

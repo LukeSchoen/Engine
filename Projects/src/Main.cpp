@@ -14,15 +14,18 @@
 #include "ModelView.h"
 #include "MarchingCubes.h"
 #include "Grass.h"
+#include "PixelLife.h"
 
 void main() // console entry
 {
+  Grass();
+  //PixeLife();
   //DLux();
   //Pokemon();
   //BTCBot();
   //SecondStream();
   //StreamTest();
-  //Glorious();
+  Glorious();
   //NovaCosm();
   //Cosmic();
   //Zelda();
@@ -30,9 +33,8 @@ void main() // console entry
   //OpenGL();
   //PhysicsTest();
   //Compression();
-  ModelView();
+  //ModelView();
   //MarchingCubes();
-  //Grass();
 }
 
 int wmain(int pc, char* ps){main();} // windows entry

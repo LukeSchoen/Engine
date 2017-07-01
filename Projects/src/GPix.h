@@ -84,12 +84,23 @@ struct GrassWorld
 {
   GPix emptyGPix;
   GPix *grid = &emptyGPix;
+  GPix *newgrid = &emptyGPix;
   uint32_t gridWidth = 1;
   uint32_t gridHeight = 1;
   uint16_t xpos = 0;
   uint16_t ypos = 0;
+
+  void RandomizeBuffer();
 };
 
-GPix &GetGPix(uint16_t x, uint16_t y);
+const GPix &GetGPix(uint16_t x, uint16_t y);
 
-GPix &GetGPixOffset(int16_t x, int16_t y);
+const GPix &GetGPixOffset(int16_t x, int16_t y);
+
+GPix &SetNewGPix(uint16_t x, uint16_t y);
+
+GPix &SetNewGPixOffset(int16_t x, int16_t y);
+
+void MutateAgent(GPix *agent);
+
+int FastRand();

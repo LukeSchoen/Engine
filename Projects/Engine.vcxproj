@@ -90,6 +90,7 @@
     <ClCompile Include="src\OpenGL.cpp" />
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\PhysicsTest.cpp" />
+    <ClCompile Include="src\PixelLife.cpp" />
     <ClCompile Include="src\PointCloud.cpp" />
     <ClCompile Include="src\pokemon.cpp" />
     <ClCompile Include="src\PolyMesh.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="src\Octree.h" />
     <ClInclude Include="src\OpenGL.h" />
     <ClInclude Include="src\PhysicsTest.h" />
+    <ClInclude Include="src\PixelLife.h" />
     <ClInclude Include="src\PointCloud.h" />
     <ClInclude Include="src\pokemon.h" />
     <ClInclude Include="src\PolyMesh.h" />
@@ -218,6 +220,7 @@
     <ClInclude Include="src\Vector3.h" />
     <ClInclude Include="src\Vector4.h" />
     <ClInclude Include="src\Vector.h" />
+    <ClInclude Include="src\VirtualVector.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\Zelda\Zelda.h" />
   </ItemGroup>
@@ -336,6 +339,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\Bullet\src;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\ZLIB;$(SolutionDir)3rdParty\SDL2Image\include;$(ProjectDir)src;$(ProjectDir)src\Mesh;$(ProjectDir)src\Math;$(ProjectDir)src\File;$(ProjectDir)src\VoxelBoy;$(ProjectDir)src\Zelda;$(ProjectDir)src\Glorious</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <AdditionalOptions>/openmp</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -372,6 +376,7 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc1
       <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\Bullet\src;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\ZLIB;$(SolutionDir)3rdParty\SDL2Image\include;$(ProjectDir)src;$(ProjectDir)src\Mesh;$(ProjectDir)src\Math;$(ProjectDir)src\File;$(ProjectDir)src\VoxelBoy;$(ProjectDir)src\Zelda;$(ProjectDir)src\Glorious</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <AdditionalOptions>/openmp</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -408,7 +413,7 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc1
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/Oa %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/openmp</AdditionalOptions>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -425,7 +430,7 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc1
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;"C:\Luke\Programming\Engine\bin\win64\Release\Accelerator.lib"</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
     </Link>
@@ -452,7 +457,7 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc1
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/Oa %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/openmp</AdditionalOptions>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -469,7 +474,7 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc1
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;"C:\Luke\Programming\Engine\bin\win64\Release\Accelerator.lib"</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
     </Link>
@@ -496,7 +501,7 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc1
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;FINAL;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/Oa %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/openmp</AdditionalOptions>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -546,7 +551,7 @@ xcopy "$(SolutionDir)Assets" "$(OutDir)Assets" /d /y /i /e</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;FINAL;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/Oa %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/openmp</AdditionalOptions>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <BufferSecurityCheck>false</BufferSecurityCheck>

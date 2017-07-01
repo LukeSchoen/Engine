@@ -137,4 +137,5 @@ struct CPURenderer
   }
 
 };
+
 #endif // CPUDraw_h__

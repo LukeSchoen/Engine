@@ -8,13 +8,13 @@ GrassWorld grassWorld;
 
 void _UpdateWorld()
 {
-  // Sprinkle food
+  std::swap(grassWorld.grid, grassWorld.newgrid);
 
   // Agent Death
   for (int y = 0; y < grassWorld.gridHeight; y++)
     for (int x = 0; x < grassWorld.gridWidth; x++)
     {
-      GPix &gpix = grassWorld.grid[x + y * grassWorld.gridWidth];
+      GPix &gpix = grassWorld.newgrid[x + y * grassWorld.gridWidth];
       if (gpix.energy == 0)
         gpix.red = gpix.green = gpix.blue = 0;
     }
@@ -25,26 +25,32 @@ void _UpdateWorld()
     {
       GPix &gpix = grassWorld.grid[x + y * grassWorld.gridWidth];
       if(gpix.energy == 0) continue;
+
+      gpix.energy = Min(gpix.energy + 32, 255);
+
       grassWorld.xpos = x;
       grassWorld.ypos = y;
       ActionType action = gpix.brain.Think(gpix);
       switch (action)
       {
-      case Detonate: for (int iy = -1; iy <= 1; iy++) for (int ix = -1; ix <= 1; ix++) { GPix &o = GetGPixOffset(ix, iy); o.energy = 0; o.red = 255; o.green = 32; o.blue = 32; }; break;
-      case MoveLeft: {GPix &o = GetGPixOffset(-1, 0); if (o.useable) { o = gpix; gpix.energy = 0; gpix.red = 0; gpix.green = 0; gpix.blue = 0; } } break;
-      case MoveRight: {GPix &o = GetGPixOffset(1, 0); if (o.useable) { o = gpix; gpix.energy = 0; gpix.red = 0; gpix.green = 0; gpix.blue = 0; } } break;
-      case MoveUp: {GPix &o = GetGPixOffset(0, -1); if (o.useable) { o = gpix; gpix.energy = 0; gpix.red = 0; gpix.green = 0; gpix.blue = 0; } } break;
-      case MoveDown: {GPix &o = GetGPixOffset(0, 1); if (o.useable) { o = gpix; gpix.energy = 0; gpix.red = 0; gpix.green = 0; gpix.blue = 0; } } break;
-      case GiveLeft: {GPix &o = GetGPixOffset(-1, 0); if (o.energy == 0) { gpix.energy /= 2; o = gpix; } else { o.energy = Min(o.energy + gpix.energy / 2, 255); gpix.energy /= 2; } } break;
-      case GiveRight: {GPix &o = GetGPixOffset(1, 0); if (o.energy == 0) { gpix.energy /= 2; o = gpix; } else { o.energy = Min(o.energy + gpix.energy / 2, 255); gpix.energy /= 2; } } break;
-      case GiveUp: {GPix &o = GetGPixOffset(0, -1); if (o.energy == 0) { gpix.energy /= 2; o = gpix; } else { o.energy = Min(o.energy + gpix.energy / 2, 255); gpix.energy /= 2; } } break;
-      case GiveDown: {GPix &o = GetGPixOffset(0, 1); if (o.energy == 0) { gpix.energy /= 2; o = gpix; } else { o.energy = Min(o.energy + gpix.energy / 2, 255); gpix.energy /= 2; } } break;
-      case TakeLeft: {GPix &o = GetGPixOffset(-1, 0); if (o.energy > 0) { gpix.energy = Min(gpix.energy + o.energy / 2, 255); o.energy /= 2; } } break;
-      case TakeRight: {GPix &o = GetGPixOffset(1, 0); if (o.energy > 0) { gpix.energy = Min(gpix.energy + o.energy / 2, 255); o.energy /= 2; } } break;
-      case TakeUp: {GPix &o = GetGPixOffset(0, -1); if (o.energy > 0) { gpix.energy = Min(gpix.energy + o.energy / 2, 255); o.energy /= 2; } } break;
-      case TakeDown: {GPix &o = GetGPixOffset(0, 1); if (o.energy > 0) { gpix.energy = Min(gpix.energy + o.energy / 2, 255); o.energy /= 2; } } break;
+      case Detonate: for (int iy = -1; iy <= 1; iy++) for (int ix = -1; ix <= 1; ix++) { GPix &ow = SetNewGPixOffset(0, 0); const GPix &o = GetGPixOffset(ix, iy); ow.energy = 0; ow.red = 255; ow.green = 32; ow.blue = 32; }; break;
+      case MoveLeft: {GPix &ow = SetNewGPixOffset(-1, 0); const GPix &o = GetGPixOffset(-1, 0); if (o.useable) { SetNewGPixOffset(0, 0) = gpix; ow = gpix; MutateAgent(&ow), gpix.energy = 0; gpix.red = 0; gpix.green = 0; gpix.blue = 0; } } break;
+      case MoveRight: {GPix &ow = SetNewGPixOffset(1, 0); const GPix &o = GetGPixOffset(1, 0); if (o.useable)  { SetNewGPixOffset(0, 0) = gpix; ow = gpix; MutateAgent(&ow), gpix.energy = 0; gpix.red = 0; gpix.green = 0; gpix.blue = 0; } } break;
+      case MoveUp: {GPix &ow = SetNewGPixOffset(0, -1); const GPix &o = GetGPixOffset(0, -1); if (o.useable)   { SetNewGPixOffset(0, 0) = gpix; ow = gpix; MutateAgent(&ow), gpix.energy = 0; gpix.red = 0; gpix.green = 0; gpix.blue = 0; } } break;
+      case MoveDown: {GPix &ow = SetNewGPixOffset(0, 1); const GPix &o = GetGPixOffset(0, 1); if (o.useable)   { SetNewGPixOffset(0, 0) = gpix; ow = gpix; MutateAgent(&ow), gpix.energy = 0; gpix.red = 0; gpix.green = 0; gpix.blue = 0; } } break;
+      
+      case GiveLeft: {GPix &ow = SetNewGPixOffset(-1, 0); const GPix &o = GetGPixOffset(-1, 0); if (o.energy == 0) { gpix.energy /= 2; ow = gpix; } else { ow.energy = Min(o.energy + gpix.energy / 2, 255); gpix.energy /= 2; ow = std::move(o); } } break;
+      case GiveRight: {GPix &ow = SetNewGPixOffset(1, 0); const GPix &o = GetGPixOffset(1, 0); if (o.energy == 0) { gpix.energy /= 2; ow = gpix; } else { ow.energy = Min(o.energy + gpix.energy / 2, 255); gpix.energy /= 2; ow = std::move(o); } } break;
+      case GiveUp: {GPix &ow = SetNewGPixOffset(0, -1); const GPix &o = GetGPixOffset(0, -1); if (o.energy == 0) { gpix.energy /= 2; ow = gpix; } else { ow.energy = Min(o.energy + gpix.energy / 2, 255); gpix.energy /= 2;  ow = std::move(o); } } break;
+      case GiveDown: {GPix &ow = SetNewGPixOffset(0, 1); const GPix &o = GetGPixOffset(0, 1); if (o.energy == 0) { gpix.energy /= 2; ow = gpix; } else { ow.energy = Min(o.energy + gpix.energy / 2, 255); gpix.energy /= 2;  ow = std::move(o); } } break;
+      case TakeLeft: {GPix &ow = SetNewGPixOffset(-1, 0); const GPix &o = GetGPixOffset(-1, 0); if (o.energy > 0) { gpix.energy = Min(gpix.energy + o.energy / 2, 255); ow.energy /= 2;ow = std::move(o); } } break;
+      case TakeRight: {GPix &ow = SetNewGPixOffset(1, 0); const GPix &o = GetGPixOffset(1, 0); if (o.energy > 0) { gpix.energy = Min(gpix.energy + o.energy / 2, 255); ow.energy /= 2; ow = std::move(o);} } break;
+      case TakeUp: {GPix &ow = SetNewGPixOffset(0, -1); const GPix &o = GetGPixOffset(0, -1); if (o.energy > 0) { gpix.energy = Min(gpix.energy + o.energy / 2, 255); ow.energy /= 2; ow = std::move(o);} } break;
+      case TakeDown: {GPix &ow = SetNewGPixOffset(0, 1); const GPix &o = GetGPixOffset(0, 1); if (o.energy > 0) { gpix.energy = Min(gpix.energy + o.energy / 2, 255); ow.energy /= 2; ow = std::move(o);} } break;
+      default: SetNewGPixOffset(0, 0) = std::move(GetGPixOffset(0, 0)); break;
       }
     }
+
 }
 
 void _AddRandomAgent()
@@ -83,25 +89,50 @@ void _DrawWorld(const Window &window, int zoom)
     for (int x = 0; x < grassWorld.gridWidth; x++)
     {
       GPix &gpix = grassWorld.grid[x + y * grassWorld.gridWidth];
-      uint32_t c = gpix.blue + (gpix.green << 8) + (gpix.red << 16);
-      for (int iy = 0; iy < zoom; iy++)
-        for (int ix = 0; ix < zoom; ix++)
-          window.pixels[x * zoom + ix + (y * zoom + iy) * window.width] = c;
+//       if (gpix.energy == 0)
+//         gpix.energy = 255;
+      //uint8_t r = gpix.red * 255 / gpix.energy;
+      //uint8_t g = gpix.green * 255 / gpix.energy;
+      //uint8_t b = gpix.blue * 255 / gpix.energy;
+
+      uint8_t r = 0;
+      uint8_t g = 0;
+      uint8_t b = 0;
+
+      r += gpix.red;
+      g += gpix.green;
+      b += gpix.blue;
+
+      r = Min((uint64_t)r + (uint64_t)gpix.red * gpix.energy / 256, 255);
+      g = Min((uint64_t)g + (uint64_t)gpix.green * gpix.energy / 256, 255);
+      b = Min((uint64_t)b + (uint64_t)gpix.blue * gpix.energy / 256, 255);
+
+      uint32_t c = b + (g << 8) + (r << 16);
+      if (gpix.energy != 0)
+        for (int iy = 0; iy < zoom; iy++)
+          for (int ix = 0; ix < zoom; ix++)
+            window.pixels[x * zoom + ix + (y * zoom + iy) * window.width] = c;
     }
 }
 
 void Grass()
 {
-  Window window("SecondStream", false, 1920, 1080, true); // Create Game Window
+  Window window("Grass", false, 800, 600, true); // Create Game Window
 
   // Create game World
-  const int zoom = 4;
+  const int zoom = 20;
   grassWorld.gridWidth = window.width / zoom;
   grassWorld.gridHeight = window.height / zoom;
   grassWorld.grid = new GPix[grassWorld.gridWidth * grassWorld.gridHeight];
+  grassWorld.newgrid = new GPix[grassWorld.gridWidth * grassWorld.gridHeight];
+  grassWorld.RandomizeBuffer();
+  
   for (int y = 0; y < grassWorld.gridHeight; y++)
     for (int x = 0; x < grassWorld.gridWidth; x++)
+    {
       grassWorld.grid[x + y * grassWorld.gridWidth].useable = true;
+      grassWorld.newgrid[x + y * grassWorld.gridWidth].useable = true;
+    }
 
   while (Controls::Update()) // Main Game Loop
   {
@@ -113,6 +144,9 @@ void Grass()
       _AddRandomAgent();
 
     _UpdateWorld();
+
+    GrassWorld *grassWorldTemp;
+
 
     _DrawWorld(window, zoom);
 
@@ -126,6 +160,5 @@ void Grass()
     if (Controls::KeyDown(SDL_SCANCODE_3))
       SDL_Delay(200);
   }
-
 
 }
