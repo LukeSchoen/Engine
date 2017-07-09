@@ -118,18 +118,15 @@ GPix &SetNewGPixOffset(int16_t x, int16_t y)
 
 void MutateAgent(GPix *agent)
 {
-  int64_t colorMutationRate = 1;
-  int64_t brainMutationRate = 10;
+  int64_t colorMutationRate = 5;
+  int64_t brainMutationRate = 5;
 
   // mutate color
-  for (int64_t i = 0; i < colorMutationRate; i++)
-  {
-    agent->red = agent->red - 1 + rand() % 3;
-    agent->green = agent->green - 1 + rand() % 3;
-    agent->blue = agent->blue - 1 + rand() % 3;
-  }
+  agent->red = agent->red += (rand() % 3 - 1) * (rand() % colorMutationRate);
+  agent->green = agent->green += (rand() % 3 - 1) * (rand() % colorMutationRate);
+  agent->blue = agent->blue += (rand() % 3 - 1) * (rand() % colorMutationRate);
 
-  float mutationSpeed = (float)rand() / RAND_MAX * 128;
+  float mutationSpeed = 1 - (((float)rand() / RAND_MAX * 128) * ((float)rand() / RAND_MAX * 128) * ((float)rand() / RAND_MAX * 128));
 
   // mutate brain
   for (int64_t i = 0; i < brainMutationRate; i++)

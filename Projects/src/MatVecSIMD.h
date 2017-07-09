@@ -15,8 +15,8 @@ void MatVec(vec3* dst, mat4 matrix, const vec3* src, int num)
   int maxPar = num - (num & 1);
   for (; i < maxPar; i += 2)
   {
-    // Load [X0,Y0,Z0,1] into xyz1  
-    // Load [X1,Y1,Z1,1] into uvw1  
+    // Load [X0,Y0,Z0,1] into xyz1
+    // Load [X1,Y1,Z1,1] into uvw1
     __m128 xyzu = _mm_loadu_ps(&src[i].x);  // X0 Y0 Z0 X1
     __m128 vw11 = _mm_loadl_pi(_mm_setzero_ps(), (const __m64*)&src[i + 1].y); // Y1 Z1 1 1    
     vw11 = _mm_loadh_pi(vw11, (const __m64*)&MM_ONES);
@@ -25,7 +25,7 @@ void MatVec(vec3* dst, mat4 matrix, const vec3* src, int num)
     __m128 xyz1 = _mm_shuffle_ps(xyzu, zu1v, _MM_SHUFFLE(2, 0, 1, 0)); // X0 Y0 Z0 1  
     __m128 uvw1 = _mm_shuffle_ps(zu1v, vw11, _MM_SHUFFLE(3, 1, 3, 1)); // X1 Y1 Z1 1
 
-                                                                       // Perform matrix multiplication
+   // Perform matrix multiplication
     __m128 x = _mm_mul_ps(xyz1, r0);
     __m128 y = _mm_mul_ps(xyz1, r1);
     __m128 z = _mm_mul_ps(xyz1, r2);

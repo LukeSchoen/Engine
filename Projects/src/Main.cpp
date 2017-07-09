@@ -15,10 +15,11 @@
 #include "MarchingCubes.h"
 #include "Grass.h"
 #include "PixelLife.h"
+#include "DrawTree.h"
 
 void main() // console entry
 {
-  Grass();
+  //Grass();
   //PixeLife();
   //DLux();
   //Pokemon();
@@ -26,6 +27,7 @@ void main() // console entry
   //SecondStream();
   //StreamTest();
   Glorious();
+  //DrawTree();
   //NovaCosm();
   //Cosmic();
   //Zelda();

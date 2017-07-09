@@ -19,6 +19,13 @@ void _UpdateWorld()
         gpix.red = gpix.green = gpix.blue = 0;
     }
 
+  // Agent Life
+  for (int i = 0; i < (grassWorld.gridWidth * grassWorld.gridHeight) / 2; i++)
+  {
+    //GPix &gpix = grassWorld.grid[(rand() % grassWorld.gridWidth) + (rand() % grassWorld.gridHeight) * grassWorld.gridWidth];
+    //if(gpix.energy > 0) gpix.energy = Min(gpix.energy + 1, 255);
+  }
+
   // Agent step
   for (int y = 0; y < grassWorld.gridHeight; y++)
     for (int x = 0; x < grassWorld.gridWidth; x++)
@@ -26,7 +33,7 @@ void _UpdateWorld()
       GPix &gpix = grassWorld.grid[x + y * grassWorld.gridWidth];
       if(gpix.energy == 0) continue;
 
-      gpix.energy = Min(gpix.energy + 32, 255);
+      gpix.energy = Min(gpix.energy + 1, 255);
 
       grassWorld.xpos = x;
       grassWorld.ypos = y;
@@ -103,9 +110,17 @@ void _DrawWorld(const Window &window, int zoom)
       g += gpix.green;
       b += gpix.blue;
 
+      //r >>= 1;
+      //g >>= 1;
+      //b >>= 1;
+
       r = Min((uint64_t)r + (uint64_t)gpix.red * gpix.energy / 256, 255);
       g = Min((uint64_t)g + (uint64_t)gpix.green * gpix.energy / 256, 255);
       b = Min((uint64_t)b + (uint64_t)gpix.blue * gpix.energy / 256, 255);
+
+      r >>= 1;
+      g >>= 1;
+      b >>= 1;
 
       uint32_t c = b + (g << 8) + (r << 16);
       if (gpix.energy != 0)
@@ -117,10 +132,10 @@ void _DrawWorld(const Window &window, int zoom)
 
 void Grass()
 {
-  Window window("Grass", false, 800, 600, true); // Create Game Window
+  Window window("Grass", false, 640, 480, false); // Create Game Window
 
   // Create game World
-  const int zoom = 20;
+  const int zoom = 8;
   grassWorld.gridWidth = window.width / zoom;
   grassWorld.gridHeight = window.height / zoom;
   grassWorld.grid = new GPix[grassWorld.gridWidth * grassWorld.gridHeight];

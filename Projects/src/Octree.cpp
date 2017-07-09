@@ -180,7 +180,6 @@ void Octree::AddVoxel(uint32_t Color, int Xpos, int Ypos, int Zpos)
   RecursiveAddVoxel(*this, RootNode(), Color, Xpos, Ypos, Zpos, 0, 0, 0, depth, 0);
 }
 
-
 void Octree::SaveFile(const char* filePath)
 {
   nodes.SaveFile(filePath);
@@ -191,7 +190,6 @@ void Octree::LoadFile(const char* filePath)
   nodes.LoadFile(filePath);
   root = 0;
 }
-
 
 //void Octree::SaveFile(const char* filePath)
 //{

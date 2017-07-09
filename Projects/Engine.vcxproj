@@ -43,6 +43,7 @@
     <ClCompile Include="src\CosmicModel.cpp" />
     <ClCompile Include="src\Decimator.cpp" />
     <ClCompile Include="src\DLux.cpp" />
+    <ClCompile Include="src\DrawTree.cpp" />
     <ClCompile Include="src\Effect Object.cpp" />
     <ClCompile Include="src\Entities.cpp" />
     <ClCompile Include="src\EntityHandler.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="src\BTCBot.h" />
     <ClInclude Include="src\btcFunctions.h" />
     <ClInclude Include="src\btcTypes.h" />
+    <ClInclude Include="src\DrawTree.h" />
     <ClInclude Include="src\EntityHandler.h" />
     <ClInclude Include="src\EntityMaker.h" />
     <ClInclude Include="src\EntityModel.h" />

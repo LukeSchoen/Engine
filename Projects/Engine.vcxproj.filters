@@ -245,6 +245,9 @@
       <Filter>Projects\Grass</Filter>
     </ClCompile>
     <ClCompile Include="src\PixelLife.cpp" />
+    <ClCompile Include="src\DrawTree.cpp">
+      <Filter>Projects\DrawTree</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -560,6 +563,9 @@
       <Filter>Engine\VirtualVetor</Filter>
     </ClInclude>
     <ClInclude Include="src\PixelLife.h" />
+    <ClInclude Include="src\DrawTree.h">
+      <Filter>Projects\DrawTree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -807,6 +813,9 @@
     </Filter>
     <Filter Include="Engine\VirtualVetor">
       <UniqueIdentifier>{88bbec34-9b0f-4481-a68c-a4f46fe704ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\DrawTree">
+      <UniqueIdentifier>{2cb29adf-939a-4058-bc7c-63bc5c75096a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
