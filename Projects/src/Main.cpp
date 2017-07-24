@@ -17,8 +17,18 @@
 #include "PixelLife.h"
 #include "DrawTree.h"
 
+#include <vector>
+#include "MergeSort.h"
+
 void main() // console entry
 {
+//   std::vector<int> data = {5,6,9,1,3,7,2};
+//   for (auto & num : data) printf("%d", num);
+//   printf("\n\n");
+//   data = Sorter::MergeSort(data);
+//   for (auto & num : data) printf("%d", num);
+//   getchar();
+
   //Lua();
   //Grass();
   //PixeLife();
@@ -31,10 +41,10 @@ void main() // console entry
   //DrawTree();
   //NovaCosm();
   //Cosmic();
-  Zelda();
+  //Zelda();
+  PhysicsTest();
   //Minecraft();
   //OpenGL();
-  //PhysicsTest();
   //Compression();
   //ModelView();
   //MarchingCubes();

@@ -18,17 +18,17 @@ void BufferObject::ClearBuffers()
   buffers.clear();
 }
 
-void BufferObject::AddRenderObject(RenderObject *modelMesh, mat4 modelMat)
+void BufferObject::AddRenderObject(RenderObject *modelMesh, mat4 modelMat /*= mat4()*/)
 {
   RenderInstances.emplace_back(modelMesh, modelMat);
 }
 
-void BufferObject::AddPolyModel(PolyModel *pm)
+void BufferObject::AddPolyModel(PolyModel *pm, mat4 modelMat /*= mat4()*/)
 {
   RenderObject *meshes;
   int64_t meshCount;
   pm->GetMeshData(&meshCount, &meshes); for (int m = 0; m < meshCount; m++)
-    AddRenderObject(&meshes[m]);
+    AddRenderObject(&meshes[m], modelMat);
 }
 
 void BufferObject::AddBuffer(const char *name)

@@ -481,9 +481,6 @@
     <ClInclude Include="src\FastPack.h">
       <Filter>Engine\Packer</Filter>
     </ClInclude>
-    <ClInclude Include="src\SortedList.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\pokemon.h">
       <Filter>Projects\Pokemon</Filter>
     </ClInclude>
@@ -568,6 +565,12 @@
     </ClInclude>
     <ClInclude Include="src\Sol.hpp">
       <Filter>Engine\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SortedList.h">
+      <Filter>Engine\Sort</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MergeSort.h">
+      <Filter>Engine\Sort</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -822,6 +825,9 @@
     </Filter>
     <Filter Include="Engine\Lua">
       <UniqueIdentifier>{892e2b8b-23f9-4c72-91e4-82ecc500bc4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Sort">
+      <UniqueIdentifier>{b70458f8-a0f9-4768-87a7-2caedef8e374}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

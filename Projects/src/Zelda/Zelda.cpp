@@ -42,7 +42,7 @@ void Zelda()
   //hyruleColorModel.LoadModel(ASSETDIR "zelda/Hyrule/Color/Hyrule.obj");
   //hyruleLightModel.LoadModel(ASSETDIR "zelda/Hyrule/Light/Hyrule.obj");
 
-  Audio::PlayMP3(ASSETDIR "Halo/Journal.mp3", 1000, "Journal", true);
+  //Audio::PlayMP3(ASSETDIR "Halo/Journal.mp3", 1000, "Journal", true);
 
   hyruleColorModel.LoadModel(ASSETDIR "Halo/Bridge/Color/Color.obj");
   hyruleLightModel.LoadModel(ASSETDIR "Halo/Bridge/Light/Light.obj");

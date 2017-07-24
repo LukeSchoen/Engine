@@ -29,7 +29,7 @@ public:
   void ClearBuffers();
   void ClearRenderInstances();
   void AddRenderObject(RenderObject *modelMesh, mat4 modelMat = mat4());
-  void AddPolyModel(PolyModel *pm);
+  void AddPolyModel(PolyModel *pm, mat4 modelMat = mat4());
   void AddBuffer(const char *name);
   void DelBuffer(const char *name);
   GLint GetBuffer(const char *name);

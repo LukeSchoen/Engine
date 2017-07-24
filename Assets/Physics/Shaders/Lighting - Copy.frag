@@ -28,7 +28,7 @@ void main()
 	float actorDepth = texture(depth1, passTexcoord0).x;
 	
 	if(actorDepth < mapDepth)
-		fragColor = vec4( saturation(actorColor, 1), 1.0 );
+		fragColor = vec4( saturation(actorColor, 1.5), 1.0 );
 	else
-		fragColor = vec4( saturation(mapColor, 1.2) * 2.4, 1.0 );
+		fragColor = vec4( saturation(mapColor, 1.5) * 2.5, 1.0 );
 }

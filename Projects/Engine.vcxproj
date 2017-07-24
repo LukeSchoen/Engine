@@ -135,6 +135,7 @@
     <ClInclude Include="src\GPix.h" />
     <ClInclude Include="src\Grass.h" />
     <ClInclude Include="src\MarchingCubes.h" />
+    <ClInclude Include="src\MergeSort.h" />
     <ClInclude Include="src\ModelView.h" />
     <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\Cache.h" />

@@ -21,7 +21,7 @@ vec3 Camera::Direction()
 
 void Camera::Update(float speed, bool only2D, bool useTimeDelta)
 {
-  const float MouseTurnSensitivity = 1.0f / 1000.0f;
+  const float MouseTurnSensitivity = 1.0f / 500.0f;
   const float ControllerTurnSensitivity = 1.0f / 1000.0f * 2000;
   const float controllerDeadZone = 0.2;
 
@@ -52,12 +52,12 @@ void Camera::Update(float speed, bool only2D, bool useTimeDelta)
     speed *= 0.2f;
 
   if (Controls::KeyDown(SDL_SCANCODE_LSHIFT))
-    speed *= 5.0f;
+    speed *= 2.5;
 
   // Controller Speed
   vec2 controllerSpeed = Controls::GetController2DAxis(2);
   float cSpeed = (((controllerSpeed.y + 1) / 2.0f) - (((controllerSpeed.x + 1) / 2.0f))) + 1;
-  speed *= Delinerize(cSpeed, 3.0f);
+  speed *= Delinerize(cSpeed, 1.4f);
 
   // Controller Movement
   vec2 controllerMove = Controls::GetController2DAxis(0);
