@@ -21,7 +21,7 @@ static int GloriousStreamThread(void *ptr)
 {
   while (running)
   {
-    if(!Controls::KeyDown(SDL_SCANCODE_3))
+    if(!Controls::KeyDown(SDL_SCANCODE_SPACE))
       MainModel->Stream();
     //Sleep(1);
   }
@@ -34,7 +34,7 @@ void Glorious()
 #ifdef _DEBUG
   Window window("Game", true, 640, 480, false); // Create Debug Game Window
 #else
-  Window window("Game", true, 1920, 1080, true); // Create Game Window
+  Window window("Game", true, 1920, 1080,  true); // Create Game Window
   //Window window("Game", true, 800, 600, false); // Create Game Window
 #endif
 

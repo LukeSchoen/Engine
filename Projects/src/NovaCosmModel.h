@@ -108,7 +108,7 @@ private:
 
     bool leaf = true;
     // Close enough to split ?
-    if (dist < 326 * layerSize)
+    if (dist < 256 * layerSize)
     //if (false)
     {
       for (uint8_t cItr = 0; cItr < 8; cItr++)

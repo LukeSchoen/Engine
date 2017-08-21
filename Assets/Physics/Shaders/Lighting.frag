@@ -30,5 +30,5 @@ void main()
 	if(actorDepth < mapDepth)
 		fragColor = vec4( saturation(actorColor, 1), 1.0 );
 	else
-		fragColor = vec4( saturation(mapColor, 1.2) * 2.4, 1.0 );
+		fragColor = vec4( saturation(mapColor, 2.4) * 2.4, 1.0 );
 }

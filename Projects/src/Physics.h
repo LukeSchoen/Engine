@@ -11,6 +11,7 @@ class PhysicsObject
 public:
   PhysicsObject(btCollisionObject *a_pObject);
   vec3 GetPos() const;
+  void SetPos(vec3 pos);
   Quat GetOri() const;
   vec3 GetSpeed() const;
   mat4 GetModelMat() const;

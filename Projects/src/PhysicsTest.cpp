@@ -86,7 +86,7 @@ void PhysicsTest()
   //Window window("Physics", true, 800, 600, false);
   Window window("Physics", true, 1920, 1080, true);
 #endif
-  float superSample = 2;
+  float superSample = 1;
 
   Controls::SetMouseLock(true);
 
@@ -97,9 +97,6 @@ void PhysicsTest()
   RenderObject *cubeMesh = MakeCube();
 
   PolyModel colorModel, lightModel;
-
-  //colorModel.LoadModel(ASSETDIR "Physics/Map/Color/test.obj");
-  //lightModel.LoadModel(ASSETDIR "Physics/Map/Light/test.obj");
 
   PolyModel pistol;
   pistol.LoadModel(ASSETDIR "Halo/Pistol/Pistol.obj");
@@ -136,6 +133,7 @@ void PhysicsTest()
   finalRenderBuffer.AddBuffer("fragColor");
 
   PhysicsWorld world;
+
   int64_t meshCount;
   RenderObject *meshes;
   colorModel.GetMeshData(&meshCount, &meshes);
@@ -158,7 +156,7 @@ void PhysicsTest()
   PhysicsObject CamSphere = world.AddSphere(vec3() - Camera::Position(), 40, 1);
   CamSphere.SetCanSleep(false);
 
-  const float boxSize = 40.0f;
+  const float boxSize = 20.0f;
 
   while (Controls::Update())
   {
@@ -196,10 +194,12 @@ void PhysicsTest()
 
     actorColorBuffer.AddPolyModel(&pistol, weaponMat);
 
-
     mat4 gruntModelMat = gruntObject.GetModelMat();
     gruntModelMat.Translate(vec3(0, -30, 0));
     actorColorBuffer.AddPolyModel(&grunt, gruntModelMat);
+
+    if(Controls::KeyDown(SDL_SCANCODE_4))
+    gruntObject.ApplyForce(vec3(10, 0, 0), vec3(0,1.8,0));
 
     for(const auto &cube : cubes)
     {
@@ -230,6 +230,43 @@ void PhysicsTest()
       cubes[cubes.size() - 1].ApplyForce(vec3(rand() % 1000 - 500, rand() % 1000, rand() % 1000 - 500));
     }
 
+    static bool heldRight = false;
+    if(Controls::GetRightClick())
+    {
+      if(heldRight == false)
+      {
+        vec3 hitPoint;
+        world.RayCast(CamSphere.GetPos(), CamSphere.GetPos() - Camera::Direction() * 100000, &hitPoint);
+        cubes.push_back(world.AddCube(hitPoint + Camera::Direction() * 100, vec3(10, 10, 10), 1));
+        cubes[cubes.size() - 1].ApplyForce(vec3(0, 200, 0));
+      }
+      heldRight = true;
+    }
+    else
+      heldRight = false;
+
+
+    static bool boxriver = false;
+
+    // box river
+    static std::vector<int64_t> boxRiverBoxes;
+    if (!boxriver)
+    {
+      for (int64_t i = 0; i < 100; i++)
+      {
+        cubes.push_back(world.AddCube(vec3(128, 128, 128), vec3(boxSize, boxSize, boxSize), 0.2));
+        boxRiverBoxes.push_back(cubes.size() - 1);
+      }
+      boxriver = true;
+    }
+
+    for (auto & boxid : boxRiverBoxes)
+    {
+      cubes[boxid].ApplyForce(vec3(0, 0, 40));
+      if ((cubes[boxid].GetSpeed().LengthSquared() < 10) || ((cubes[boxid].GetPos() - vec3(128, 128, 128)).LengthSquared() > 100))
+        cubes[boxid].SetPos(vec3(128, 128, 128));
+    }
+
     // Shooting
     static bool shooting = false;
     if (Controls::GetControllerButton(12) || Controls::GetLeftClick())
@@ -238,24 +275,25 @@ void PhysicsTest()
       {
         vec3 camPos = vec3() - Camera::Position();
         vec3 camDir = vec3() - Camera::Direction();
-        cubes.push_back(world.AddCube(camPos + camDir * (40 + boxSize), vec3(boxSize, boxSize, boxSize), 1));
-        cubes[cubes.size() - 1].ApplyForce(camDir * 10000);
-        WER.x -= 1;
+
+        vec3 weaponDir = weaponMat * vec4(1, 0, 0, 0);
+
+        cubes.push_back(world.AddCube(camPos + weaponDir * (40 + boxSize), vec3(boxSize, boxSize, boxSize), 1));
+        cubes[cubes.size() - 1].ApplyForce(weaponDir * 40000);
+        WER.x -= 0.4;
       }
       shooting = true;
     }
     else
-    {
       shooting = false;
-    }
+
+    if (!Controls::KeyDown(SDL_SCANCODE_5))
+      for (auto cube : cubes)
+        cube.ApplyForce(vec3(0, 0, 100));
 
     if (Controls::KeyDown(SDL_SCANCODE_2))
-    {
       for (auto cube : cubes)
-      {
         cube.ApplyForce(vec3(rand() % 1000 - 500, 500, rand() % 1000 - 500));
-      }
-    }
 
     // Jumping
     bool FeetNearGround = false;
@@ -272,35 +310,12 @@ void PhysicsTest()
     vec3 newCam = Camera::Position();
     //newCam.y = lastCam.y;
 
-
-
-
     vec3 moveDir = vec3() - (newCam - lastCam);
     bool IsMoving = (newCam - lastCam).Length() > 0.005;
 
     bool HardStopping = moveDir.Normalized().DotProduct(CamSphere.GetSpeed().Normalized()) < -0.01;
 
-    //if (OnGround)
-    //{
-    //  if (IsMoving)
-    //    if(HardStopping)
-    //      CamSphere.ApplyForce(moveDir * 30);
-    //    else
-    //      CamSphere.ApplyForce(moveDir * 100);
-    //  if (!IsMoving || HardStopping)
-    //  {
-    //    vec3 stopDir = vec3() - CamSphere.GetSpeed() * 5;
-    //    stopDir.y = 0;
-    //    CamSphere.ApplyForce(stopDir);
-    //  }
-    //}
-    //else
-    //{
-    //  CamSphere.ApplyForce(moveDir * 20);
-    //}
-
     CamSphere.ApplyForce(moveDir * 100);
-
 
     vec3 frictionVector = (vec3() - CamSphere.GetSpeed()) * 1;
     frictionVector.y = 0;
@@ -308,9 +323,9 @@ void PhysicsTest()
     CamSphere.ApplyForce(frictionVector * 2);
 
     if (Controls::GetControllerButton(11))
-      world.UpdateWorld(1.0f / 200.0f);
+      world.UpdateWorld(1.0f / 10.0f);
     else
-      world.UpdateWorld(1.0f / 20.0f);
+      world.UpdateWorld(1.0f / 10.0f);
 
     Camera::SetPosition(vec3() - CamSphere.GetPos());
 

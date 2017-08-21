@@ -23,6 +23,13 @@ vec3 PhysicsObject::GetPos() const
   return FromBT(t.getOrigin());
 }
 
+void PhysicsObject::SetPos(vec3 pos)
+{
+  btTransform t = GetWorldTransform(pObject);
+  t.setOrigin(ToBT(pos));
+  pObject->setWorldTransform(t);
+}
+
 vec3 PhysicsObject::GetSpeed() const
 {
   const btRigidBody* body = btRigidBody::upcast(pObject);
@@ -69,7 +76,7 @@ PhysicsWorld::PhysicsWorld()
   btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
   btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
   world = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-  world->setGravity(btVector3(0, -100, 0));
+  world->setGravity(btVector3(0, -200, 0));
 }
 
 void PhysicsWorld::UpdateWorld(float StepSize, int subSteps)

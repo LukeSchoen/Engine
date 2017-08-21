@@ -61,7 +61,7 @@ void DrawNode(Octree &tree, const Node &node, const float &size, const Window &w
   //if (invZ < 10.0f) // Either on screen ?
   {
     //if (screenSize > 0.5f)
-    if (screenSize > 2)
+    if (screenSize > 1)
     //vec2i diff = (highScreenPos - lowScreenPos);
     //if (diff.x > 3 || diff.y > 3);
     {

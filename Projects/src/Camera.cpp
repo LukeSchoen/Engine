@@ -3,7 +3,7 @@
 #include "Window.h"
 #include <time.h>
 
-static vec3 pos = vec3(0, -50, 0);
+static vec3 pos = vec3(0, 0, 0);
 //static vec3 pos = vec3(-3439.62012, -176.580917, -733.853149);
 //static vec2 dir = vec2(0.531746447, -5.85340261);
 static vec2 dir = vec2(0, DegsToRads * 180);
