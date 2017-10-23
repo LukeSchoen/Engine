@@ -14,16 +14,25 @@
 // Thread synchronizers
 static volatile bool running = true;
 static volatile bool streaming = true;
+const bool MultiThreading = true;
 
 GloriousModel* MainModel;
 
+mat4 projectionMat;
+
 static int GloriousStreamThread(void *ptr)
 {
+  mat4 MVP;
+  mat4 viewMat;
+  mat4 modelMat;
+
   while (running)
   {
-    if(!Controls::KeyDown(SDL_SCANCODE_SPACE))
-      MainModel->Stream();
-    //Sleep(1);
+    viewMat = Camera::Matrix();
+    MVP = projectionMat * viewMat * modelMat;
+    MVP.Transpose();
+    if (!Controls::KeyDown(SDL_SCANCODE_SPACE))
+      MainModel->Stream(MVP);
   }
   streaming = false;
   return 0;
@@ -38,6 +47,8 @@ void Glorious()
   //Window window("Game", true, 800, 600, false); // Create Game Window
 #endif
 
+  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 1.0 / 35.0, 515);
+
   Controls::SetMouseLock(true);
 
   //GloriousModel model("F:/temp/CarrickHillSmall.ncs");
@@ -47,17 +58,20 @@ void Glorious()
   //GloriousModel model("F:/temp/Image.ncs");
   //GloriousModel model("F:/temp/CarrickHill.ncs");
   GloriousModel model("F:/temp/Colledge.ncs");
+
+  //model.GenGMesh("F:/temp/Colledge.ncs", "F:/temp/Colledge.sgm");
+  //exit(0);
+
   //GloriousModel model("F:/temp/Expressway.ncs");
 
   MainModel = &model;
 
-  mat4 projectionMat;
-  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 1.0 / 2.0, 515);
-
   Textures::SetTextureFilterMode(false);
 
   Controls::Update();
-  SDL_CreateThread(GloriousStreamThread, "streamer", nullptr);
+  if(MultiThreading) SDL_CreateThread(GloriousStreamThread, "streamer", nullptr);
+
+  Camera::SetPosition({ -128,-32,-128 });
 
   while (Controls::Update()) // Main Game Loop
   {
@@ -84,8 +98,6 @@ void Glorious()
       wireDown = true;
     }
     else wireDown = false;
-
-    //model.Stream();
 
     if (wire)
     {
@@ -114,11 +126,17 @@ void Glorious()
       break;
     }
 
+    glFlush();
     window.Swap(); // Swap Window
     FrameRate::Update();
+     
+    if (!MultiThreading) model.Stream(MVP);
     //printf("tiles used: %d\n", model.atlasFreeTiles.UseCount);
   }
-
-  running = false; while (streaming) Sleep(10); // Wait for streamer to end before exiting
+  if (MultiThreading)
+  {
+    running = false;
+    while (streaming) Sleep(10); // Wait for streamer to end before exiting
+  }
 
 }

@@ -8,7 +8,7 @@ static vec3 pos = vec3(0, 0, 0);
 //static vec2 dir = vec2(0.531746447, -5.85340261);
 static vec2 dir = vec2(0, DegsToRads * 180);
 
-static int lastClock = 0;
+int lastClock = 0;
 
 vec3 Camera::Direction()
 {

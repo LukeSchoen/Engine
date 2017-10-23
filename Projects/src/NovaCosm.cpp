@@ -52,8 +52,11 @@ void NovaCosm()
   //Convertor::ExportPCFtoNovaCosm("D:/Luke/Programming/Visual Studio/pixelly/Software Tracer/CarrickHill.pcf", "D:/temp/CarrickHillFull.ncs", "D:/temp/export/", 255);
   //Convertor::ExportPCFtoNovaCosm("D:/Luke/Programming/Visual Studio/pixelly/Software Tracer/sorrento.pcf", "D:/temp/sorrento.ncs", "D:/temp/export/", 2048);
   //Convertor::ExportPCFtoNovaCosm("D:/Luke/Programming/Visual Studio/pixelly/Software Tracer/Expressway.pcf", "D:/temp/Expressway.ncs", "D:/temp/export/", 8192);
-  //Convertor::ExportPCFtoNovaCosm("D:/Luke/Programming/Visual Studio/pixelly/Software Tracer/CarrickHill.pcf", "D:/temp/CarrickHill.ncs", "D:/temp/export/", 4096);
-  //exit(0);
+  if (false)
+  {
+    Convertor::ExportPCFtoNovaCosm("F:/Luke/Old Programming/Visual Studio/pixelly/Software Tracer/Colledge.pcf", "c:/temp/Colledge.ncs", "c:/temp/export/", 255);
+    exit(0);
+  }
 
   Window window("Game", true, 1920, 1080, true); // Create Game Window
 

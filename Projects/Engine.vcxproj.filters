@@ -248,6 +248,12 @@
     <ClCompile Include="src\DrawTree.cpp">
       <Filter>Projects\DrawTree</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sims.cpp">
+      <Filter>Projects\Sims</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BioMorphs.cpp">
+      <Filter>Projects\Biomorphs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -572,6 +578,18 @@
     <ClInclude Include="src\MergeSort.h">
       <Filter>Engine\Sort</Filter>
     </ClInclude>
+    <ClInclude Include="src\VoxelCosm.h">
+      <Filter>Projects\VoxelTracer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sims.h">
+      <Filter>Projects\Sims</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WireWars.h">
+      <Filter>Projects\WireWars</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BioMorphs.h">
+      <Filter>Projects\Biomorphs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -799,9 +817,6 @@
     <Filter Include="Engine\Physics">
       <UniqueIdentifier>{0fcc1cef-2e90-4452-9ed9-04b33142665f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Projects\ModelView">
-      <UniqueIdentifier>{4b1e47c1-46e3-4eab-a496-ec69399da863}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Projects\MarchingCubes">
       <UniqueIdentifier>{61ac7cf5-0fff-4369-8243-72a0baafa53e}</UniqueIdentifier>
     </Filter>
@@ -828,6 +843,21 @@
     </Filter>
     <Filter Include="Engine\Sort">
       <UniqueIdentifier>{b70458f8-a0f9-4768-87a7-2caedef8e374}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\VoxelTracer">
+      <UniqueIdentifier>{be8d40b5-9d1f-4943-9479-c28d0573f3ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\ModelView">
+      <UniqueIdentifier>{4b1e47c1-46e3-4eab-a496-ec69399da863}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Sims">
+      <UniqueIdentifier>{bbaac8fa-58fd-4832-90d2-f70a048bca92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\WireWars">
+      <UniqueIdentifier>{cbeb6be9-7df6-4252-94f8-695b12ed4936}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Biomorphs">
+      <UniqueIdentifier>{45a84664-e032-418d-a667-be1d822bb211}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

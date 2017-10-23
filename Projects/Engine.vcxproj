@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Audio.cpp" />
+    <ClCompile Include="src\BioMorphs.cpp" />
     <ClCompile Include="src\Biped.cpp" />
     <ClCompile Include="src\BlockMesher.cpp" />
     <ClCompile Include="src\BlockTypes.cpp" />
@@ -103,6 +104,7 @@
     <ClCompile Include="src\Region.cpp" />
     <ClCompile Include="src\Round.cpp" />
     <ClCompile Include="src\SecondStream.cpp" />
+    <ClCompile Include="src\Sims.cpp" />
     <ClCompile Include="src\StreamTest.cpp" />
     <ClCompile Include="src\FilePath.cpp" />
     <ClCompile Include="src\Text.cpp" />
@@ -121,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="src\Assets.h" />
     <ClInclude Include="src\Audio.h" />
+    <ClInclude Include="src\BioMorphs.h" />
     <ClInclude Include="src\Biped.h" />
     <ClInclude Include="src\BlockMesher.h" />
     <ClInclude Include="src\BlockTypes.h" />
@@ -214,6 +217,7 @@
     <ClInclude Include="src\Region.h" />
     <ClInclude Include="src\Round.h" />
     <ClInclude Include="src\SecondStream.h" />
+    <ClInclude Include="src\Sims.h" />
     <ClInclude Include="src\Sol.hpp" />
     <ClInclude Include="src\SortedList.h" />
     <ClInclude Include="src\StreamTest.h" />
@@ -225,7 +229,9 @@
     <ClInclude Include="src\Vector4.h" />
     <ClInclude Include="src\Vector.h" />
     <ClInclude Include="src\VirtualVector.h" />
+    <ClInclude Include="src\VoxelCosm.h" />
     <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\WireWars.h" />
     <ClInclude Include="src\Zelda\Zelda.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -434,7 +440,7 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc1
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;"C:\Luke\Programming\Engine\bin\win64\Release\Accelerator.lib"</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
     </Link>

@@ -86,7 +86,6 @@ void FinishScreenShot(RayTracer *tracer)
   }
 }
 
-
 void DLux()
 {
   // Setup Window

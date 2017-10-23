@@ -14,7 +14,8 @@ vec3 saturation(vec3 rgb, float adjustment)
 
 void main()
 {
-	vec4 c = texture(texture0, passTexcoord0);
+	//vec4 c = texture(texture0, passTexcoord0);
 	//fragColor = vec4(saturation(c.rgb * passColour0, 1.5), c.w);
-	fragColor = vec4(c.rgb, c.w);
+	//fragColor = vec4(saturation(c.rgb, 1.5), c.w);
+	fragColor = texture(texture0, passTexcoord0);
 }

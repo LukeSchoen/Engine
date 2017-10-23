@@ -26,9 +26,9 @@ static volatile bool streaming = true;
 
 // ViewDistance
 #ifdef _DEBUG
-int viewDist = 8;
+int viewDist = 15;
 #else
-int viewDist = 10;
+int viewDist = 15;
 #endif
 
 BlockWorld *world = nullptr;
@@ -151,7 +151,6 @@ void Minecraft()
   bool run = true;
   while (run) // Main Game Loop
   {
-
     // Toggle Fly Mode !
     static bool flyMode = false;
     static bool flyDown = false;

@@ -11,6 +11,8 @@
 #include "FaceOptimizer.h"
 #include "Assets.h"
 #include "SortedList.h"
+#include "ImageFile.h"
+#include <string>
 
 struct voxel
 {
@@ -30,20 +32,21 @@ struct GloriousBlock
   //RenderObject model;
   RenderObject *Smodel;
   std::vector<int> tiles;
+  int faceCount = 0;
 };
 
 struct GloriousModel
 {
-  int64_t quality = 128;
+  int facesDrawn = 0;
 
-  std::mutex renderLock;
+  int64_t quality = 320;
 
   GloriousBlock *root;
 
   StreamFileReader *fileStream;
 
   GloriousModel(const char *NCSfile)
-    : atlas(128, 128, 128)
+    : atlas(512, 512, 512)
   {
     atlas.UploadToGPU();
     Load(NCSfile);
@@ -55,6 +58,8 @@ struct GloriousModel
 
   Pool atlasFreeTiles;
 
+  std::vector<std::tuple<GloriousBlock*, int64_t>> streamOptions;
+
   void Load(const char *NCSfile)
   {
     fileStream = new StreamFileReader(NCSfile); // Open File Stream
@@ -64,24 +69,125 @@ struct GloriousModel
   void Render(const mat4 &MVP)
   {
     RecursiveRender(root, MVP, 0);
+    //printf("\nfaces drawn %d\n\n", facesDrawn * 60);
+    facesDrawn = 0;
   }
 
-  void Stream()
+  void Stream(const mat4 &MVP)
   {
-    RecursiveStream(root, 0);
+    if (atlas.layers - atlasFreeTiles.UseCount < 5)
+    {
+      Sleep(1);
+      return;
+    }
+    streamOptions.clear();
+    RecursiveStream(root, MVP, 0);
+    // Pick Best Block
+    if (!streamOptions.size()) return;
+    float bestScore = 99999999999;
+    GloriousBlock *bestPtr = nullptr;
+    for (auto & block : streamOptions)
+    {
+      auto blockPtr = std::get<0>(block);
+      auto blockScore = std::get<1>(block);
+      if (blockScore < bestScore)
+      {
+        bestScore = blockScore;
+        bestPtr = blockPtr;
+      }
+    }
+    if (!bestPtr) return;
+    for (uint8_t cItr = 0; cItr < 8; cItr++)
+    {
+      if (!bestPtr->childPtr[cItr])
+      {
+        int64_t childAddress = bestPtr->children[cItr];
+        if (childAddress > 0)
+        {
+          bestPtr->childPtr[cItr] = LoadBlock(childAddress);
+          return;
+        }
+      }
+    }
+
+  }
+
+  void GenGMesh(const char *NCSfile, const char *gmshFile)
+  {
+    fileStream = new StreamFileReader(NCSfile); // Open File Stream
+    auto stream = new StreamFileWriter(gmshFile); // Open File Stream
+    RecursiveGmesh(stream, root);
   }
 
 private:
 
-  bool RecursiveStream(GloriousBlock *block, int layer)
+  void RecursiveGmesh(StreamFileWriter *stream, GloriousBlock *block)
+  {
+    // Load Block
+    block = LoadBlock(0);
+
+    //mat4 MVP;
+    //atlas.UploadToGPU();
+    //block->Smodel->UploadToGPU();
+    //block->Smodel->Render(MVP);
+
+    int64_t discLocation = stream->GetLocation();
+
+    //write node
+    stream->WriteBytes(block->children, sizeof(block->children)); // Dummy children data ( will be over written )
+    stream->WriteBytes(&block->position, sizeof(block->position)); // Real position data
+
+    char *pMesh;
+    int pMeshLen;
+    block->Smodel->Serialize(&pMesh, &pMeshLen);
+    stream->WriteBytes(pMesh, pMeshLen);
+    delete[] pMesh;
+
+    int64_t textureCount = block->tiles.size();
+    stream->WriteBytes(&textureCount, sizeof(int64_t));
+
+    //glGetTexImage(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, GL_UNSIGNED_INT_8_8_8_8, texture);
+    for (auto & tile : block->tiles)
+    {
+      stream->WriteBytes(atlas.image + tile * atlas.width * atlas.height, atlas.width * atlas.height * sizeof(uint32_t));
+      //ImageFile::WriteImagePNG("C:/temp/output/layer.png", atlas.image + tile * atlas.width * atlas.height, atlas.width, atlas.height);
+      //atlas.image;
+    }
+    //static char buffer[256] = { 0 };
+    //for (int64_t i = 0; i < atlas.layers; i++)
+    //{
+    //  sprintf(buffer, "C:/temp/layer%d.png", i);
+    //  stream->WriteBytes(atlas.image + i * atlas.width * atlas.height, atlas.width * atlas.height * sizeof(uint32_t));
+    //  ImageFile::WriteImagePNG(buffer, atlas.image + (i * atlas.width * atlas.height), atlas.width, atlas.height);
+    //}
+
+    atlas;
+
+    // Unload block
+    UnloadBlock(block);
+
+    //write child nodes
+    for (int8_t i = 0; i < 8; i++)
+      if (block->children[i])
+      {
+        int64_t head = stream->GetLocation();
+        stream->SetLocation(discLocation + i * sizeof(int64_t));
+        stream->WriteBytes(&head, sizeof(head));
+        stream->SetLocation(head);
+        RecursiveGmesh(stream, LoadBlock(block->children[i]));
+      }
+
+  }
+
+  bool RecursiveStream(GloriousBlock *block, const mat4 &MVP, int layer)
   {
     float layerSize = (1.0 / (1LL << layer));
     vec3 blockPos = (block->position + vec3(128, 128, 128)) * layerSize;
     vec3 camPos = vec3(0) - Camera::Position();
     float dist = Max(Max(fabs(camPos.x - blockPos.x), fabs(camPos.y - blockPos.y)), fabs(camPos.z - blockPos.z));
 
-    // Close enough to split ?
-    if (dist < quality * layerSize)
+    if (ProjectBlock(block, MVP, layer))
+    if (dist < quality * layerSize) // Close enough to split ?
     {
       // Create children
       for (uint8_t cItr = 0; cItr < 8; cItr++)
@@ -91,8 +197,10 @@ private:
           int64_t childAddress = block->children[cItr];
           if (childAddress > 0)
           {
-            block->childPtr[cItr] = LoadBlock(childAddress);
-            return true;
+            streamOptions.emplace_back(block, layer * 100000 + dist);
+            return false;
+            //block->childPtr[cItr] = LoadBlock(childAddress);
+            //return true;
           }
         }
       }
@@ -102,7 +210,7 @@ private:
       {
         if (block->childPtr[cItr])
         {
-          if (RecursiveStream(block->childPtr[cItr], layer + 1))
+          if (RecursiveStream(block->childPtr[cItr], MVP, layer + 1))
             return true;
         }
       }
@@ -134,7 +242,7 @@ private:
         for (uint8_t cItr = 0; cItr < 8; cItr++)
           if (block->childPtr[cItr])
           {
-            float clayerSize = (1.0 / (1LL << (layer+1)));
+            float clayerSize = (1.0 / (1LL << (layer + 1)));
             vec3 cblockPos = (block->childPtr[cItr]->position + vec3(128, 128, 128)) * clayerSize;
             float cdist = (camPos - cblockPos).Length();
             childList.AddElement(block->childPtr[cItr], 0.f - cdist);
@@ -159,22 +267,24 @@ private:
         }
     }
 
-    if (leaf)
-    {
-      //renderLock.lock();
-      block->Smodel->AssignUniform("LAYER", UT_1f, &layerSize);
-      block->Smodel->AssignUniform("regionPos", UT_3f, block->position.Data());
-
-      // Slow bits
-      if (!Controls::KeyDown(SDL_SCANCODE_4))
+    //if (ProjectBlock(block, MVP, layer))
+      if (leaf)
       {
-        block->Smodel->UploadToGPU();
-        atlas.UploadToGPU();
-      }
+        facesDrawn += block->faceCount;
+        //renderLock.lock();
+        block->Smodel->AssignUniform("LAYER", UT_1f, &layerSize);
+        block->Smodel->AssignUniform("regionPos", UT_3f, block->position.Data());
 
-      block->Smodel->Render(MVP);
-      //renderLock.unlock();
-    }
+        // Slow bits
+        if (!Controls::KeyDown(SDL_SCANCODE_4))
+        {
+          atlas.UploadToGPU();
+          block->Smodel->UploadToGPU();
+        }
+
+        block->Smodel->Render(MVP);
+        //renderLock.unlock();
+      }
   }
 
   void RecursiveUnload(GloriousBlock *block)
@@ -187,7 +297,6 @@ private:
 
   GloriousBlock *LoadBlock(int64_t discLocation)
   {
-    printf("Loading Block\n");
     // CPU
     GloriousBlock *block = new GloriousBlock;
     block->discLocation = discLocation;
@@ -278,6 +387,7 @@ private:
           uint32_t u = ugrid[x + y * 256 + z * 256 * 256];
           if (u)
           {
+            block->faceCount++;
             int rowWidth = 256 - x;
             for (int ix = x + 1; ix < 256; ix++)
               if (!ugrid[ix + y * 256 + z * 256 * 256])
@@ -304,20 +414,20 @@ private:
           }
         }
 
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 1);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 2);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 4);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 8);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 16);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 32);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 64);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 128);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 256);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 1, 0);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 2, 0);
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 4, 0);
+    if (true)
+    {
+      //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0.5, 0);
+      //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 1.0, 0);
+      //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 2.0, 0);
+      FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 3.3333, 0);
+      //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 4, 0);
+    }
+    //     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 2, 0);
+    //     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 4, 0);
+    //     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 8, 0);
+    //     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 16, 0);
 
-    //printf("built block\n");
+        //printf("built block\n");
     int tile = -1;
 
     for (int i = 0; i < tops.size(); i++)
@@ -389,6 +499,57 @@ private:
     for (int t : block->tiles) atlasFreeTiles.Old(t);
     delete block;
   }
+
+  int ProjectBlock(GloriousBlock *block, const mat4 &MVP, int layer)
+  {
+    mat4 lMVP = MVP;
+    lMVP.Transpose();
+    float layerSize = (1.0 / (1LL << layer));
+    // Projects
+    auto blockPos = block->position;
+
+    bool visable = false;
+
+    vec2 low(99999, 99999);
+    vec2 high(-99999, -99999);
+
+    for (int z = 0; z <= 1; z++)
+      for (int y = 0; y <= 1; y++)
+        for (int x = 0; x <= 1; x++)
+        {
+          bool onScreen = false;
+          auto pos = (blockPos + vec3(x * 256, y * 256, z * 256)) * layerSize;
+          auto viewPos = lMVP * vec4(pos.x, pos.y, pos.z, 1);
+          onScreen = viewPos.w > 0 - layerSize - 1.75;
+          viewPos = viewPos / viewPos.w;
+          vec2 p = vec2(viewPos.x, viewPos.y);
+          if (onScreen)
+          {
+            low = vec2(Min(low.x, p.x), Min(low.y, p.y));
+            high = vec2(Max(low.x, p.x), Max(low.y, p.y));
+            visable = true;
+          }
+        }
+
+    if (!visable)
+      return 0;
+
+    low = vec2(Max(low.x, -1), Max(low.y, -1));
+    high = vec2(Min(high.x, 1), Min(high.y, 1));
+
+    float blockSize = Max(high.x - low.x, high.y - low.y);
+
+    //auto highPos = (blockPos + vec3(256, 256, 256)) * layerSize;
+    //auto highPosView = lMVP * vec4(highPos.x, highPos.y, highPos.z, 1);
+    //lowPosView = lowPosView / lowPosView.w;
+    //highPosView = highPosView / highPosView.w;
+    
+    //if (lowPosView.w > 0.f && highPosView.w > 0.f)
+    if (blockSize > 0.f)
+      return 1;
+    return 0;
+  }
+
 };
 
 #endif // GloriousModel_h__
