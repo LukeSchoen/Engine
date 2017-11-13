@@ -1,0 +1,2 @@
+C:\Luke\Programming\Engine\Assets\BTCBot\rest\C#\rest\bin\Debug\okCoin.exe.config
+C:\Luke\Programming\Engine\Assets\BTCBot\rest\C#\rest\obj\Debug\rest.csprojResolveAssemblyReference.cache

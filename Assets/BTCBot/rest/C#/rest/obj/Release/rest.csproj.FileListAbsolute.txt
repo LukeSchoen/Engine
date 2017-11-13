@@ -1,0 +1,5 @@
+C:\Luke\Programming\Engine\Assets\BTCBot\okCoin.exe.config
+C:\Luke\Programming\Engine\Assets\BTCBot\rest\C#\rest\obj\Release\okCoin.exe
+C:\Luke\Programming\Engine\Assets\BTCBot\rest\C#\rest\obj\Release\okCoin.pdb
+C:\Luke\Programming\Engine\Assets\BTCBot\okCoin.exe
+C:\Luke\Programming\Engine\Assets\BTCBot\okCoin.pdb

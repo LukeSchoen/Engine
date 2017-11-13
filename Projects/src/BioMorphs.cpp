@@ -112,13 +112,23 @@ struct BioMorph
   }
 };
 
-void SpawnChildren(std::vector<BioMorph> *bioMorphs, int parent)
+void SpawnChildren(std::vector<BioMorph> *bioMorphs, int parent, BioMorph *grandma)
 {
-  const int mutationRate = 20;
+  const int mutationRate = 200;
   for (int64_t c = 0; c < bioMorphs->size(); c++)
     if (c != parent)
     {
       (*bioMorphs)[c] = (*bioMorphs)[parent];
+      for (int i = 0; i < (*bioMorphs)[c].genes.size(); i++) // mutation momentum
+      {
+        float scrub = 1.0;
+        (*bioMorphs)[c].genes[i].angleMult += ((*bioMorphs)[parent].genes[i].angleMult - grandma->genes[i].angleMult) * scrub;
+        (*bioMorphs)[c].genes[i].blueMult += ((*bioMorphs)[parent].genes[i].blueMult - grandma->genes[i].blueMult) * scrub;
+        (*bioMorphs)[c].genes[i].greenMult += ((*bioMorphs)[parent].genes[i].greenMult - grandma->genes[i].greenMult) * scrub;
+        (*bioMorphs)[c].genes[i].lengthMult += ((*bioMorphs)[parent].genes[i].lengthMult - grandma->genes[i].lengthMult) * scrub;
+        (*bioMorphs)[c].genes[i].limbMult += ((*bioMorphs)[parent].genes[i].limbMult - grandma->genes[i].limbMult) * scrub;
+        (*bioMorphs)[c].genes[i].redMult += ((*bioMorphs)[parent].genes[i].redMult - grandma->genes[i].redMult) * scrub;
+      }
       for (int i = 0; i < mutationRate; i++)
         (*bioMorphs)[c].Mutate();
     }
@@ -132,10 +142,12 @@ void BioMorphs()
   std::vector<BioMorph> bioMorphs;
   bioMorphs.resize(rows * colums);
   int parent = ((rows / 2) * colums) + (colums / 2);
+  BioMorph grandma;
 
   // Begin first round
-  bioMorphs[parent].Randomize();
-  SpawnChildren(&bioMorphs, parent);
+  grandma.Randomize();
+  bioMorphs[parent] = grandma;
+  SpawnChildren(&bioMorphs, parent, &grandma);
 
   Window window("BioMorphs", false, 1000, 600);
 
@@ -143,18 +155,56 @@ void BioMorphs()
   {
     window.Clear();
 
+    vec2i mouse = Controls::GetMouse();
+    int mouseCol = mouse.x / 200;
+    int mouseRow = mouse.y / 200;
+
+    static int timer = 0;
     // Draw BioMorphs
     int id = 0;
     for (int y = 0; y < rows; y++)
       for (int x = 0; x < colums; x++)
       {
-        bioMorphs[id++].Express(0, &window, x * 200 + 100, y * 200 + 100, 10.0, 0.0, 128, 128, 128);
+        if (x == mouseCol && y == mouseRow)
+        {
+          float scrub = (mouse.x - (mouseCol * 200)) / 200.0;
+          BioMorph scrubMorph = bioMorphs[id];
+          for (int g = 0; g < scrubMorph.genes.size(); g++)
+          {
+            scrubMorph.genes[g].angleMult = bioMorphs[parent].genes[g].angleMult * (1.0 - scrub) + bioMorphs[id].genes[g].angleMult * scrub;
+            scrubMorph.genes[g].blueMult = bioMorphs[parent].genes[g].blueMult * (1.0 - scrub) + bioMorphs[id].genes[g].blueMult * scrub;
+            scrubMorph.genes[g].greenMult = bioMorphs[parent].genes[g].greenMult * (1.0 - scrub) + bioMorphs[id].genes[g].greenMult * scrub;
+            scrubMorph.genes[g].lengthMult = bioMorphs[parent].genes[g].lengthMult * (1.0 - scrub) + bioMorphs[id].genes[g].lengthMult * scrub;
+            scrubMorph.genes[g].limbMult = bioMorphs[parent].genes[g].limbMult * (1.0 - scrub) + bioMorphs[id].genes[g].limbMult * scrub;
+            scrubMorph.genes[g].redMult = bioMorphs[parent].genes[g].redMult * (1.0 - scrub) + bioMorphs[id].genes[g].redMult * scrub;
+          }
+          scrubMorph.Express(0, &window, x * 200 + 100, y * 200 + 100, 10.0, 0.0, 128, 128, 128);
+        }
+        else
+        {
+          timer++;
+          float scrub = (sin(timer * 0.002)+1)*0.5;
+          BioMorph scrubMorph = bioMorphs[id];
+          for (int g = 0; g < scrubMorph.genes.size(); g++)
+          {
+            scrubMorph.genes[g].angleMult = bioMorphs[parent].genes[g].angleMult * (1.0 - scrub) + bioMorphs[id].genes[g].angleMult * scrub;
+            scrubMorph.genes[g].blueMult = bioMorphs[parent].genes[g].blueMult * (1.0 - scrub) + bioMorphs[id].genes[g].blueMult * scrub;
+            scrubMorph.genes[g].greenMult = bioMorphs[parent].genes[g].greenMult * (1.0 - scrub) + bioMorphs[id].genes[g].greenMult * scrub;
+            scrubMorph.genes[g].lengthMult = bioMorphs[parent].genes[g].lengthMult * (1.0 - scrub) + bioMorphs[id].genes[g].lengthMult * scrub;
+            scrubMorph.genes[g].limbMult = bioMorphs[parent].genes[g].limbMult * (1.0 - scrub) + bioMorphs[id].genes[g].limbMult * scrub;
+            scrubMorph.genes[g].redMult = bioMorphs[parent].genes[g].redMult * (1.0 - scrub) + bioMorphs[id].genes[g].redMult * scrub;
+          }
+          scrubMorph.Express(0, &window, x * 200 + 100, y * 200 + 100, 10.0, 0.0, 128, 128, 128);
+
+          //bioMorphs[id].Express(0, &window, x * 200 + 100, y * 200 + 100, 10.0, 0.0, 128, 128, 128);
+        }
+        id++;
       }
 
+    //if (timer % 2000 == 0)
+      //SpawnChildren(&bioMorphs, parent, &grandma);
+
     // Select child
-    vec2i mouse = Controls::GetMouse();
-    int mouseCol = mouse.x / 200;
-    int mouseRow = mouse.y / 200;
     int x = mouseCol * 200;
     int y = mouseRow * 200;
     DrawLine(&window, 0xFFFFFFFF, x, y, x + 200, y);
@@ -166,8 +216,9 @@ void BioMorphs()
     {
       if (!clicked)
       {
+        grandma = bioMorphs[parent];
         bioMorphs[parent] = bioMorphs[mouseCol + mouseRow * colums];
-        SpawnChildren(&bioMorphs, parent);
+        SpawnChildren(&bioMorphs, parent, &grandma);
       }
       clicked = true;
     }
@@ -178,7 +229,10 @@ void BioMorphs()
     if (Controls::GetRightClick())
     {
       bioMorphs[parent].Randomize();
-      SpawnChildren(&bioMorphs, parent);
+      grandma = bioMorphs[parent];
+      SpawnChildren(&bioMorphs, parent, &grandma);
+      window.Swap();
+      SDL_Delay(25);
     }
 
     window.Swap();

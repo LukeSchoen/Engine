@@ -215,7 +215,7 @@ void Minecraft()
     if (!MultiThread)
       world->Stream(vec3() - Camera::Position());
 
-    window.Swap(true); // Swap Window
+    window.Swap(false); // Swap Window
 
     FrameRate::Update();
   }

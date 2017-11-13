@@ -254,6 +254,24 @@
     <ClCompile Include="src\BioMorphs.cpp">
       <Filter>Projects\Biomorphs</Filter>
     </ClCompile>
+    <ClCompile Include="src\net\http\curl\md5.cpp">
+      <Filter>Projects\BTCBot\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\http\curl\okcoinapi.cpp">
+      <Filter>Projects\BTCBot\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\http\curl\string.cpp">
+      <Filter>Projects\BTCBot\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\http\curl\uri.cpp">
+      <Filter>Projects\BTCBot\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\http\curl\curl.cpp">
+      <Filter>Projects\BTCBot\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\http\curl\curlprotocol.cpp">
+      <Filter>Projects\BTCBot\Networking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -499,12 +517,6 @@
     <ClInclude Include="src\BTCBot.h">
       <Filter>Projects\BTCBot</Filter>
     </ClInclude>
-    <ClInclude Include="src\btcFunctions.h">
-      <Filter>Projects\BTCBot</Filter>
-    </ClInclude>
-    <ClInclude Include="src\btcTypes.h">
-      <Filter>Projects\BTCBot</Filter>
-    </ClInclude>
     <ClInclude Include="src\RayTracerTypes.h">
       <Filter>Projects\RayTracer</Filter>
     </ClInclude>
@@ -589,6 +601,30 @@
     </ClInclude>
     <ClInclude Include="src\BioMorphs.h">
       <Filter>Projects\Biomorphs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\http\curl\curlprotocol.h">
+      <Filter>Projects\BTCBot\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\http\curl\md5.h">
+      <Filter>Projects\BTCBot\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\http\curl\okcoinapi.h">
+      <Filter>Projects\BTCBot\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\http\curl\string.h">
+      <Filter>Projects\BTCBot\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\http\curl\uri.h">
+      <Filter>Projects\BTCBot\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\http\curl\curl.h">
+      <Filter>Projects\BTCBot\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Okex.h">
+      <Filter>Projects\BTCBot</Filter>
+    </ClInclude>
+    <ClInclude Include="src\softText.h">
+      <Filter>Projects\BTCBot\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -858,6 +894,12 @@
     </Filter>
     <Filter Include="Projects\Biomorphs">
       <UniqueIdentifier>{45a84664-e032-418d-a667-be1d822bb211}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\BTCBot\Networking">
+      <UniqueIdentifier>{dc5bd6f7-d3de-423c-ac22-d52843f029ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\BTCBot\Rendering">
+      <UniqueIdentifier>{c9182418-cb6d-4235-94b9-56091dbbda4a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

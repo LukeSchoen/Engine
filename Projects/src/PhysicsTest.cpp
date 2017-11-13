@@ -248,24 +248,23 @@ void PhysicsTest()
 
     static bool boxriver = false;
 
-    // box river
-    static std::vector<int64_t> boxRiverBoxes;
-    if (!boxriver)
-    {
-      for (int64_t i = 0; i < 100; i++)
-      {
-        cubes.push_back(world.AddCube(vec3(128, 128, 128), vec3(boxSize, boxSize, boxSize), 0.2));
-        boxRiverBoxes.push_back(cubes.size() - 1);
-      }
-      boxriver = true;
-    }
-
-    for (auto & boxid : boxRiverBoxes)
-    {
-      cubes[boxid].ApplyForce(vec3(0, 0, 40));
-      if ((cubes[boxid].GetSpeed().LengthSquared() < 10) || ((cubes[boxid].GetPos() - vec3(128, 128, 128)).LengthSquared() > 100))
-        cubes[boxid].SetPos(vec3(128, 128, 128));
-    }
+//     // box river
+//     static std::vector<int64_t> boxRiverBoxes;
+//     if (!boxriver)
+//     {
+//       for (int64_t i = 0; i < 100; i++)
+//       {
+//         cubes.push_back(world.AddCube(vec3(128, 128, 128), vec3(boxSize, boxSize, boxSize), 0.2));
+//         boxRiverBoxes.push_back(cubes.size() - 1);
+//       }
+//       boxriver = true;
+//     }
+//     for (auto & boxid : boxRiverBoxes)
+//     {
+//       cubes[boxid].ApplyForce(vec3(0, 0, 40));
+//       if ((cubes[boxid].GetSpeed().LengthSquared() < 10) || ((cubes[boxid].GetPos() - vec3(128, 128, 128)).LengthSquared() > 100))
+//         cubes[boxid].SetPos(vec3(128, 128, 128));
+//     }
 
     // Shooting
     static bool shooting = false;
@@ -323,15 +322,15 @@ void PhysicsTest()
     CamSphere.ApplyForce(frictionVector * 2);
 
     if (Controls::GetControllerButton(11))
-      world.UpdateWorld(1.0f / 10.0f);
+      world.UpdateWorld(1.0f / 200.0f);
     else
-      world.UpdateWorld(1.0f / 10.0f);
+      world.UpdateWorld(1.0f / 20.0f);
 
     Camera::SetPosition(vec3() - CamSphere.GetPos());
 
     Camera::SetPosition(Camera::Position() - vec3(0, 30, 0));
 
-    window.Swap();
+    window.Swap(true);
     FrameRate::Update();
   }
 

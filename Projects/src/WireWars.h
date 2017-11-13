@@ -153,7 +153,7 @@ void WireWars()
       for (auto & warrior : game.warriors)
       {
         memset(warrior.cells.data(), 0, sizeof(warrior.cells[0]) * warrior.cells.size());
-        for (int64_t i = 0; i < 30; i++)
+        for (int64_t i = 0; i < 10; i++)
           warrior.MutationAdd(1);
 
         for (int64_t i = 0; i < 2; i++)
