@@ -6,111 +6,259 @@
 #include <vector>
 #include <list>
 #include <algorithm>
-using namespace std;
 #include "curlprotocol.h"
 
-class OKCoinApi	//国内站
+using namespace std;
+
+enum FutureContractType
 {
-protected:
-	OKCoinApi(){};
-	void SetKey(string api_key,string secret_key);
-
-public:
-
-	virtual ~OKCoinApi(){};
-	CUrlProtocol urlprotocol;
-	string m_api_key;			//用户申请的apiKey
-	string m_secret_key;		//请求参数签名的私钥
-
-	
-	//现货行情 API
-	//获取OKCoin最新市场现货行情数据
-
-	string GetTicker(string &symbol);																								//Get /api/v1/ticker						获取OKCoin行情
-	string GetDepth(string &symbol,string &size,string &merge);																		//Get /api/v1/depth							获取OKCoin市场深度
-	string GetTrades(string &symbol,string &since);							//Get /api/v1/trades						获取OKCoin最近600交易信息
-	string GetKline(string &symbol,string &type,string &size,string &since);														//Get /api/v1/kline							获取比特币或莱特币的K线数据
-
-
-
-
-	//现货交易 API
-	//用于OKCoin快速进行现货交易
-
-	string DoUserinfo();																								//POST /api/v1/userinfo						获取用户信息
-	string DoTrade(string &symbol,string &type,string &price,string &amount);														//POST /api/v1/trade						下单交易
-	string DoTrade_History(string &symbol,string &since);																			//POST /api/v1/trade_history				获取OKCoin历史交易信息
-	string DoBatch_Trade(string &symbol,string &type,string &orders_data);															//POST /api/v1/batch_trade					批量下单
-	string DoCancel_Order(string &symbol,string &order_id);																			//POST /api/v1/cancel_order					撤销订单
-	string DoOrder_Info(string &symbol,string &order_id);																			//POST /api/v1/order_info					获取用户的订单信息
-	string DoOrders_Info(string &type,string &symbol,string &order_id);																//POST /api/v1/orders_info					批量获取用户订单
-	string DoOrder_History(string &symbol,string &status,string &current_page,string &page_length);									//POST /api/v1/order_history				获取历史订单信息，只返回最近七天的信息
-	string DoWithdraw(string &symbol,string &chargefee,string &trade_pwd,string &withdraw_address,string &withdraw_amount);			//POST /api/v1/withdraw						提币BTC/LTC
-	string DoCancel_Withdraw(string &symbol,string &withdraw_id);																	//POST /api/v1/cancel_withdraw				取消提币BTC/LTC
-	string DoOrder_Fee(string &symbol,string &order_id);																			//POST /api/v1/order_fee					查询手续费
-	string DoLend_Depth(string &symbol);																							//POST /api/v1/lend_depth					获取放款深度前10
-	string DoBorrows_Info(string &symbol);																							//POST /api/v1/borrows_info					查询用户借款信息
-	string DoBorrow_Money(string &symbol,string &days,string &amount,string &rate);													//POST /api/v1/borrow_money					申请借款
-	string DoCancel_Borrow(string &symbol,string &borrow_id);																		//POST /api/v1/cancel_borrow				取消借款申请
-	string DoBorrow_Order_info(string &borrow_id);																					//POST /api/v1/borrow_order_info			获取借款订单记录
-	string DoRepayment(string &borrow_id);																							//POST /api/v1/repayment					用户还全款
-	string DoUnrepayments_Info(string &symbol,string &current_page,string &page_length);											//POST /api/v1/unrepayments_info			未还款列表
-	string DoAccount_Records(string &symbol,string &type,string &current_page,string &page_length);									//POST /api/v1/account_records				获取用户提现/充值记录
-
+  LongContract = 0,
+  ShortContract = 1,
+  CloseLong = 2,
+  CloseShort = 3,
 };
 
-
-class OKCoinApiCn:public OKCoinApi	//国内站
+enum FutureContractMarket
 {
-public:
-	OKCoinApiCn(string api_key,string secret_key){
-		SetKey(api_key,secret_key);
-		urlprotocol.InitApi(HTTP_SERVER_TYPE_CN);		//国内站
-	};
-	~OKCoinApiCn(){};
-	
+  this_week = 0,
+  next_week = 1,
+  quarter = 2,
 };
 
-
-class OKCoinApiCom:public OKCoinApi	//国际站
+enum FutureContractLeverage
 {
-public:
-	OKCoinApiCom(string api_key,string secret_key){
-		SetKey(api_key,secret_key);
-		urlprotocol.InitApi(HTTP_SERVER_TYPE_COM);		//国际站
-	};
-	~OKCoinApiCom(){};
-	
-
-	//期货行情 API
-	//获取OKCoin期货行情数据
-
-	string DoFuture_Ticker(string &symbol,string &contract_type);																	//GET /api/v1/future_ticker				获取OKCoin期货行情
-	string DoFuture_Depth(string &symbol,string &contract_type,string &size,string &merge);											//GET /api/v1/future_depth				获取OKCoin期货深度信息
-	string DoFuture_Trades(string &symbol,string &contract_type);																	//GET /api/v1/future_trades				获取OKCoin期货交易记录信息
-	string DoFuture_Index(string &symbol);																							//GET /api/v1/future_index				获取OKCoin期货指数信息
-	string DoExchange_Rate();																										//GET /api/v1/exchange_rate				获取美元人民币汇率
-	string DoFuture_Estimated_Price(string &symbol);																				//GET /api/v1/future_estimated_price	获取交割预估价
-	string DoFuture_Kline(string &symbol,string &type,string &contract_type,string &size,string &since);											//GET /api/v1/future_kline				获取期货合约的K线数据
-	string DoFuture_Hold_amount(string &symbol,string &contract_type);																//GET /api/v1/future_hold_amount		获取当前可用合约总持仓量
-
-
-
-	//期货交易 API
-	//用于OKCoin快速进行期货交易
-	string DoFuture_Userinfo();																															//POST /api/v1/future_userinfo			获取OKCoin期货账户信息 （全仓）
-	string DoFuture_Position(string &symbol,string &contract_type);																						//POST /api/v1/future_position			获取用户持仓获取OKCoin期货账户信息 （全仓）
-	string DoFuture_Trade(string &symbol,string &contract_type,string &price,string &amount,string &type,string &match_price,string &lever_rate);		//POST /api/v1/future_trade				期货下单
-	string DoFuture_Trades_history(string &symbol,string &date,string &since);																			//POST /api/v1/future_trades_history	获取OKCoin期货交易历史
-	string DoFuture_Batch_trade(string &symbol,string &contract_type,string &orders_data,string &lever_rate);											//POST /api/v1/future_batch_trade		批量下单
-	string DoFuture_Cancel(string &symbol,string &order_id,string &contract_type);																		//POST /api/v1/future_cancel			取消期货订单
-	string DoFuture_Order_info(string &symbol,string &contract_type,string &status,string &order_id,string &current_page,string &page_length);			//POST /api/v1/future_order_info		获取期货订单信息
-	string DoFuture_Orders_info(string &symbol,string &contract_type,string &order_id);																	//POST /api/v1/future_orders_info		批量获取期货订单信息
-	string DoFuture_Userinfo_4fix();																													//POST /api/v1/future_userinfo_4fix		获取逐仓期货账户信息	
-	string DoFuture_Position_4fix(string &symbol,string &contract_type,string &type);																	//POST /api/v1/future_position_4fix		逐仓用户持仓查询
-	string DoFuture_Explosive(string &symbol,string &contract_type,string &status,string &current_page,string &page_length);							//POST /api/v1/future_explosive			获取期货爆仓单
-	
+  x10leverage = 0,
+  x20leverage = 1,
 };
 
+class OKCoinApi
+{
+public:
+  OKCoinApi(string api_key, string secret_key, bool futures)
+    : m_api_key(api_key)
+    , m_secret_key(secret_key)
+  {
+    urlprotocol.InitApi(futures ? HTTP_SERVER_TYPE_COM : HTTP_SERVER_TYPE_CN);
+    //Uri uri;
+    //m_signature = uri.GetSign(m_secret_key);
+  };
+
+  void SetKey(string api_key, string secret_key);
+
+  CUrlProtocol urlprotocol;
+
+  string m_api_key;
+  string m_secret_key;
+  string m_signature;
+
+  const char* FutureContractMarketNames[3] = { "this_week", "next_week", "quarter" };
+
+  std::string FutureTrade(FutureContractType orderType = LongContract, int contractCount = 1 /*100usd each*/, int priceInUSDCents = 0 /*0=best price*/, FutureContractLeverage leverage = x20leverage, FutureContractMarket market = this_week)
+  {
+    std::string ret;
+    while (true)
+    {
+      Uri uri; urlprotocol.GetUrl(uri, HTTP_API_TYPE_FUTURE_TRADE);
+      std::vector<std::pair<char*, std::string>> params;
+      uri.AddParam("api_key", m_api_key);
+      params.push_back({ "api_key", m_api_key });
+
+      uri.AddParam("symbol", "btc_usd");
+      params.push_back({ "symbol", "btc_usd" });
+
+      uri.AddParam("contract_type", FutureContractMarketNames[market]);
+      params.push_back({ "contract_type", FutureContractMarketNames[market]});
+
+      static char buf[64];
+      itoa(priceInUSDCents / 100, buf, 10);
+      std::string price = buf;
+      //price += ".";
+      //itoa(priceInUSDCents & 100, buf, 10);
+      //price += buf;
+      uri.AddParam("price", price);
+      params.push_back({ "price", price });
+
+      itoa(contractCount, buf, 10);
+      std::string amt = buf;
+      uri.AddParam("amount", amt);
+      params.push_back({ "amount", amt });
+
+      int ot = 0;
+      if (orderType == LongContract) ot = 1;
+      if (orderType == ShortContract) ot = 2;
+      if (orderType == CloseLong) ot = 3;
+      if (orderType == CloseShort) ot = 4;
+
+      uri.AddParam("type", std::to_string(ot));
+      params.push_back({ "type", std::to_string(ot) });
+
+      uri.AddParam("match_price", priceInUSDCents == 0 ? "1" : "0");
+      params.push_back({ "match_price", priceInUSDCents == 0 ? "1" : "0" });
+
+      uri.AddParam("lever_rate", leverage == x20leverage ? "20" : "10");
+      params.push_back({ "lever_rate", leverage == x20leverage ? "20" : "10" });
+
+      m_signature = uri.GetSign(m_secret_key);
+      uri.AddParam("secret_key", m_secret_key);
+      params.push_back({ "secret_key", m_secret_key });
+
+      uri.AddParam("sign", m_signature);
+      params.push_back({ "sign", m_signature });
+
+      auto s = uri.GetParamSet();
+      uri.Requset();
+      ret = uri.result;
+      if (ret.find("order_id") == -1)
+      {
+        printf("bad..\n");
+        Sleep(100);
+        continue;
+      }
+      printf("good..\n");
+      break;
+    }
+    return ret;
+  }
+
+  int64_t FuturePrice(string &symbol, string &contract_type);
+
+  int64_t FutureMyOrders(int64_t *startPrice = nullptr, FutureContractMarket market = this_week)
+  {
+    while (true)
+    {
+      Uri uri; urlprotocol.GetUrl(uri, HTTP_API_TYPE_FUTURE_POSITION_4FIX);
+      uri.AddParam("api_key", m_api_key);
+      uri.AddParam("symbol", "btc_usd");
+      uri.AddParam("contract_type", FutureContractMarketNames[market]);
+      uri.AddParam("type", "1");
+      string sign = uri.GetSign(m_secret_key);
+      uri.AddParam("secret_key", m_secret_key);
+      uri.AddParam("sign", sign);
+      uri.Requset();
+      std::string ret = uri.result;
+      int retPos = ret.find("holding");
+      if (retPos == -1)
+      {
+        printf("bad..\n");
+        Sleep(100);
+        continue;
+      }
+      printf("good...\n");
+
+      int buyLoc = ret.find("buy_amount");
+      int selLoc = ret.find("sell_amount");
+
+      // Check longs
+      if (buyLoc >= 0)
+      {
+        std::string p = ret.substr(buyLoc + 12);
+        p = p.substr(0, p.find(","));
+        int longContracts = atoi(p.c_str());
+        if (longContracts)
+        {
+          int avgLoc = ret.find("buy_price_avg");
+          std::string a = ret.substr(avgLoc + 15);
+          a = a.substr(0, a.find(","));
+          if (startPrice) *startPrice = atoi(a.c_str()) * 100;
+          return longContracts;
+        }
+      }
+      
+      // Check shorts
+      if (selLoc >= 0)
+      {
+        std::string p = ret.substr(selLoc + 13);
+        p = p.substr(0, p.find(","));
+        int shortContracts = atoi(p.c_str());
+        if (shortContracts)
+        {
+          int avgLoc = ret.find("sell_price_avg");;
+          std::string a = ret.substr(avgLoc + 16);
+          a = a.substr(0, a.find(","));
+          if (startPrice) *startPrice = atoi(a.c_str()) * 100;
+          return -shortContracts;
+        }
+      }
+      if (startPrice) *startPrice = 0;
+      return 0;
+    }
+
+  }
+
+  int64_t FutureMyBalance()
+  {
+    while (true)
+    {
+      Uri uri; urlprotocol.GetUrl(uri, HTTP_API_TYPE_FUTURE_USERINFO_4FIX);
+      uri.AddParam("api_key", m_api_key);
+      string sign = uri.GetSign(m_secret_key);
+      uri.AddParam("secret_key", m_secret_key);
+      uri.AddParam("sign", sign);
+      uri.Requset();
+      std::string ret = uri.result;
+      int retLoc = ret.find("rights");
+      if (retLoc == -1)
+      {
+        printf("bad..\n");
+        Sleep(100);
+        continue;
+      }
+      ret = ret.substr(retLoc + 8);
+      ret = ret.substr(0, ret.find(","));
+      printf("good...\n");
+
+      std::string left = ret.substr(0, ret.find("."));
+      std::string right = ret.substr(ret.find(".") + 1);
+      int64_t bitCoins = atoi(left.c_str());
+      int64_t satoshi = atoi(right.c_str());
+      return bitCoins * 100000000 + satoshi;
+    }
+  }
+
+
+  // Spot Trading
+  string GetTicker(string &symbol);
+  string GetDepth(string &symbol, string &size, string &merge);
+  string GetTrades(string &symbol, string &since);
+  string GetKline(string &symbol, string &type, string &size, string &since);
+  string DoUserinfo();
+  string DoTrade(string &symbol, string &type, string &price, string &amount);
+  string DoTrade_History(string &symbol, string &since);
+  string DoBatch_Trade(string &symbol, string &type, string &orders_data);
+  string DoCancel_Order(string &symbol, string &order_id);
+  string DoOrder_Info(string &symbol, string &order_id);
+  string DoOrders_Info(string &type, string &symbol, string &order_id);
+  string DoOrder_History(string &symbol, string &status, string &current_page, string &page_length);
+  string DoWithdraw(string &symbol, string &chargefee, string &trade_pwd, string &withdraw_address, string &withdraw_amount);
+  string DoCancel_Withdraw(string &symbol, string &withdraw_id);
+  string DoOrder_Fee(string &symbol, string &order_id);
+  string DoLend_Depth(string &symbol);
+  string DoBorrows_Info(string &symbol);
+  string DoBorrow_Money(string &symbol, string &days, string &amount, string &rate);
+  string DoCancel_Borrow(string &symbol, string &borrow_id);
+  string DoBorrow_Order_info(string &borrow_id);
+  string DoRepayment(string &borrow_id);
+  string DoUnrepayments_Info(string &symbol, string &current_page, string &page_length);
+  string DoAccount_Records(string &symbol, string &type, string &current_page, string &page_length);
+
+  // Futures Market
+  string DoFuture_Depth(string &symbol, string &contract_type, string &size, string &merge);
+  string DoFuture_Trades(string &symbol, string &contract_type);
+  string DoFuture_Index(string &symbol);
+  string DoExchange_Rate();
+  string DoFuture_Estimated_Price(string &symbol);
+  string DoFuture_Kline(string &symbol, string &type, string &contract_type, string &size, string &since);
+  string DoFuture_Hold_amount(string &symbol, string &contract_type);
+  string DoFuture_Userinfo();
+  string DoFuture_Position(string &symbol, string &contract_type);
+  string DoFuture_Trade(string &symbol, string &contract_type, string &price, string &amount, string &type, bool match_price, string &lever_rate);
+  string DoFuture_Trades_history(string &symbol, string &date, string &since);
+  string DoFuture_Batch_trade(string &symbol, string &contract_type, string &orders_data, string &lever_rate);
+  string DoFuture_Cancel(string &symbol, string &order_id, string &contract_type);
+  string DoFuture_Order_info(string &symbol, string &contract_type, string &status, string &order_id, string &current_page, string &page_length);
+  string DoFuture_Orders_info(string &symbol, string &contract_type, string &order_id);
+  string DoFuture_Position_4fix(string &symbol, string &contract_type, string &type);
+  string DoFuture_Explosive(string &symbol, string &contract_type, string &status, string &current_page, string &page_length);
+};
 
 #endif /* __OKCOINAPI_H__ */

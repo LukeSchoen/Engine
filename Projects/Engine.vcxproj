@@ -229,6 +229,7 @@
     <ClInclude Include="src\Round.h" />
     <ClInclude Include="src\SecondStream.h" />
     <ClInclude Include="src\Sims.h" />
+    <ClInclude Include="src\softButton.h" />
     <ClInclude Include="src\softText.h" />
     <ClInclude Include="src\Sol.hpp" />
     <ClInclude Include="src\SortedList.h" />

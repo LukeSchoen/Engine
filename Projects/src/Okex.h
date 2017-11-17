@@ -20,6 +20,9 @@ public:
 class Okex
 {
 public:
+  Okex(std::string apiKey, std::string secretKey, bool futures)
+    : m_okex(apiKey, secretKey, futures) {}
+
   void Update()
   {
     if (!ready)
@@ -28,42 +31,58 @@ public:
     std::thread(ThreadedUpdate, this).detach();
   }
 
+  std::string CloseOrders() // Take market and exit
+  {
+    if (activeOrders > 0) return m_okex.FutureTrade(CloseLong, activeOrders, 0, x10leverage, this_week);
+    if (activeOrders < 0) return m_okex.FutureTrade(CloseShort, 0 - activeOrders, 0, x10leverage, this_week);
+  }
+
+  std::string OpenLong() { return m_okex.FutureTrade(LongContract, 1, 0, x10leverage, this_week); }
+  std::string OpenShort() { return m_okex.FutureTrade(ShortContract, 1, 0, x10leverage, this_week); }
+
   volatile bool ready = true;
-  volatile int64_t currentPrice = 0;
+  volatile bool started = false;
+  volatile int64_t currentBalance = 0; // BTC
+  volatile int64_t currentPrice = 0; // BTC in USD
+
+  volatile int64_t activeOrders = 0; // Whole number of contracts, positive is long, negative is short
+  volatile int64_t activeOrderAvgPrice = 0; // USD
+
+  OKCoinApi m_okex;
 
 private:
 
 };
 
-
-int64_t FetchCurrentPrice()
+int64_t FetchCurrentBalance(Okex *okex)
 {
-  int lastPtr = -1;
-  std::string ret;
-  while (lastPtr == -1)
-  {
-    std::string cn_apiKey = "";
-    std::string cn_secretKey = "";
-    OKCoinApiCom futures(cn_apiKey, cn_secretKey);
-    ret = futures.DoFuture_Ticker(string("btc_usd"), std::string("this_week"));
-    lastPtr = ret.find("last");
-    if (lastPtr == -1)
-    {
-      Sleep(100);
-      printf("Bad...\n");
-    }
-  }
-  printf("Good...\n");
-  ret = ret.substr(lastPtr + 6);
-  ret = ret.substr(0, ret.find(","));
-  if(ret.find(".") > 0)
-    ret.erase(std::remove_copy(ret.begin(), ret.end(), ret.begin(), '.'), ret.end());
-  return stoi(ret);
+  return okex->m_okex.FutureMyBalance();
+}
+
+int64_t FetchCurrentPrice(Okex *okex)
+{
+  return okex->m_okex.FuturePrice(string("btc_usd"), std::string("this_week"));
+}
+
+int64_t FetchOrderStatus(Okex *okex, int64_t *avgPrice)
+{
+  return okex->m_okex.FutureMyOrders(avgPrice);
 }
 
 void ThreadedUpdate(Okex * okex)
 {
-  okex->currentPrice = FetchCurrentPrice();
+  okex->currentPrice = FetchCurrentPrice(okex);
+  if (okex->started) Sleep(500);
+
+  okex->currentBalance = FetchCurrentBalance(okex);
+  if (okex->started) Sleep(500);
+
+  int64_t avgPrice;
+  okex->activeOrders = FetchOrderStatus(okex, &avgPrice);
+  okex->activeOrderAvgPrice = avgPrice;
+  if (okex->started) Sleep(500);
+
+  okex->started = true;
   okex->ready = true;
 }
 

@@ -626,6 +626,9 @@
     <ClInclude Include="src\softText.h">
       <Filter>Projects\BTCBot\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="src\softButton.h">
+      <Filter>Projects\BTCBot\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

@@ -12,16 +12,40 @@ struct SoftText
     img = ImageFile::ReadImage(ASSETDIR "font.bmp", &x, &y);
   }
 
-  void DrawPrice(int64_t cents, uint32_t col, int xpos, int ypos, int size = 1)
+  void DrawPriceUSD(int64_t cents, uint32_t mainCol, uint32_t backCol, int xpos, int ypos, int size = 1)
   {
+    bool negative = cents < 0;
+    if (negative) cents = 0 - cents;
     int valDollars = cents / 100;
     int valCents = cents % 100;
+    char negs[2] = {};
+    if (negative)
+      negs[0] = '-';
     static char buff[1024];
-    sprintf(buff, "$%d.%d", valDollars, valCents);
-    DrawText(buff, col, xpos, ypos, size);
+    std::string cen = std::to_string(valCents);
+    while (cen.length() < 2)
+      cen = "0" + cen;
+    sprintf(buff,  "usd $%s%d.%s", negs, valDollars, cen.c_str());
+    DrawText(buff, backCol, xpos, ypos, size);
+    sprintf(buff, "     %s%d", negs, valDollars);
+    DrawText(buff, mainCol, xpos, ypos, size);
   }
 
-  void DrawText(int64_t numb, uint32_t col, int xpos, int ypos, int size = 1)
+  void DrawPriceBTC(int64_t satoshi, uint32_t mainCol, uint32_t backCol, int xpos, int ypos, int size = 1)
+  {
+    int coins = satoshi / 100000000;
+    int satoshis = satoshi % 100000000;
+    std::string satosh = std::to_string(satoshis);
+    while (satosh.length() < 8)
+      satosh = "0" + satosh;
+    static char buff[1024];
+    sprintf(buff, "btc %d.%s", coins, satosh.c_str());
+    DrawText(buff, backCol, xpos, ypos, size);
+    sprintf(buff, "    %d", coins);
+    DrawText(buff, mainCol, xpos, ypos, size);
+  }
+
+  void DrawNumber(int64_t numb, uint32_t col, int xpos, int ypos, int size = 1)
   {
     static char buff[1024];
     DrawText(itoa(numb, buff, 10), col, xpos, ypos, size);
