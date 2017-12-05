@@ -272,6 +272,9 @@
     <ClCompile Include="src\net\http\curl\curlprotocol.cpp">
       <Filter>Projects\BTCBot\Networking</Filter>
     </ClCompile>
+    <ClCompile Include="src\Okex.cpp">
+      <Filter>Projects\BTCBot</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -626,7 +629,16 @@
     <ClInclude Include="src\softText.h">
       <Filter>Projects\BTCBot\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="src\softButton.h">
+    <ClInclude Include="src\SimpleUD.h">
+      <Filter>Projects\SimpleUD</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SoftButton.h">
+      <Filter>Projects\BTCBot\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SoftGraph.h">
+      <Filter>Projects\BTCBot\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SoftObject.h">
       <Filter>Projects\BTCBot\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
@@ -903,6 +915,9 @@
     </Filter>
     <Filter Include="Projects\BTCBot\Rendering">
       <UniqueIdentifier>{c9182418-cb6d-4235-94b9-56091dbbda4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\SimpleUD">
+      <UniqueIdentifier>{2451afaa-a9eb-4f01-bad3-2aed3c1e9700}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

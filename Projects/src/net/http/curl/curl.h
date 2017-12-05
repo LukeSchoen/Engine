@@ -13,54 +13,54 @@ using namespace std;
 class CUrl
 {
 public:
-	CUrl();
-	~CUrl();
-	static CUrl &GetCUrl();
+  CUrl();
+  ~CUrl();
+  static CUrl &GetCUrl();
 
-	static int global_init();
-	static void global_cleanup();
-	
-	void set_share_handle(CURL* curl_handle);
+  static int global_init();
+  static void global_cleanup();
 
-	int initapi();
+  void set_share_handle(CURL* curl_handle);
 
-
-	/*
-	 * 将请求返回的结果打印输出到屏幕.
-	 */
-
-	static long call_wirte_func(void *buffer, int size, int nmemb, void *uri);
-
-	static size_t header_callback(const char  *ptr, size_t size, size_t nmemb, void *uri);
+  int initapi();
 
 
-	/*
-	 * 执行 API.
-	 */
-	void * requset(void *_uri);
+  /*
+   * 将请求返回的结果打印输出到屏幕.
+   */
 
-	void get_response_code();
-	void get_response_length();
-	void get_response_contenttype();
+  static long call_wirte_func(void *buffer, int size, int nmemb, void *uri);
 
-	bool isheadread;//协议头是否已经读取过
+  static size_t header_callback(const char  *ptr, size_t size, size_t nmemb, void *uri);
 
-	CURLcode code;
-	long retcode;
-	CURL *curl;
-	struct curl_slist *cookies;
-	list<string> cookielist;
 
-	bool dataverify;
+  /*
+   * 执行 API.
+   */
+  void * requset(void *_uri);
 
-	string m_sessionid;
-	string file_name;
+  void get_response_code();
+  void get_response_length();
+  void get_response_contenttype();
 
-	long file_size ;	
-	long request_size;
-	string contenttype_str;
+  bool isheadread;//协议头是否已经读取过
 
-	bool isfirstwirte;
+  CURLcode code;
+  long retcode;
+  CURL *curl;
+  struct curl_slist *cookies;
+  list<string> cookielist;
+
+  bool dataverify;
+
+  string m_sessionid;
+  string file_name;
+
+  long file_size;
+  long request_size;
+  string contenttype_str;
+
+  bool isfirstwirte;
 
 };
 

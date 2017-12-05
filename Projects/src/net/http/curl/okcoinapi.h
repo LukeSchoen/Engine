@@ -37,16 +37,24 @@ public:
   OKCoinApi(string api_key, string secret_key, bool futures)
     : m_api_key(api_key)
     , m_secret_key(secret_key)
+    , m_futures(futures)
   {
     urlprotocol.InitApi(futures ? HTTP_SERVER_TYPE_COM : HTTP_SERVER_TYPE_CN);
     //Uri uri;
     //m_signature = uri.GetSign(m_secret_key);
   };
 
+  void Reload()
+  {
+    urlprotocol = CUrlProtocol();
+    urlprotocol.InitApi(m_futures ? HTTP_SERVER_TYPE_COM : HTTP_SERVER_TYPE_CN);
+  }
+
   void SetKey(string api_key, string secret_key);
 
   CUrlProtocol urlprotocol;
 
+  bool m_futures;
   string m_api_key;
   string m_secret_key;
   string m_signature;
@@ -106,12 +114,21 @@ public:
       params.push_back({ "sign", m_signature });
 
       auto s = uri.GetParamSet();
+      static int errorCount = 0;
       uri.Requset();
       ret = uri.result;
       if (ret.find("order_id") == -1)
       {
         printf("bad..\n");
         Sleep(100);
+        errorCount++;
+        if (errorCount > 5)
+        {
+          printf("refreshing..\n");
+          errorCount = 0;
+          Reload();
+          Sleep(100);
+        }
         continue;
       }
       printf("good..\n");
@@ -120,7 +137,7 @@ public:
     return ret;
   }
 
-  int64_t FuturePrice(string &symbol, string &contract_type);
+  int64_t FuturePrice(string &symbol, string &contract_type, int64_t *CurrentPriceTime = nullptr);
 
   int64_t FutureMyOrders(int64_t *startPrice = nullptr, FutureContractMarket market = this_week)
   {

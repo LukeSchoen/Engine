@@ -13,7 +13,7 @@
 #include "MatVecSIMD.h"
 #include "CPUDraw.h"
 
-#include "C:\Luke\Programming\Engine\Projects\Accelerator\Accelerator.h"
+//#include "C:\Luke\Programming\Engine\Projects\Accelerator\Accelerator.h"
 
 void SecondStream()
 {

@@ -33,7 +33,8 @@ void _UpdateWorld()
       GPix &gpix = grassWorld.grid[x + y * grassWorld.gridWidth];
       if(gpix.energy == 0) continue;
 
-      gpix.energy = Min(gpix.energy + 1, 255);
+      //gpix.energy = Min(gpix.energy + 1, 255);
+      gpix.energy--;
 
       grassWorld.xpos = x;
       grassWorld.ypos = y;

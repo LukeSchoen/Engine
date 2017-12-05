@@ -21,6 +21,7 @@
 #include "Sims.h"
 #include "WireWars.h"
 #include "BioMorphs.h"
+#include "SimpleUD.h"
 
 void main() // console entry
 {
@@ -31,6 +32,7 @@ void main() // console entry
   //DLux();
   //Pokemon();
   BTCBot();
+  //SimpleUD();
   //SecondStream();
   //StreamTest();
   //Glorious();

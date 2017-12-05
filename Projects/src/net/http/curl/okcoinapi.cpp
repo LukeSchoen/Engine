@@ -287,7 +287,7 @@ string OKCoinApi::DoAccount_Records(string &symbol, string &type, string &curren
 
 
 
-int64_t OKCoinApi::FuturePrice(string &symbol, string &contract_type)			//GET /api/v1/future_ticker				获取OKCoin期货行情
+int64_t OKCoinApi::FuturePrice(string &symbol, string &contract_type, int64_t *CurrentPriceTime /*= nullptr*/)			//GET /api/v1/future_ticker				获取OKCoin期货行情
 {
   while (true)
   {
@@ -305,6 +305,14 @@ int64_t OKCoinApi::FuturePrice(string &symbol, string &contract_type)			//GET /a
       continue;
     }
     printf("good...\n");
+
+    if (CurrentPriceTime)
+    {
+      lastPtr = ret.find("date ");  
+      ret = ret.substr(lastPtr + 7);
+      ret = ret.substr(0, ret.find("\""));
+      *CurrentPriceTime = atoll(ret.c_str());
+    }
 
     ret = ret.substr(lastPtr + 6);
     ret = ret.substr(0, ret.find(","));
