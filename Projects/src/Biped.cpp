@@ -178,11 +178,17 @@ void Biped::Draw(mat4 VP, vec3 pos, vec3 dir, uint32_t texture, bool use3D)
   float headPitch = DegsToRads * 270 + atan2(vec2(pos.x - capPos.x, pos.z - capPos.z).Length(), pos.y - capPos.y);
   //model.RotateY(headYaw);
   //model.RotateX(headPitch);
-  mat4 headMVP = VP * model;
 
-  //model.RotateX(-headPitch);
-  //model.RotateY(-headYaw);
+  model.RotateY(headYaw);
+
+  mat4 headModel = model;
+
+  headModel.RotateX(DegsToRads * 180 + headPitch);
+  headModel.RotateZ(DegsToRads * 180);
+
+  mat4 headMVP = VP * headModel;
   headMVP.Transpose();
+
   Head->Render(headMVP);
 
   float hatScaler = 1 + ((1.0 / 16.0) * worldScale) / 8;
@@ -196,7 +202,6 @@ void Biped::Draw(mat4 VP, vec3 pos, vec3 dir, uint32_t texture, bool use3D)
   mat4 torsoMVP = VP * model;
   torsoMVP.Transpose();
   Body->Render(torsoMVP);
-
 
   vec3 jacketScaler = vec3(1.1, 1, 1.2);
   model.Scale(jacketScaler);

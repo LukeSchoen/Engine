@@ -434,7 +434,7 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc1
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;"C:\Luke\Programming\Engine\bin\win64\Release\Accelerator.lib"</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
     </Link>

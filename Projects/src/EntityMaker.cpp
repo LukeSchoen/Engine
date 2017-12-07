@@ -4,8 +4,12 @@
 #include "Camera.h"
 #include "Assets.h"
 
+vec3 playerPos;
+
 static void _PlayerUpdate(Entity *entity)
 {
+  playerPos = entity->position;
+
   // Jumping
   bool jumpPressed = Controls::KeyDown(SDL_SCANCODE_SPACE) || Controls::GetControllerButton(10);
   if (jumpPressed && entity->OnFloor() && abs(entity->momentum.y) < 0.05)
@@ -67,7 +71,24 @@ static void _PlayerUpdate(Entity *entity)
   else placeDown = false;
 }
 
+static void _UpdateZombie(Entity *entity)
+{
 
+  entity;
+
+  // look at player
+  vec3 mobToPMeDir = (playerPos - entity->position).Normalized();
+  entity->direction = mobToPMeDir;
+
+  // Move towards player
+  entity->Move(mobToPMeDir * 0.005);
+
+  // Jump Up
+  //if (entity->OnFloor())
+  //  entity->momentum.y = 0.21;
+
+  entity->ApplyPhysics();
+}
 
 
 struct Agent
@@ -82,8 +103,8 @@ Entity EntityMaker::CreateAgentNear(BlockWorld *world, vec3 pos, const char *ent
   Entity entity(world);
   entity.textureID = entTexture;
   entity.position = pos + vec3(rand() % 16 - 8, 0, rand() % 16 - 8);
+  entity.Behavior = _UpdateZombie;
   return entity;
-
 }
 
 Entity EntityMaker::CreatePlayer(BlockWorld *world, vec3 pos /*= vec3()*/)

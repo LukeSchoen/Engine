@@ -148,7 +148,6 @@ void RenderObject::BindShaders()
 {
   if (program == -1)
     __debugbreak();
-
   glUseProgram(program);
 }
 

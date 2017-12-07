@@ -112,8 +112,10 @@ void Minecraft()
   //Textures::SetTextureFilterMode(false);
 
   // Create World
-  world = new BlockWorld(ASSETDIR "/minecraft/maps/island/", viewDist);
-  vec3 playerPos = vec3(-43, 68, 170);
+  //world = new BlockWorld(ASSETDIR "/minecraft/maps/island/", viewDist);
+  world = new BlockWorld("C:/Users/Luke/AppData/Roaming/.technic/modpacks/vanilla/saves/roulette/region/", viewDist);
+
+  vec3 playerPos = vec3(-56, 74, -1300);
   int64_t playerID = world->entities.Add(EntityMaker::CreatePlayer(world, playerPos));
   Camera::SetPosition(vec3()-playerPos);
 
@@ -121,13 +123,18 @@ void Minecraft()
   if (MultiThread)
     SDL_CreateThread(updateWorldThread, "streamer", nullptr);
 
-  Textures::SetTextureFilterMode(false);
+  Textures::SetTextureFilterMode(false); 
   //for (int i = 0; i < 3; i++) world->entities.Add(EntityMaker::CreateOrcWarrior(world, playerPos + vec3(rand() % 50 - 25, 50, rand() % 50 - 25)));
   //for (int i = 0; i < 3; i++) world->entities.Add(EntityMaker::CreateOrcBerzerker(world, playerPos + vec3(rand() % 50 - 25, 50, rand() % 50 - 25)));
 
-  world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/textures/1.png"));
-  world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/textures/2.png"));
-  world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/textures/3.png"));
+  world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Zombie.png"));
+
+  //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager2.png"));
+  //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager3.png"));
+  //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager4.png"));
+  //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager5.png"));
+  //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager6.png"));
+  //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager7.png"));
 
   Textures::SetTextureFilterMode(true);
 

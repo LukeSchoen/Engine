@@ -42,8 +42,8 @@ void main() // console entry
   //NovaCosm();
   //Cosmic();
   //Zelda();
-  PhysicsTest();
-  //Minecraft();
+  //PhysicsTest();
+  Minecraft();
   //OpenGL();
   //Compression();
   //ModelView();

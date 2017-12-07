@@ -11,8 +11,8 @@ in float passDepth;
 out vec4 fragColor;
 
 vec3 fogColor = vec3(136/ 255.0, 222/ 255.0, 255 / 255.0);
-float fogStart = 48;
-float fogEnd = 96;
+float fogStart = 96;
+float fogEnd = 200;
 
 void main()
 {
