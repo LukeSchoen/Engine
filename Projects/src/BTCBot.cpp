@@ -1,12 +1,20 @@
 #include "Window.h"
 #include "Controls.h"
-#include "okex.h"
 #include "softText.h"
 #include "SoftButton.h"
 #include "SoftGraph.h"
+#include "Okex.h"
+#include "StreamFile.h"
+#include "Pre.h"
 
 void BTCBot()
 {
+
+  std::vector<int> input = { 0, 1, 2, 4 };
+  auto ret = Pre::Predict(input, std::max((int)input.size(), 8), 32);
+
+  getchar();
+
   Window window("BTCBOT", false, 800, 400);
   SoftText text(&window);
 
@@ -43,7 +51,7 @@ void BTCBot()
         text.DrawText("Active Order Open!", 0x990000, 30, 180, 2);
 
         text.DrawText("Type:", 0x444444, 32, 210, 1);
-        if(okex.activeOrders > 0)
+        if (okex.activeOrders > 0)
           text.DrawText("Long", 0x005500, 80, 210, 1);
         else
           text.DrawText("Short", 0x550000, 80, 210, 1);
@@ -63,16 +71,30 @@ void BTCBot()
         if (longButton.Update()) okex.OpenLong();
         text.DrawText("No Orders", 0x1E90FF, 30, 180, 2);
       }
+
+      // Draw Price Graph
+      priceGraph.Update();
+
+      // Print Price
+      static bool started = false;
+      static StreamFileWriter stream("c:/temp/btc_history.x");
+      static time_t prevTime = clock();
+      if (clock() - prevTime > 1000)
+      {
+        prevTime = clock();
+        int currPrice = (int)floor(okex.currentPrice);
+        printf("%d\n", currPrice);
+        static char buffer[64];
+        sprintf(buffer, "%d\n", currPrice);
+        stream.WriteBytes(buffer, strlen(buffer));
+        stream.FlushStream();
+      }
+
     }
     else
     {
       text.DrawText("Retrieving data...", 0x1E90FF, 30, 30, 1);
     }
-
-      // Charts
-    priceGraph.Update();
-
-
 
     window.Swap();
     Sleep(50);

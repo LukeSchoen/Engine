@@ -275,6 +275,18 @@
     <ClCompile Include="src\Okex.cpp">
       <Filter>Projects\BTCBot</Filter>
     </ClCompile>
+    <ClCompile Include="src\SoftButton.cpp">
+      <Filter>Projects\BTCBot\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SoftGraph.cpp">
+      <Filter>Projects\BTCBot\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SoftObject.cpp">
+      <Filter>Projects\BTCBot\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SoftText.cpp">
+      <Filter>Projects\BTCBot\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -641,6 +653,9 @@
     <ClInclude Include="src\SoftObject.h">
       <Filter>Projects\BTCBot\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="src\Pre.h">
+      <Filter>Engine\Pre</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -918,6 +933,9 @@
     </Filter>
     <Filter Include="Projects\SimpleUD">
       <UniqueIdentifier>{2451afaa-a9eb-4f01-bad3-2aed3c1e9700}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Pre">
+      <UniqueIdentifier>{b44bf2bd-2950-4376-9e51-e7fcdc1dfa78}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -112,6 +112,10 @@
     <ClCompile Include="src\Round.cpp" />
     <ClCompile Include="src\SecondStream.cpp" />
     <ClCompile Include="src\Sims.cpp" />
+    <ClCompile Include="src\SoftButton.cpp" />
+    <ClCompile Include="src\SoftGraph.cpp" />
+    <ClCompile Include="src\SoftObject.cpp" />
+    <ClCompile Include="src\SoftText.cpp" />
     <ClCompile Include="src\StreamTest.cpp" />
     <ClCompile Include="src\FilePath.cpp" />
     <ClCompile Include="src\Text.cpp" />
@@ -221,6 +225,7 @@
     <ClInclude Include="src\pokemon.h" />
     <ClInclude Include="src\PolyMesh.h" />
     <ClInclude Include="src\Pool.h" />
+    <ClInclude Include="src\Pre.h" />
     <ClInclude Include="src\Quaternion.h" />
     <ClInclude Include="src\RayTracer.h" />
     <ClInclude Include="src\RayTracerTypes.h" />

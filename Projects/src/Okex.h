@@ -4,17 +4,15 @@
 #include <thread>
 #include <time.h>
 #include <string>
+#include <vector>
 #include "net\http\curl\okcoinapi.h"
-
-class Okex;
-void ThreadedUpdate(Okex * okex);
 
 class Trade
 {
 public:
   int64_t price;
   time_t dateTime;
-  std::string DateTime();
+  std::string DateTime;
 };
 
 class Okex
@@ -29,6 +27,8 @@ public:
   std::string OpenLong();
   std::string OpenShort();
 
+  //std::string DateTime();
+
   volatile bool ready = true;
   volatile bool started = false;
   volatile int64_t currentBalance = 0; // BTC
@@ -42,9 +42,6 @@ public:
   OKCoinApi m_okex;
 
   std::vector<Trade> m_tradeHistory;
-
-private:
-
 };
 
 #endif // Okex_h__

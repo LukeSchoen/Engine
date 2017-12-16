@@ -43,7 +43,8 @@ void ThreadedUpdate(Okex *okex)
   okex->ready = true;
 }
 
-Okex::Okex(std::string apiKey, std::string secretKey, bool futures) : m_okex(apiKey, secretKey, futures)
+Okex::Okex(std::string apiKey, std::string secretKey, bool futures)
+  : m_okex(apiKey.c_str(), secretKey.c_str(), futures)
 {
 
 }
@@ -72,7 +73,7 @@ std::string Okex::OpenShort()
   startingBalance = currentBalance; return m_okex.FutureTrade(ShortContract, 1, 0, x10leverage, this_week);
 }
 
-std::string Trade::DateTime()
-{
-  return ctime(&dateTime);
-}
+// std::string Trade::DateTime()
+// {
+//   return std::string(ctime(&dateTime));
+// }
