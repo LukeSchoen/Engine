@@ -92,7 +92,7 @@ RenderObject* _CreateBox(vec3i dims, vec2i toff, bool SwapLeftWithBack = false, 
   );
 
   // Front
-  ltoff = vec2i(dims.z, dims.z);
+  ltoff = vec2i(dims.z + dims.x + dims.z, dims.z);
   _AddQuad
   (
     &maker,
@@ -108,7 +108,7 @@ RenderObject* _CreateBox(vec3i dims, vec2i toff, bool SwapLeftWithBack = false, 
 
   // Back
   //ltoff = vec2i(dims.z + dims.x + (SwapLeftWithBack ? 0 : dims.z), dims.z);
-  ltoff = vec2i(dims.z + dims.x + dims.z, dims.z);
+  ltoff = vec2i(dims.z, dims.z);
   _AddQuad
   (
     &maker,
@@ -147,7 +147,7 @@ void _CreateModels()
 }
 
 
-void Biped::Draw(mat4 VP, vec3 pos, vec3 dir, uint32_t texture, bool use3D)
+void Biped::Draw(mat4 VP, vec3 pos, vec3 dir, uint32_t texture, bool use3D, float walkCycle)
 {
   static bool loaded = false; if (!loaded) _CreateModels(); loaded = true;
 
@@ -174,14 +174,20 @@ void Biped::Draw(mat4 VP, vec3 pos, vec3 dir, uint32_t texture, bool use3D)
   model.Translate(pos);
 
   vec3 capPos = vec3() - Camera::Position();
-  float headYaw = -atan2(pos.x - capPos.x, pos.z - capPos.z);
-  float headPitch = DegsToRads * 270 + atan2(vec2(pos.x - capPos.x, pos.z - capPos.z).Length(), pos.y - capPos.y);
+  //float headYaw = -atan2(pos.x - capPos.x, pos.z - capPos.z);
+  //float headPitch = DegsToRads * 270 + atan2(vec2(pos.x - capPos.x, pos.z - capPos.z).Length(), pos.y - capPos.y);
+
+  float headYaw = -atan2(-dir.x, -dir.z);
+  float headPitch = DegsToRads * 270 + atan2(vec2(-dir.x, -dir.z).Length(), -dir.y);
+
   //model.RotateY(headYaw);
   //model.RotateX(headPitch);
 
   model.RotateY(headYaw);
 
   mat4 headModel = model;
+
+  headModel.RotateY(DegsToRads * 180);
 
   headModel.RotateX(DegsToRads * 180 + headPitch);
   headModel.RotateZ(DegsToRads * 180);
@@ -212,7 +218,13 @@ void Biped::Draw(mat4 VP, vec3 pos, vec3 dir, uint32_t texture, bool use3D)
 
   model.Translate(vec3(-armOut, 0, 0));
   model.Translate(vec3(-limbWidth, 0, 0));
-  mat4 armRMVP = VP * model;
+
+  mat4 armRModel = model;
+  armRModel.Translate(vec3(0, limbWidth * 2, 0));
+  armRModel.RotateX(walkCycle*0.5 + DegsToRads * 90);
+  armRModel.Translate(vec3(0, -limbWidth * 2, 0));
+
+  mat4 armRMVP = VP * armRModel;
   armRMVP.Transpose();
   ArmR->Render(armRMVP);
 
@@ -226,7 +238,13 @@ void Biped::Draw(mat4 VP, vec3 pos, vec3 dir, uint32_t texture, bool use3D)
 
   model.Translate(vec3(armOut * 2, 0, 0));
   model.Translate(vec3(limbWidth * 2, 0, 0));
-  mat4 armLMVP = VP * model;
+
+  mat4 armLModel = model;
+  armLModel.Translate(vec3(0, limbWidth * 2, 0));
+  armLModel.RotateX(-walkCycle *0.5+ DegsToRads * 90);
+  armLModel.Translate(vec3(0, -limbWidth * 2, 0));
+
+  mat4 armLMVP = VP * armLModel;
   armLMVP.Transpose();
   ArmL->Render(armLMVP);
 
@@ -241,7 +259,13 @@ void Biped::Draw(mat4 VP, vec3 pos, vec3 dir, uint32_t texture, bool use3D)
 
   model.Translate(vec3(0, -legDown, 0));
   model.Translate(vec3(-limbWidth, 0, 0));
-  mat4 legRMVP = VP * model;
+
+  mat4 legRModel = model;
+  legRModel.Translate(vec3(0, limbWidth * 3, 0));
+  legRModel.RotateX(-walkCycle);
+  legRModel.Translate(vec3(0, -limbWidth * 3, 0));
+
+  mat4 legRMVP = VP * legRModel;
   legRMVP.Transpose();
   LegR->Render(legRMVP);
 
@@ -252,7 +276,13 @@ void Biped::Draw(mat4 VP, vec3 pos, vec3 dir, uint32_t texture, bool use3D)
   model.Scale(vec3(1, 1, 1) / sleveScaler);
 
   model.Translate(vec3(limbWidth * 2, 0, 0));
-  mat4 legLMVP = VP * model;
+
+  mat4 legLModel = model;
+  legLModel.Translate(vec3(0, limbWidth * 3, 0));
+  legLModel.RotateX(walkCycle);
+  legLModel.Translate(vec3(0, -limbWidth * 3, 0));
+
+  mat4 legLMVP = VP * legLModel;
   legLMVP.Transpose();
   LegL->Render(legLMVP);
 

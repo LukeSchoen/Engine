@@ -30,7 +30,7 @@ struct Entity
 
   vec3 position;
   vec3 momentum;
-  vec3 direction;
+  vec3 direction = vec3(0, 0, 1);
   vec3 dimensions = vec3(0.5, 1.95, 0.5);
   vec3 center = vec3(0, 0.75, 0);
   int64_t uniqueID = -1;

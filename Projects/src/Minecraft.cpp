@@ -127,14 +127,18 @@ void Minecraft()
   //for (int i = 0; i < 3; i++) world->entities.Add(EntityMaker::CreateOrcWarrior(world, playerPos + vec3(rand() % 50 - 25, 50, rand() % 50 - 25)));
   //for (int i = 0; i < 3; i++) world->entities.Add(EntityMaker::CreateOrcBerzerker(world, playerPos + vec3(rand() % 50 - 25, 50, rand() % 50 - 25)));
 
-  world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Zombie.png"));
+  for (int64_t i = 0; i < 1; i++)
+  {
+    world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Zombie.png", EBH_Zombie));
+    world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Skeleton.png", EBH_Zombie));
 
-  //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager2.png"));
-  //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager3.png"));
-  //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager4.png"));
-  //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager5.png"));
-  //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager6.png"));
-  //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager7.png"));
+    //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager2.png", EBH_Friendly));
+    //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager3.png", EBH_Friendly));
+    //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager4.png", EBH_Friendly));
+    //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager5.png", EBH_Friendly));
+    //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager6.png", EBH_Friendly));
+    //world->entities.Add(EntityMaker::CreateAgentNear(world, playerPos, ASSETDIR "Minecraft/Mobs/Villager7.png", EBH_Friendly));
+  }
 
   Textures::SetTextureFilterMode(true);
 
@@ -223,7 +227,8 @@ void Minecraft()
     if (!MultiThread)
       world->Stream(vec3() - Camera::Position());
 
-    window.Swap(true); // Swap Window
+    window.Swap(false); // Swap Window
+    glFinish();
 
     FrameRate::Update();
   }

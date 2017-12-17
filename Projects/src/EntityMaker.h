@@ -3,15 +3,19 @@
 
 #include "Entities.h"
 
+enum EntityBehaviorType
+{
+  EBH_Neutral,
+  EBH_Friendly,
+  EBH_Zombie,
+  EBH_Archer,
+};
+
 struct EntityMaker
 {
-  static Entity CreateAgentNear(BlockWorld *world, vec3 pos, const char *entityTextureFile);
+  static Entity CreateAgentNear(BlockWorld *world, vec3 pos, const char *entityTextureFile, EntityBehaviorType type);
 
   static Entity CreatePlayer(BlockWorld *world, vec3 pos = vec3());
-
-  static Entity CreateOrcWarrior(BlockWorld *world, vec3 pos = vec3());
-
-  static Entity CreateOrcBerzerker(BlockWorld *world, vec3 pos = vec3());
 
 private:
   static unsigned int _LoadTex(const char *file);

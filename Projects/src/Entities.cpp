@@ -65,7 +65,7 @@ void Entity::Update()
 
 void Entity::Draw(mat4 VP)
 {
-  if(visible) Biped::Draw(VP, position, direction, textureID, false);
+  if (visible) Biped::Draw(VP, position, direction, textureID, false, sin(clock()*0.008) * 1);
 }
 
 vec3 Entity::ResolveMomentum(vec3 pos, vec3 momentum, float stepSize)
