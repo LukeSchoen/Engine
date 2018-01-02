@@ -248,6 +248,12 @@
     <ClCompile Include="src\DrawTree.cpp">
       <Filter>Projects\DrawTree</Filter>
     </ClCompile>
+    <ClCompile Include="src\NN.cpp">
+      <Filter>Projects\NeuralNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Reference.cpp">
+      <Filter>Projects\NeuralNetwork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -572,6 +578,12 @@
     <ClInclude Include="src\MergeSort.h">
       <Filter>Engine\Sort</Filter>
     </ClInclude>
+    <ClInclude Include="src\nn.h">
+      <Filter>Projects\NeuralNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Reference.h">
+      <Filter>Projects\NeuralNetwork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -828,6 +840,9 @@
     </Filter>
     <Filter Include="Engine\Sort">
       <UniqueIdentifier>{b70458f8-a0f9-4768-87a7-2caedef8e374}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\NeuralNetwork">
+      <UniqueIdentifier>{0465d8c5-7720-4e41-b760-7578e8ebc1e7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

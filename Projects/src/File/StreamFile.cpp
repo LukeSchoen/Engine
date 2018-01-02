@@ -99,7 +99,7 @@ void *StreamFileReader::ReadToEnd(int64_t *a_numOfBytesRead)
   SetLocation(-1);
   int64_t end = GetLocation();
   SetLocation(start);
-  return ReadBytes(end - start);
+  return ReadBytes(end - start, a_numOfBytesRead);
 }
 
 int64_t StreamFileReader::GetLocation()
