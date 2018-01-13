@@ -34,7 +34,7 @@ uint32_t *ImageFile::ReadImage(const char *imagePath, uint32_t *width, uint32_t 
     for (int x = 0; x < w; x++)
     {
       address = x * step + y * rawImg->pitch;
-      r = imgData[address + rOffset];
+      r= imgData[address + rOffset];
       g = imgData[address + gOffset];
       b = imgData[address + bOffset];
       //a = 255;
