@@ -6,12 +6,42 @@
 #include "Okex.h"
 #include "StreamFile.h"
 #include "Pre.h"
+#include <string>
+#include <stdio.h>
 
 void BTCBot()
 {
+  // Load Prices
+  std::vector<int> priceInCents;
+  int64_t fileLen;
+  StreamFileReader reader("C:/temp/btc_history.x", &fileLen);
+  std::string file((char*)reader.ReadToEnd(), fileLen);
+  const char *ptr = file.c_str();
+  while (true)
+  {
+    int val = atoi(ptr);
+    priceInCents.push_back(val);
+    while (*ptr != '\n' && *ptr != NULL) ptr++;
+    if(*ptr == NULL) break;
+    ptr++;
+  }
 
-  std::vector<int> input = { 0, 1, 2, 4 };
-  auto ret = Pre::Predict(input, std::max((int)input.size(), 8), 32);
+  // Normalize Inputs
+  int start = priceInCents[0]; for (auto & item : priceInCents) item -= start; // offset from start
+  for (auto & item : priceInCents) item /= 500; // rescale
+  for (int64_t i = 0; i < priceInCents.size() - 1; i++) if (priceInCents[i] == priceInCents[i + 1]) priceInCents.erase(priceInCents.begin() + i--); // Remove duplicates
+
+  std::vector<int> predictedCents;
+  for (int64_t p = 0; p < 64; p++)
+  {
+    // Create some inputs
+    std::vector<int> input; for (int i = 0; i < 2; i++) input.push_back(priceInCents[i + p]);
+    auto ret = Pre::Predict(input, std::max((int)input.size(), 8), 32);
+    predictedCents.push_back(ret[0] + input[0]);
+  }
+  
+  priceInCents;
+  predictedCents;
 
   getchar();
 
@@ -28,7 +58,7 @@ void BTCBot()
   SoftButton shortButton("DN", &window, 40, 230, 128, 32, 0x999999, 0x221111);
   SoftButton exitButton("EXIT", &window, 180, 250, 128, 32, 0x999999, 0x111122);
 
-  SoftGraph priceGraph("", &window, 300, 100, 200, 200, 0xffffff, 0x888888);
+  //SoftGraph priceGraph("", &window, 300, 100, 200, 200, 0xffffff, 0x888888);
 
   int64_t startingBalance = 0;
 
@@ -73,22 +103,23 @@ void BTCBot()
       }
 
       // Draw Price Graph
-      priceGraph.Update();
+      //priceGraph.Update();
 
       // Print Price
-      static bool started = false;
+      /*static bool started = false;
       static StreamFileWriter stream("c:/temp/btc_history.x");
-      static time_t prevTime = clock();
-      if (clock() - prevTime > 1000)
-      {
-        prevTime = clock();
-        int currPrice = (int)floor(okex.currentPrice);
-        printf("%d\n", currPrice);
-        static char buffer[64];
-        sprintf(buffer, "%d\n", currPrice);
-        stream.WriteBytes(buffer, strlen(buffer));
-        stream.FlushStream();
-      }
+      static time_t prevTime = clock();*/
+
+      //if (clock() - prevTime > 1000)
+      //{
+      //  prevTime = clock();
+      //  int currPrice = (int)floor(okex.currentPrice);
+      //  printf("%d\n", currPrice);
+      //  static char buffer[64];
+      //  sprintf(buffer, "%d\n", currPrice);
+      //  stream.WriteBytes(buffer, strlen(buffer));
+      //  stream.FlushStream();
+      //}
 
     }
     else

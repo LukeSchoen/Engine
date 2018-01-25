@@ -3,7 +3,7 @@
 
 #include <vector>
 
-enum PreInstruction : int
+enum PreInstruction : uint8_t
 {
   SWAPAB,
   COPYAB,
@@ -22,20 +22,16 @@ class PreProgram
 {
 public:
   std::vector<PreInstruction> instructions;
-  int a;
-  int b;
-
   void Generate(int programLength)
   {
     instructions.clear();
     for (int i = 1; i < programLength; i++)
       instructions.push_back((PreInstruction)(rand() % INTNUM));
   }
-
   std::vector<int> Execute(int runLengthDepth)
   {
-    a = 0;
-    b = 0;
+    int a = 0;
+    int b = 0;
     std::vector<int> ret;
     bool s = true;
     for (int l = 0; l < runLengthDepth; l++)
@@ -60,7 +56,6 @@ public:
     }
     return ret;
   }
-
   void Optimize(int DepthPrecision)
   {
     auto base = Execute(DepthPrecision);
@@ -83,12 +78,9 @@ public:
   }
 };
 
-
 class Pre
 {
-public:
-
-  static std::vector<int> Predict(const std::vector<int> &examples, int predictionDepth = 1, int botBrainSize = 10)
+public: static std::vector<int> Predict(const std::vector<int> &examples, int predictionDepth = 1, int botBrainSize = 10)
   {
     // Need
     // list of programs
@@ -149,9 +141,6 @@ public:
           default: break;
           }
         }
-
-        getchar();
-
         return prediction;
       }
     }

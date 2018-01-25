@@ -238,7 +238,8 @@ private:
       //renderLock.unlock();
       if (kidsAllReady)
       {
-        SortedList childList;
+        static SortedList childList;
+        childList.list.clear();
         for (uint8_t cItr = 0; cItr < 8; cItr++)
           if (block->childPtr[cItr])
           {

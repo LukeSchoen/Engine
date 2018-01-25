@@ -62,6 +62,7 @@
     <ClCompile Include="src\GPix.cpp" />
     <ClCompile Include="src\Grass.cpp" />
     <ClCompile Include="src\Insight.cpp" />
+    <ClCompile Include="src\JamesBot.cpp" />
     <ClCompile Include="src\LogicMonday.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MarchingCubes.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="src\EntityModel.h" />
     <ClInclude Include="src\GPix.h" />
     <ClInclude Include="src\Grass.h" />
+    <ClInclude Include="src\JamesBot.h" />
     <ClInclude Include="src\MarchingCubes.h" />
     <ClInclude Include="src\MergeSort.h" />
     <ClInclude Include="src\ModelView.h" />

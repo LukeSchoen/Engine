@@ -24,6 +24,7 @@ void Zelda()
 #ifdef _DEBUG
   Window window("Game", true, 640, 480, false); // Create Debug Game Window
 #else
+  //Window window("Game", true, 640, 480, false); // Create Debug Game Window
   Window window("Game", true, 1920, 1080, true); // Create Game Window
 #endif
 
@@ -31,7 +32,7 @@ void Zelda()
   Controls::SetMouseLock(true);
 
   mat4 projectionMat;
-  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 20.0f, 20000.0f);
+  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 0.1f, 20000.0f);
 
   PolyModel skybox;
   skybox.LoadModel(ASSETDIR "skybox/skybox.obj");
@@ -39,13 +40,13 @@ void Zelda()
   window.Swap();
   PolyModel hyruleColorModel, hyruleLightModel;
 
-  //hyruleColorModel.LoadModel(ASSETDIR "zelda/Hyrule/Color/Hyrule.obj");
-  //hyruleLightModel.LoadModel(ASSETDIR "zelda/Hyrule/Light/Hyrule.obj");
+  hyruleColorModel.LoadModel(ASSETDIR "zelda/Hyrule/Color/Hyrule.obj");
+  hyruleLightModel.LoadModel(ASSETDIR "zelda/Hyrule/Light/Hyrule.obj");
 
   //Audio::PlayMP3(ASSETDIR "Halo/Journal.mp3", 1000, "Journal", true);
 
-  hyruleColorModel.LoadModel(ASSETDIR "Halo/Bridge/Color/Color.obj");
-  hyruleLightModel.LoadModel(ASSETDIR "Halo/Bridge/Light/Light.obj");
+  //hyruleColorModel.LoadModel(ASSETDIR "Halo/Bridge/Color/Color.obj");
+  //hyruleLightModel.LoadModel(ASSETDIR "Halo/Bridge/Light/Light.obj");
 
   PolyMesh hyruleCollisionMesh;
 
@@ -112,7 +113,9 @@ void Zelda()
 
     // Create Hyrule color buffer
     float useDetail = 1;
-    if (!Controls::KeyDown(SDL_SCANCODE_1)) useDetail = 0;
+
+    //if (!Controls::KeyDown(SDL_SCANCODE_1)) useDetail = 0;
+
     hyruleColorModel.GetMeshData(&meshCount, &meshes); for (int m = 0; m < meshCount; m++) meshes[m].AssignUniform("useDetail", UT_1f, &useDetail);
     hyruleColorBuffer.Render(MVP);
 

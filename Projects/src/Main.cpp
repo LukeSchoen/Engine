@@ -22,16 +22,18 @@
 #include "WireWars.h"
 #include "BioMorphs.h"
 #include "SimpleUD.h"
+#include "JamesBot.h"
 
 void main() // console entry
 {
+  //JamesBot();
   //WireWars();
   //Lua();
   //Grass();
   //PixeLife();
   //DLux();
   //Pokemon();
-  BTCBot();
+  //BTCBot();
   //SimpleUD();
   //SecondStream();
   //StreamTest();

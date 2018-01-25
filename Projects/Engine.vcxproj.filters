@@ -287,6 +287,9 @@
     <ClCompile Include="src\SoftText.cpp">
       <Filter>Projects\BTCBot\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\JamesBot.cpp">
+      <Filter>Projects\JamesBot</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -656,6 +659,9 @@
     <ClInclude Include="src\Pre.h">
       <Filter>Engine\Pre</Filter>
     </ClInclude>
+    <ClInclude Include="src\JamesBot.h">
+      <Filter>Projects\JamesBot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -936,6 +942,9 @@
     </Filter>
     <Filter Include="Engine\Pre">
       <UniqueIdentifier>{b44bf2bd-2950-4376-9e51-e7fcdc1dfa78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\JamesBot">
+      <UniqueIdentifier>{bd65067e-83ed-4bbc-b400-6eb58bfe3ef7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
