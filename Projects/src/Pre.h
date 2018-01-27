@@ -99,7 +99,9 @@ public: static std::vector<int> Predict(const std::vector<int> &examples, int pr
 
     PreProgram bot;
     int c = 0;
-    while(true)
+    int64_t maxSeachSize = 10000;
+    int64_t seachSize = 0;
+    while(seachSize++ < maxSeachSize)
     {
       c++;
       bot.Generate(rand() % botBrainSize + 1);
@@ -144,6 +146,7 @@ public: static std::vector<int> Predict(const std::vector<int> &examples, int pr
         return prediction;
       }
     }
+    return {0, 0};
   }
 };
 

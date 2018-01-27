@@ -62,7 +62,6 @@
     <ClCompile Include="src\GPix.cpp" />
     <ClCompile Include="src\Grass.cpp" />
     <ClCompile Include="src\Insight.cpp" />
-    <ClCompile Include="src\JamesBot.cpp" />
     <ClCompile Include="src\LogicMonday.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MarchingCubes.cpp" />
@@ -115,6 +114,7 @@
     <ClCompile Include="src\Sims.cpp" />
     <ClCompile Include="src\SoftButton.cpp" />
     <ClCompile Include="src\SoftGraph.cpp" />
+    <ClCompile Include="src\SoftLine.cpp" />
     <ClCompile Include="src\SoftObject.cpp" />
     <ClCompile Include="src\SoftText.cpp" />
     <ClCompile Include="src\StreamTest.cpp" />
@@ -147,7 +147,6 @@
     <ClInclude Include="src\EntityModel.h" />
     <ClInclude Include="src\GPix.h" />
     <ClInclude Include="src\Grass.h" />
-    <ClInclude Include="src\JamesBot.h" />
     <ClInclude Include="src\MarchingCubes.h" />
     <ClInclude Include="src\MergeSort.h" />
     <ClInclude Include="src\ModelView.h" />
@@ -240,6 +239,7 @@
     <ClInclude Include="src\Sims.h" />
     <ClInclude Include="src\SoftButton.h" />
     <ClInclude Include="src\SoftGraph.h" />
+    <ClInclude Include="src\SoftLine.h" />
     <ClInclude Include="src\SoftObject.h" />
     <ClInclude Include="src\softText.h" />
     <ClInclude Include="src\Sol.hpp" />

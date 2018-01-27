@@ -11,41 +11,44 @@
 
 void BTCBot()
 {
-  // Load Prices
-  std::vector<int> priceInCents;
-  int64_t fileLen;
-  StreamFileReader reader("C:/temp/btc_history.x", &fileLen);
-  std::string file((char*)reader.ReadToEnd(), fileLen);
-  const char *ptr = file.c_str();
-  while (true)
+  if (false)
   {
-    int val = atoi(ptr);
-    priceInCents.push_back(val);
-    while (*ptr != '\n' && *ptr != NULL) ptr++;
-    if(*ptr == NULL) break;
-    ptr++;
-  }
+    // Load Prices
+    std::vector<int> priceInCents;
+    int64_t fileLen;
+    StreamFileReader reader("C:/temp/btc_history.x", &fileLen);
+    std::string file((char*)reader.ReadToEnd(), fileLen);
+    const char *ptr = file.c_str();
+    while (true)
+    {
+      int val = atoi(ptr);
+      priceInCents.push_back(val);
+      while (*ptr != '\n' && *ptr != NULL) ptr++;
+      if(*ptr == NULL) break;
+      ptr++;
+    }
 
-  // Normalize Inputs
-  int start = priceInCents[0]; for (auto & item : priceInCents) item -= start; // offset from start
-  for (auto & item : priceInCents) item /= 500; // rescale
-  for (int64_t i = 0; i < priceInCents.size() - 1; i++) if (priceInCents[i] == priceInCents[i + 1]) priceInCents.erase(priceInCents.begin() + i--); // Remove duplicates
+    // Normalize Inputs
+    int start = priceInCents[0]; for (auto & item : priceInCents) item -= start; // offset from start
+    for (auto & item : priceInCents) item /= 500; // rescale
+    for (int64_t i = 0; i < priceInCents.size() - 1; i++) if (priceInCents[i] == priceInCents[i + 1]) priceInCents.erase(priceInCents.begin() + i--); // Remove duplicates
 
-  std::vector<int> predictedCents;
-  for (int64_t p = 0; p < 64; p++)
-  {
-    // Create some inputs
-    std::vector<int> input; for (int i = 0; i < 2; i++) input.push_back(priceInCents[i + p]);
-    auto ret = Pre::Predict(input, std::max((int)input.size(), 8), 32);
-    predictedCents.push_back(ret[0] + input[0]);
-  }
+    std::vector<int> predictedCents;
+    for (int64_t p = 0; p < 64; p++)
+    {
+      // Create some inputs
+      std::vector<int> input; for (int i = 0; i < 3; i++) input.push_back(priceInCents[i + p]);
+      auto ret = Pre::Predict(input, std::max((int)input.size(), 8), 32);
+      predictedCents.push_back(ret[0] + input[0]);
+    }
   
-  priceInCents;
-  predictedCents;
+    priceInCents;
+    predictedCents;
 
-  getchar();
+    getchar();
+  }
 
-  Window window("BTCBOT", false, 800, 400);
+  Window window("BTCBOT", false, 1200, 400);
   SoftText text(&window);
 
   std::string apiKey = "28d20390-2427-40b0-8b9d-5567831194cd";
@@ -58,14 +61,21 @@ void BTCBot()
   SoftButton shortButton("DN", &window, 40, 230, 128, 32, 0x999999, 0x221111);
   SoftButton exitButton("EXIT", &window, 180, 250, 128, 32, 0x999999, 0x111122);
 
-  //SoftGraph priceGraph("", &window, 300, 100, 200, 200, 0xffffff, 0x888888);
+  SoftGraph priceGraph("", &window, 300, 16, 400, 365, 0xffffff, 0x222222);
+  SoftGraph predictionGraph("", &window, 300 + priceGraph.m_width + 20, 16, 400, 365, 0xffffff, 0x222222);
 
   int64_t startingBalance = 0;
+
+  int64_t okexUpdateStep = 0;
+  int64_t okexUpdateTime = 50;
 
   while (Controls::Update())
   {
     window.Clear();
-    okex.Update();
+    bool newData = okexUpdateStep++ == 0;
+    if (okexUpdateStep >= okexUpdateTime) okexUpdateStep = 0;
+
+    if (newData) okex.Update();
 
     // Prices, balances and orders
     if (okex.started)
@@ -73,8 +83,8 @@ void BTCBot()
       text.DrawText("Price", 0xFFDF00, 60, 25, 1);
       text.DrawPriceUSD(okex.currentPrice, 0xFFDF00, 0x884800, 30, 45, 2);
 
-      text.DrawText("Balance", 0x008000, 60, 320, 1);
-      text.DrawPriceBTC(okex.currentBalance, 0x008000, 0x004000, 30, 340, 2);
+      text.DrawText("Balance", 0x00FF00, 60, 320, 1);
+      text.DrawPriceBTC(okex.currentBalance, 0x00FF00, 0x008800, 30, 340, 2);
       if (okex.activeOrders != 0)
       {
         if (exitButton.Update()) okex.CloseOrders();
@@ -103,7 +113,40 @@ void BTCBot()
       }
 
       // Draw Price Graph
-      //priceGraph.Update();
+      static std::vector<int64_t> priceList;
+      static int64_t itemNum = 0;
+      priceList.clear();
+      for(auto & item : okex.m_tradeHistory)
+        priceList.push_back(item.price);
+      priceGraph.SetValueList(&priceList);
+      priceGraph.Update();
+
+      static std::vector<int64_t> predictions64;
+      // Predict Price
+      if (newData)
+      {
+        predictions64.clear();
+
+        // Load Prices
+        std::vector<int> priceInCents;
+        for (auto & item : priceList) priceInCents.emplace_back(item);
+
+        // Normalize Inputs
+        for (auto & item : priceInCents) item /= 400; // rescale
+        for (int64_t i = 0; i < priceInCents.size() - 1; i++) if (priceInCents[i] == priceInCents[i + 1]) priceInCents.erase(priceInCents.begin() + i--); // Remove duplicates
+
+        if (priceInCents.size() > 3) priceInCents.erase(priceInCents.begin(), priceInCents.begin() + priceInCents.size() - 3);
+
+        int start = priceInCents[0]; for (auto & item : priceInCents) item -= start; // offset from start
+
+        printf("--------\n");
+        for (auto & item : priceInCents) printf("%d\n", item);
+
+        auto predictions = Pre::Predict(priceInCents, 5, 32);
+        for (auto item : predictions) predictions64.emplace_back(item);
+        predictionGraph.SetValueList(&predictions64);
+      }
+      predictionGraph.Update();
 
       // Print Price
       /*static bool started = false;
@@ -128,6 +171,6 @@ void BTCBot()
     }
 
     window.Swap();
-    Sleep(50);
+    Sleep(5);
   }
 }

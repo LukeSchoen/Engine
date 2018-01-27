@@ -22,7 +22,6 @@
 #include "WireWars.h"
 #include "BioMorphs.h"
 #include "SimpleUD.h"
-#include "JamesBot.h"
 
 void main() // console entry
 {
@@ -33,7 +32,7 @@ void main() // console entry
   //PixeLife();
   //DLux();
   //Pokemon();
-  //BTCBot();
+  BTCBot();
   //SimpleUD();
   //SecondStream();
   //StreamTest();

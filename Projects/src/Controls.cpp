@@ -62,6 +62,13 @@ void Controls::SetMouseLock(bool lock)
   SDL_SetRelativeMouseMode(lock ? SDL_TRUE : SDL_FALSE);
 }
 
+int Controls::GetMouseScroll()
+{
+  int scroll = mouseScroll;
+  mouseScroll = 0;
+  return scroll;
+}
+
 vec2 Controls::GetController2DAxis(int axisID /*= 0*/, int gameController /*= 0*/)
 {
   if (gameController >= controllers.gamePadCount) return vec2(); // Make sure controller is attached

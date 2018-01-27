@@ -22,22 +22,23 @@ void ThreadedUpdate(Okex *okex)
   okex->currentPrice = FetchCurrentPrice(okex, &lastTrade.dateTime);
   // Log price
   time_t lastPrice = lastTrade.price;
-  if (okex->currentPrice != lastPrice)
+  //if (okex->currentPrice != lastPrice)
   {
     lastTrade.price = okex->currentPrice;
     okex->m_tradeHistory.push_back(lastTrade);
+    while (okex->m_tradeHistory.size() > 256)
+      okex->m_tradeHistory.erase(okex->m_tradeHistory.begin());
   }
-  if (okex->started) Sleep(500);
 
   // Balance
-  okex->currentBalance = FetchCurrentBalance(okex);
-  if (okex->started) Sleep(500);
+  //okex->currentBalance = FetchCurrentBalance(okex);
+  //if (okex->started) Sleep(500);
 
   // Active Orders
-  int64_t avgPrice;
-  okex->activeOrders = FetchOrderStatus(okex, &avgPrice);
-  okex->activeOrderAvgPrice = avgPrice;
-  if (okex->started) Sleep(500);
+  //int64_t avgPrice;
+  //okex->activeOrders = FetchOrderStatus(okex, &avgPrice);
+  //okex->activeOrderAvgPrice = avgPrice;
+  //if (okex->started) Sleep(500);
 
   okex->started = true;
   okex->ready = true;

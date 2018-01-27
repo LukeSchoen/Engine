@@ -20,6 +20,8 @@ struct Controls
 
   static void SetMouseLock(bool lock);
 
+  static int GetMouseScroll();
+
   static vec2 GetController2DAxis(int axisID = 0, int gameController = 0);
 
   static bool GetControllerButton(int button = 0, int gameController = 0);

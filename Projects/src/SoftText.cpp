@@ -68,7 +68,13 @@ void SoftText::DrawText(const char *text, uint32_t col, int xpos, int ypos, int 
           if (img[(ix * 8 + x) + (iy * 8 + y) * 256] == 0xFFFFFFFF)
             for (int sy = 0; sy < size; sy++)
               for (int sx = 0; sx < size; sx++)
-                win->pixels[(xpos + (x)* size + sx) + (ypos + (y)* size + sy) * win->width] = col;
+              {
+                int px = (xpos + (x)* size + sx);
+                int py = (ypos + (y)* size + sy);
+                if(px >= 0 && py >= 0 && px < win->width && py < win->height)
+                  win->pixels[px + py * win->width] = col;
+              }
+
     if (text[c] == '\n')
       ypos += 8 * size;
     xpos += 8 * size;
