@@ -24,7 +24,9 @@ void SoftGraph::Update()
   zoomedValueList.clear();
   if (m_valueList)
   {
-    for (int64_t i = Max(m_valueList->size() - int(m_zoom), 0); i < m_valueList->size(); i++)
+    int64_t start = Max(int64_t(m_valueList->size()) - int64_t(m_zoom), 0);
+    int64_t finish = m_valueList->size();
+    for (int64_t i = start; i < finish; i++)
     {
       m_zoom = m_zoom;
       zoomedValueList.push_back((*m_valueList)[i]);
@@ -108,16 +110,18 @@ void SoftGraph::Update()
       int scroll = Controls::GetMouseScroll();
       while (scroll < 0)
       {
-        m_targetZoom * 1.25;
+        m_targetZoom *= 1.1;
+        if (m_targetZoom > 256.0f) m_targetZoom = 256.0f;
         scroll++;
       }
       while (scroll > 0)
       {
-        m_targetZoom * 0.75;
+        m_targetZoom *= 0.9;
+        if (m_targetZoom < 8.0f) m_targetZoom = 8.0f;
         scroll--;
       }
     }
-    m_zoom = m_zoom * 9 + m_targetZoom;
+    m_zoom = (m_zoom * 4 + m_targetZoom) * 0.2;
   }
 
   // Border

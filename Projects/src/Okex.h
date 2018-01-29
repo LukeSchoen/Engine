@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "net\http\curl\okcoinapi.h"
+#include <mutex>
 
 class Trade
 {
@@ -42,6 +43,8 @@ public:
   OKCoinApi m_okex;
 
   std::vector<Trade> m_tradeHistory;
+
+  std::mutex m_lock;
 };
 
 #endif // Okex_h__

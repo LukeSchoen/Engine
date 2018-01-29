@@ -24,10 +24,12 @@ void ThreadedUpdate(Okex *okex)
   time_t lastPrice = lastTrade.price;
   //if (okex->currentPrice != lastPrice)
   {
+    okex->m_lock.lock();
     lastTrade.price = okex->currentPrice;
     okex->m_tradeHistory.push_back(lastTrade);
     while (okex->m_tradeHistory.size() > 256)
       okex->m_tradeHistory.erase(okex->m_tradeHistory.begin());
+    okex->m_lock.unlock();
   }
 
   // Balance

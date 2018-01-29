@@ -39,17 +39,17 @@ public:
       for (auto & i : instructions)
         switch (i)
         {
-          case SWAPAB: std::swap(a, b); break;
-          case COPYAB: b = a; break;
-          case AddBTA: a += b; break;
-          case SUBBFA: a -= b; break;
-          case MULBTA: a *= b; break;
-          case DIVBTA: a /= b > 0 ? b : 1; break;
-          case SETAT0: a = s ? 0 : a; break;
-          case SETAT1: a = s ? 1 : a; break;
-          case SETAT2: a = s ? 2 : a; break;
-          case SETAT3: a = s ? 3 : a; break;
-          default: break;
+        case SWAPAB: std::swap(a, b); break;
+        case COPYAB: b = a; break;
+        case AddBTA: a += b; break;
+        case SUBBFA: a -= b; break;
+        case MULBTA: a *= b; break;
+        case DIVBTA: a /= b > 0 ? b : 1; break;
+        case SETAT0: a = s ? 0 : a; break;
+        case SETAT1: a = s ? 1 : a; break;
+        case SETAT2: a = s ? 2 : a; break;
+        case SETAT3: a = s ? 3 : a; break;
+        default: break;
         }
       s = false;
       ret.push_back(a);
@@ -78,9 +78,26 @@ public:
   }
 };
 
+struct Prediction
+{
+  int value;
+  float likelyhood;
+};
+
+struct PredictionMoment
+{
+  std::vector<Prediction> distribution;
+};
+
+struct PredictionDistribution
+{
+  std::vector<PredictionMoment> moments;
+};
+
 class Pre
 {
-public: static std::vector<int> Predict(const std::vector<int> &examples, int predictionDepth = 1, int botBrainSize = 10)
+public:
+  static std::vector<int> SimplePredict(const std::vector<int> &examples, int predictionDepth = 1, int botPopulationSize = 100000, int botBrainSize = 10)
   {
     // Need
     // list of programs
@@ -99,9 +116,9 @@ public: static std::vector<int> Predict(const std::vector<int> &examples, int pr
 
     PreProgram bot;
     int c = 0;
-    int64_t maxSeachSize = 10000;
+    int64_t maxSeachSize = botPopulationSize;
     int64_t seachSize = 0;
-    while(seachSize++ < maxSeachSize)
+    while (seachSize++ < maxSeachSize)
     {
       c++;
       bot.Generate(rand() % botBrainSize + 1);
@@ -146,16 +163,101 @@ public: static std::vector<int> Predict(const std::vector<int> &examples, int pr
         return prediction;
       }
     }
-    return {0, 0};
+    return{ 0, 0 };
   }
+
+  static PredictionDistribution PredictDistribution(const std::vector<int> &examples, int predictionDepth = 1, int botPopulationSize = 100000, int botBrainSize = 10)
+  {
+    PredictionDistribution distribution;
+    distribution.moments.resize(predictionDepth);
+
+    PreProgram bot;
+
+    for (int i = 0; i < botPopulationSize; i++)
+    {
+      bot.Generate(rand() % botBrainSize + 1); // Create random bot
+      std::vector<int> botPattern = bot.Execute(examples.size() + predictionDepth); // Run random bot
+
+      float corelation = 0.0f; // correlate examples with bot pattern
+      for (int p = 1; p < examples.size(); p++) // (ignore first example as its normalised to be correct)
+      {
+        float example = examples[p];
+        float prediction = botPattern[p];
+        int diff = abs(prediction - example);
+        if (diff == 0)
+          corelation++;
+        else
+        corelation += 1.0 / (diff * diff * diff + 1);
+      }
+      for (int p = 0; p < predictionDepth; p++)
+      {
+        Prediction pre;
+        pre.likelyhood = corelation;
+        pre.value = botPattern[examples.size() + p];
+        distribution.moments[p].distribution.push_back(pre); // Store predictions weighted by corelation
+      }
+    }
+
+    // Normalize prediction quotients for each future moment
+    for (auto & moment : distribution.moments)
+    {
+      float sumLikelyhood = 0.f;
+      for (auto & prediction : moment.distribution) sumLikelyhood += prediction.likelyhood;
+      for (auto & prediction : moment.distribution) prediction.likelyhood /= sumLikelyhood;
+    }
+
+    // Combine identical result predictions
+    // --THIS IS A REALLY LAGGY CODE BLOCK--
+    //for (auto & moment : distribution.moments)
+    //{
+    //  for (int i = 0; i < moment.distribution.size() - 1; i++)
+    //  {
+    //    int val = moment.distribution[i].value;
+    //    for (int j = i + 1; j < moment.distribution.size(); j++)
+    //    {
+    //      if (moment.distribution[j].value == val)
+    //      {
+    //        moment.distribution[i].likelyhood += moment.distribution[j].likelyhood;
+    //        moment.distribution.erase(moment.distribution.begin() + j--);
+    //      }
+    //    }
+    //  }
+    //}
+
+//     // Drop junk predictions
+//     for (auto & moment : distribution.moments)
+//     {
+//       float average = 0;
+//       for (int i = 0; i < moment.distribution.size() - 1; i++)
+//       {
+//         average = moment.distribution[i].likelyhood;
+//       }
+//     }
+
+    return distribution;
+  };
+
+  static std::vector<int> PredictSequence(const std::vector<int> &examples, int predictionDepth = 1, int botPopulationSize = 100000, int botBrainSize = 10)
+  {
+    auto distribution = PredictDistribution(examples, predictionDepth, botPopulationSize, botBrainSize);
+    std::vector<int> prediction;
+    for (auto & item : distribution.moments)
+    {
+      int bestValue = 0;
+      float bestLikelyhood = 0;
+      for (auto & prediction : item.distribution)
+      {
+        if (prediction.likelyhood > bestLikelyhood)
+        {
+          bestLikelyhood = prediction.likelyhood;
+          bestValue = prediction.value;
+        }
+      }
+      bestLikelyhood = bestLikelyhood;
+      prediction.push_back(bestValue);
+    }
+    return prediction;
+  }
+
 };
-
-
-
-class MultiPre
-{
-
-};
-
-
 #endif // Pre_h__

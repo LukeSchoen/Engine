@@ -28,31 +28,132 @@ void BTCBot()
       ptr++;
     }
 
-    // Normalize Inputs
-    int start = priceInCents[0]; for (auto & item : priceInCents) item -= start; // offset from start
-    for (auto & item : priceInCents) item /= 500; // rescale
-    for (int64_t i = 0; i < priceInCents.size() - 1; i++) if (priceInCents[i] == priceInCents[i + 1]) priceInCents.erase(priceInCents.begin() + i--); // Remove duplicates
 
-    std::vector<int> predictedCents;
-    for (int64_t p = 0; p < 64; p++)
+    priceInCents.pop_back();
+
+    float usd = 100;
+    float btc = 0;
+    int lastPrice = priceInCents[0];
+    int trades = 0;
+    bool buyMode = true;
+    int goods = 0;
+    int bads = 0;
+    int gppdsThreshold = 15;
+    for (auto item : priceInCents)
     {
-      // Create some inputs
-      std::vector<int> input; for (int i = 0; i < 3; i++) input.push_back(priceInCents[i + p]);
-      auto ret = Pre::Predict(input, std::max((int)input.size(), 8), 32);
-      predictedCents.push_back(ret[0] + input[0]);
+      float percentChange = item != lastPrice ? percentChange = ((item / (lastPrice + 0.0f))-1) * 100.0f : 0.0f;
+
+      if (buyMode)
+      {
+        if (percentChange < 0)
+        {
+          goods++;
+          bads = 0;
+        }
+        else
+        {
+          bads++;
+          goods = 0;
+        }
+
+        if (goods > gppdsThreshold)
+        {
+          btc = usd / (item / 100);
+          usd = 0;
+          buyMode = 1 - buyMode;
+          lastPrice = item;
+          trades++;
+        }
+
+      }
+      else if(!buyMode )//&& percentChange > threshold)
+      {
+        if (percentChange > 0)
+        {
+          goods++;
+          bads = 0;
+        }
+        else
+        {
+          bads++;
+          goods = 0;
+        }
+
+
+        if (goods > gppdsThreshold)
+        {
+          usd = btc * (item / 100);
+          btc = 0;
+          buyMode = 1 - buyMode;
+          lastPrice = item;
+          trades++;
+        }
+
+      }
     }
+
+
+//     float usd = 100;
+//     float btc = 0;
+//     float threshold = 5;
+//     int lastPrice = priceInCents[0];
+//     int trades = 0;
+//     bool buyMode = true;
+//     for (auto item : priceInCents)
+//     {
+//       float percentChange = 0;
+//       if (item != lastPrice)
+//         percentChange = ((item / (lastPrice + 0.0f)) - 1) * 100.0f;
+// 
+//       if (buyMode)//&& percentChange < 0 - threshold)
+//       {
+//         btc = usd / (item / 100);
+//         usd = 0;
+//         buyMode = 1 - buyMode;
+//         lastPrice = item;
+//         trades++;
+//       }
+//       else if (!buyMode)//&& percentChange > threshold)
+//       {
+//         usd = btc * (item / 100);
+//         btc = 0;
+//         buyMode = 1 - buyMode;
+//         lastPrice = item;
+//         trades++;
+//       }
+//     }
+
+    printf("%d trades\n", trades);
+    printf("%f usd\n", std::max(usd, btc * 0.01f * priceInCents[priceInCents.size() - 1]));
+
+    //// Normalize Inputs
+    //int start = priceInCents[0]; for (auto & item : priceInCents) item -= start; // offset from start
+    //for (auto & item : priceInCents) item /= 500; // rescale
+    //for (int64_t i = 0; i < priceInCents.size() - 1; i++) if (priceInCents[i] == priceInCents[i + 1]) priceInCents.erase(priceInCents.begin() + i--); // Remove duplicates
+
+    //std::vector<int> predictedCents;
+    //for (int64_t p = 0; p < 256; p++)
+    //{
+    //  // Create some inputs
+    //  std::vector<int> input; for (int i = 0; i < 3; i++) input.push_back(priceInCents[i + p]);
+    //  auto ret = Pre::SimplePredict(input, std::max((int)input.size(), 8), 32);
+    //  predictedCents.push_back(ret[0] + input[0]);
+    //}
   
-    priceInCents;
-    predictedCents;
+    //priceInCents;
+    //predictedCents;
 
     getchar();
+    exit(0);
   }
+
+
 
   Window window("BTCBOT", false, 1200, 400);
   SoftText text(&window);
 
   std::string apiKey = "28d20390-2427-40b0-8b9d-5567831194cd";
-  std::string secretKey = "7678A929B5050DBE82325B342383657D";
+  std::string secretKey = "7678A929B5050DBE82325B34238365D7"; // swap
   Okex okex(apiKey, secretKey, true);
 
   SoftObject a("UP", &window, 40, 115, 128, 32, 0x999999, 0x112211);
@@ -116,8 +217,10 @@ void BTCBot()
       static std::vector<int64_t> priceList;
       static int64_t itemNum = 0;
       priceList.clear();
+      okex.m_lock.lock();
       for(auto & item : okex.m_tradeHistory)
         priceList.push_back(item.price);
+      okex.m_lock.unlock();
       priceGraph.SetValueList(&priceList);
       priceGraph.Update();
 
@@ -135,14 +238,14 @@ void BTCBot()
         for (auto & item : priceInCents) item /= 400; // rescale
         for (int64_t i = 0; i < priceInCents.size() - 1; i++) if (priceInCents[i] == priceInCents[i + 1]) priceInCents.erase(priceInCents.begin() + i--); // Remove duplicates
 
-        if (priceInCents.size() > 3) priceInCents.erase(priceInCents.begin(), priceInCents.begin() + priceInCents.size() - 3);
+        if (priceInCents.size() > 5) priceInCents.erase(priceInCents.begin(), priceInCents.begin() + priceInCents.size() - 5);
 
         int start = priceInCents[0]; for (auto & item : priceInCents) item -= start; // offset from start
 
         printf("--------\n");
         for (auto & item : priceInCents) printf("%d\n", item);
 
-        auto predictions = Pre::Predict(priceInCents, 5, 32);
+        auto predictions = Pre::PredictSequence(priceInCents, 5, 1000, 32);
         for (auto item : predictions) predictions64.emplace_back(item);
         predictionGraph.SetValueList(&predictions64);
       }
