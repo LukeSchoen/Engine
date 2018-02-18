@@ -313,15 +313,21 @@ int64_t OKCoinApi::FuturePrice(string &symbol, string &contract_type, int64_t *C
       ret = ret.substr(0, ret.find("\""));
       *CurrentPriceTime = atoll(ret.c_str());
     }
-
     ret = ret.substr(lastPtr + 6);
     ret = ret.substr(0, ret.find(","));
+
     int dotPtr = ret.find(".");
     std::string dollars = ret.substr(0, dotPtr);
+    int64_t d = stoi(dollars);
+    if (dotPtr != -1)
+    {
     std::string cents = ret.substr(dotPtr + 1);
     if (cents.length() == 1) cents += "0";
-    ret = dollars + cents;
-    return stoi(ret);
+    int64_t c = stoi(cents);
+    return d * 100 + c;
+    }
+    return d * 100;
+
   }
 }
 string OKCoinApi::DoFuture_Depth(string &symbol, string &contract_type, string &size, string &merge)	//GET /api/v1/future_depth				获取OKCoin期货深度信息

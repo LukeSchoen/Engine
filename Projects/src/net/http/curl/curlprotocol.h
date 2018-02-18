@@ -88,7 +88,7 @@ const enum HTTP_PROTOCL_TYPE
 
 #define URL_MAIN_COM						"https://www.okcoin.com"
 #define URL_PROTOCOL_COM					"https://"
-#define URL_DOMAIN_COM						"www.okcoin.com"
+#define URL_DOMAIN_COM						"www.okex.com"
 
 
 //现货行情 API
