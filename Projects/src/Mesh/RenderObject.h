@@ -31,6 +31,7 @@ public:
   void DeSerialize(char *data, int *pLength = nullptr);
 
   void Render(const Matrix4x4 &MVP, int firstVertex = 0, int vertCount = INT_MAX);
+  void RenderLines(const Matrix4x4 &MVP);
   void RenderPoints(const Matrix4x4 &MVP);
 
   void Clear();

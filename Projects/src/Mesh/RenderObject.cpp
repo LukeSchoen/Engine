@@ -354,6 +354,18 @@ void RenderObject::Render(const Matrix4x4 &MVP, int firstVertex, int vertCount)
   FrameRate::AddDraw(vertexCount / 3); // Report Tris
 }
 
+void RenderObject::RenderLines(const Matrix4x4 &MVP)
+{
+  AssignUniform("MVP", UT_mat4fv, &MVP); // Specify Model View Projection
+  UploadToGPU(); // Upload Geometry
+  BindShaders(); // Bind Shader Programs
+  BindUniforms(); // Bind Shader Uniforms
+  BindTextures(); // Bind Shader Textures
+  BindAttributes(); // Bind Vertex Attributes
+  glDrawArrays(GL_LINES, 0, vertexCount); // Render
+  FrameRate::AddDraw(vertexCount); // Report Points
+}
+
 void RenderObject::RenderPoints(const Matrix4x4 &MVP)
 {
   AssignUniform("MVP", UT_mat4fv, &MVP); // Specify Model View Projection
