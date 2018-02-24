@@ -22,8 +22,8 @@
 
 void main() // console entry
 {
-  Substance();
-  //NovaCosm();
+  //Substance();
+  NovaCosm();
   //Simple();
   //Reductio();
   //Grass();

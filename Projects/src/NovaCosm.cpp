@@ -59,7 +59,7 @@ void NovaCosm()
 
   //NovaCosmModel model("D:/temp/CarrickHill.ncs");
   //NovaCosmModel model("C:/temp/map.ncs");
-  NovaCosmModel model("D:/temp/Colledge.ncs");
+  NovaCosmModel model("F:/temp/Colledge.ncs");
 
   Controls::SetMouseLock(true);
 

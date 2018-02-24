@@ -6,8 +6,11 @@
 #include "RenderObject.h"
 #include "Assets.h"
 #include "CustomRenderObjects.h"
+#include <tuple>
 #include <time.h>
 #include <algorithm>
+#include "MolecualrDynamicsSimulator.h"
+#include <utility>
 
 struct Material
 {
@@ -35,9 +38,9 @@ struct Connection
   int o;
 };
 
-const static Material adminium({ 0.7 ,0.7, 0.7 }, false, false, false, 0.0, 1.0f);
-const static Material wood({ 0.7 ,0.5, 0.2 }, true, true, false, 1.0f, 1.0f);
-const static Material water({ 0.0 ,0.0, 1.0 }, true, true, true, 1.0f, 0.1f);
+const static Material adminium({ 0.7f, 0.7f, 0.7f }, false, false, false, 0.0, 1.0f);
+const static Material wood({ 0.7f, 0.5f, 0.2f }, true, true, false, 1.0f, 1.0f);
+const static Material water({ 0.0f, 0.0f, 1.0f }, true, true, true, 1.0f, 0.1f);
 
 std::vector<vec3> posData;
 std::vector<vec3> colData;
@@ -49,7 +52,6 @@ std::vector<Connection> connections;
 RenderObject mesh;
 
 RenderObject* lines = nullptr;
-
 
 float strength = 0.5;
 float bounce = 0.5;
@@ -175,6 +177,18 @@ void AddGearSet(vec3 pos)
   AddGear(pos + vec3(40 - 33.6, 1.2, 0), 10, 3);
 }
 
+void AddCup(vec3 pos, int size = 10)
+{
+  int floorRadius = size;
+  int floorThickness = 2 + size / 4;
+
+  AddCylinder(pos + vec3(7, 23, 7), size, size);
+  AddDisc(pos + vec3(7, 20, 7), size, size/4);
+  AddBox(pos + vec3(7 - 3, floorThickness, 7 - 3), vec3(size/2, size, size/2));
+  AddDisc(pos + vec3(7, 0, 7), size, floorThickness);
+  //AddWater(pos + vec3(0, 24, 0), vec3(15, 75, 15));
+}
+
 void AmbientOcclusion()
 {
   for (int64_t p = 0; p < posData.size(); p++)
@@ -216,6 +230,10 @@ void CalculateConection(int p, int o)
       momData[o] = momData[o] - dir * (bounceRange + 1 - dist)*strength * bounce * momentum;
     }
   }
+
+//   posData[p] = posData[p] + dir * (bounceRange + 1 - dist)*strength * bounce;
+//   posData[p] = posData[p] + dir * (1 - dist)*strength;
+
 
   // bonding
   if (dist < 1 + bondRange)
@@ -285,7 +303,7 @@ void ExtractConnections()
         //    connections.push_back({ p, o });
         //}
         //else
-          connections.push_back({ p, o });
+        connections.push_back({ p, o });
 
         if (dist < 1.0)
         {
@@ -323,13 +341,14 @@ void Start()
   // Wine
   if (true)
   {
-    AddCylinder(vec3(32, 23, 32), 32, 15);
+    AddCup(vec3(1, 1, 1), 20);
+
+    /*AddCylinder(vec3(32, 23, 32), 32, 15);
     AddDisc(vec3(32, 20, 32), 32, 3);
     AddBox(vec3(32 - 3, 5, 32 - 3), vec3(7, 15, 7));
     AddDisc(vec3(32, 0, 32), 32, 5);
-    AddWater(vec3(25, 24, 25), vec3(15, 75, 15));
+    AddWater(vec3(25, 24, 25), vec3(15, 75, 15));*/
   }
-
 
   //Gears
   if (false)
@@ -362,9 +381,9 @@ void Start()
   }
 
   // swinging ball
-  if (false)
+  if (true)
   {
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 1; i++)
     {
       vec3 off(i * 10, 0, 0);
       AddVoxel(off + vec3(32 + 5, 42 + 30, 32 + 5), vec3(1.0, 1.0, 1.0), vec3(), 0);
@@ -378,11 +397,11 @@ void Start()
   {
     AddPaddle({ 4,0,0 });
     AddPaddle({ 33,0,0 });
-    AddBox(vec3(38, 50, 10), { 1,30,10 }, adminium);
-    AddBox(vec3(20, 50, 10), { 1,30,10 }, adminium);
-    AddBox(vec3(20, 50, 9), { 19,30,1 }, adminium);
-    AddBox(vec3(20, 50, 20), { 19,30,1 }, adminium);
-    AddBox(vec3(20, 80, 10), { 19,1,10 }, adminium);
+    //AddBox(vec3(38, 50, 10), { 1,30,10 }, adminium);
+    //AddBox(vec3(20, 50, 10), { 1,30,10 }, adminium);
+    //AddBox(vec3(20, 50, 9), { 19,30,1 }, adminium);
+    //AddBox(vec3(20, 50, 20), { 19,30,1 }, adminium);
+    //AddBox(vec3(20, 80, 10), { 19,1,10 }, adminium);
   }
 
   AmbientOcclusion();
@@ -397,10 +416,109 @@ void SimulateParticles()
   CalculateNextStep();
 }
 
+
+void Create(MolecularDynamicsSimulator *pCreation)
+{
+  pCreation->Clear();
+  std::vector<std::tuple<vec3, uint32_t>> points;
+  for (int z = 0; z < 10; z++)
+    for (int y = 0; y < 10; y++)
+      for (int x = 0; x < 10; x++)
+        points.emplace_back(vec3(x, y, z), 255);
+
+  //   points.emplace_back(vec3(0.2, 0.2, 0.2), 255);
+  //   points.emplace_back(vec3(0.0, 0.0, 0.0), 255);
+
+  //   for (int z = 1000; z < 1010; z++)
+  //     for (int x = 1000; x < 1010; x++)
+  //       points.emplace_back(vec3(x, 0, z), 255);
+
+  for (auto & point : points)
+    pCreation->AddPoint(point);
+  pCreation->Update();
+}
+
 void Substance()
 {
+  #ifdef _DEBUG
+    //Window window("Game", true, 800, 600, false);
+  #else
+    //Window window("Game", true, 1920, 1080, true);
+  #endif
+    Window window("Game", true, 800, 600, false);
+
+  glEnable(GL_PROGRAM_POINT_SIZE);
+  mesh.AssignShader(ASSETDIR "Substance/shaders/Substance.vert", ASSETDIR "Substance/shaders/Substance.frag");
+
+  mat4 projectionMat;
+  Controls::SetMouseLock(true);
+  
+  MolecularDynamicsSimulator creation;
+
+  Create(&creation);
+
+  Camera::SetPosition(vec3(51.4112930, -82.1524200, 48.1408844));
+  Camera::SetRotation(vec2(0.464999855, -2.35599828));
+
+  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 0.02, 8000.0f);
+
+  static bool thickMode = true;
+
+  while (Controls::Update())
+  {
+    window.Clear(0, 0, 0);
+
+    Camera::Update(50);
+    mat4 MVP;
+    mat4 modelMat;
+    mat4 viewMat = Camera::Matrix();
+    MVP = projectionMat * viewMat * modelMat;
+    MVP.Transpose();
+    std::vector<std::tuple<vec3, uint32_t>> points = creation.RequestPoints();
+
+    posData.clear();
+    colData.clear();
+    momData.clear();
+    masData.clear();
+    liqData.clear();
+    connections.clear();
+
+    for (int64_t i = 0; i < points.size(); i++)
+    {
+      uint32_t col = std::get<1>(points[i]);
+      uint8_t *rgb = (uint8_t *)&col;
+      AddVoxel(std::get<0>(points[i]), vec3(rgb[0] / 255.0, rgb[1] / 255.0, rgb[2] / 255.0));
+    }
+
+    RebuildMesh();
+
+    float pointSize = 0.25;
+    mesh.AssignUniform("size", UT_1f, &pointSize);
+
+    mesh.RenderPoints(MVP);
+
+    window.Swap();
+    FrameRate::Update();
+
+    creation.Update();
+    SDL_Delay(10);
+
+    if (Controls::KeyDown(SDL_SCANCODE_R))
+    {
+      Create(&creation);
+    }
+
+  }
+}
+
+void Substance2()
+{
+#ifdef _DEBUG
   //Window window("Game", true, 800, 600, false);
-  Window window("Game", true, 1920, 1080, true);
+#else
+  //Window window("Game", true, 1920, 1080, true);
+#endif
+  Window window("Game", true, 800, 600, false);
 
   Start();
   RebuildMesh();
@@ -437,7 +555,7 @@ void Substance()
     MVP = projectionMat * viewMat * modelMat;
     MVP.Transpose();
 
-    float pointSize = 0.5;
+    float pointSize = 0.25;
     if (thickMode)
       pointSize = 1.4;
     mesh.AssignUniform("size", UT_1f, &pointSize);
@@ -545,8 +663,15 @@ void Substance()
           }
         }
 
+        static bool FireWasDown = false;
+        if (FireWasDown && !Controls::GetRightClick())
+          ExtractConnections();
+        FireWasDown = Controls::GetRightClick();
+
         if (Controls::GetRightClick())
+        {
           AddVoxel(vec3() - Camera::Position() - Camera::Direction() * 4, vec3(1, 1, 0), vec3() - Camera::Direction());
+        }
 
         // Spawn water
 
@@ -559,9 +684,9 @@ void Substance()
             {
               //for (int y = 0; y < 4; y++)
               {
-              //AddWater(vec3(26, 40, 26), vec3(10, 5, 10));
-                //float brightness = (rand() / (0.0f + RAND_MAX)) * 0.5 + 0.5;
-                //AddVoxel(vec3(22 + x*2, 75, 11 + y*2), vec3(0.2, 0.4, 1.0) * brightness, vec3(0.01 * ((rand() / (0.0f + RAND_MAX)) * 2 - 1), -0.1, 0.01 * ((rand() / (0.0f + RAND_MAX)) * 2 - 1)), 1.0, true);
+                //AddWater(vec3(26, 40, 26), vec3(10, 5, 10));
+                  //float brightness = (rand() / (0.0f + RAND_MAX)) * 0.5 + 0.5;
+                  //AddVoxel(vec3(22 + x*2, 75, 11 + y*2), vec3(0.2, 0.4, 1.0) * brightness, vec3(0.01 * ((rand() / (0.0f + RAND_MAX)) * 2 - 1), -0.1, 0.01 * ((rand() / (0.0f + RAND_MAX)) * 2 - 1)), 1.0, true);
               }
             }
             //waterWave = 0;

@@ -257,6 +257,17 @@
     <ClCompile Include="src\Substance.cpp">
       <Filter>Projects\Substance</Filter>
     </ClCompile>
+    <ClCompile Include="src\MDSParticle.cpp">
+      <Filter>Projects\Substance</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MDSRegion.cpp">
+      <Filter>Projects\Substance</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MolecularDynamicSimulator.cpp">
+      <Filter>Projects\Substance</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MDSTask.cpp" />
+    <ClCompile Include="src\MolecualrDynamicsSimulator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -582,6 +593,18 @@
       <Filter>Projects\simple</Filter>
     </ClInclude>
     <ClInclude Include="src\Substance.h">
+      <Filter>Projects\Substance</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MolecualrDynamicsSimulator.h">
+      <Filter>Projects\Substance</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MDSRegion.h">
+      <Filter>Projects\Substance</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MDSTask.h">
+      <Filter>Projects\Substance</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MDSParticle.h">
       <Filter>Projects\Substance</Filter>
     </ClInclude>
   </ItemGroup>

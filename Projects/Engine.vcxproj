@@ -71,6 +71,9 @@
     <ClCompile Include="src\Math\Ray.cpp" />
     <ClCompile Include="src\Math\Sphere.cpp" />
     <ClCompile Include="src\Math\Triangle.cpp" />
+    <ClCompile Include="src\MDSParticle.cpp" />
+    <ClCompile Include="src\MDSRegion.cpp" />
+    <ClCompile Include="src\MDSTask.cpp" />
     <ClCompile Include="src\Mesh\AlphaRenderObject.cpp" />
     <ClCompile Include="src\Mesh\Assimp.cpp" />
     <ClCompile Include="src\Mesh\Buffer.cpp" />
@@ -84,6 +87,8 @@
     <ClCompile Include="src\Minecraft.cpp" />
     <ClCompile Include="src\BlockWorld.cpp" />
     <ClCompile Include="src\ModelView.cpp" />
+    <ClCompile Include="src\MolecualrDynamicsSimulator.cpp" />
+    <ClCompile Include="src\MolecularDynamicSimulator.cpp" />
     <ClCompile Include="src\NodeList.cpp" />
     <ClCompile Include="src\NovaCosm.cpp" />
     <ClCompile Include="src\NovaCosmModel.cpp" />
@@ -138,7 +143,11 @@
     <ClInclude Include="src\GPix.h" />
     <ClInclude Include="src\Grass.h" />
     <ClInclude Include="src\MarchingCubes.h" />
+    <ClInclude Include="src\MDSParticle.h" />
+    <ClInclude Include="src\MDSRegion.h" />
+    <ClInclude Include="src\MDSTask.h" />
     <ClInclude Include="src\ModelView.h" />
+    <ClInclude Include="src\MolecualrDynamicsSimulator.h" />
     <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\Cache.h" />
     <ClInclude Include="src\Camera.h" />
