@@ -4,9 +4,9 @@
 void MDSParticle::TimeStep(int64_t rPosX, int64_t rPosY, int64_t rPosZ)
 {
   // Step
-  int64_t x = rPosX * 256 + xPos + xNew + xMom;
-  int64_t y = rPosY * 256 + yPos + yNew + yMom;
-  int64_t z = rPosZ * 256 + zPos + zNew + zMom;
+  int64_t x = 256ll * rPosX + ((int64_t)xPos) + xNew + xMom;
+  int64_t y = 256ll * rPosY + ((int64_t)yPos) + yNew + yMom;
+  int64_t z = 256ll * rPosZ + ((int64_t)zPos) + zNew + zMom;
 
   // Gravity
   if (mass > 0)
@@ -60,9 +60,9 @@ void MDSParticle::Interact(MDSParticle &o)
 
   if (mass > 0)
   {
-    xPos += xoff;
-    yPos += yoff;
-    zPos += zoff;
+    xNew += xoff;
+    yNew += yoff;
+    zNew += zoff;
     xMom += xMomOff;
     yMom += yMomOff;
     zMom += zMomOff;
@@ -70,9 +70,9 @@ void MDSParticle::Interact(MDSParticle &o)
 
   if (o.mass > 0)
   {
-    o.xPos -= xoff;
-    o.yPos -= yoff;
-    o.zPos -= zoff;
+    o.xNew -= xoff;
+    o.yNew -= yoff;
+    o.zNew -= zoff;
     o.xMom -= xMomOff;
     o.yMom -= yMomOff;
     o.zMom -= zMomOff;
