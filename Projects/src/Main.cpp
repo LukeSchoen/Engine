@@ -19,11 +19,13 @@
 #include "reductio.h"
 #include "Simple.h"
 #include "Substance.h"
+#include "ParticleSim.h"
 
 void main() // console entry
 {
+  ParticleSim();
   //Substance();
-  NovaCosm();
+  //NovaCosm();
   //Simple();
   //Reductio();
   //Grass();

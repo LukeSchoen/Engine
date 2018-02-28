@@ -1,7 +1,6 @@
 #ifndef RenderObject_h__
 #define RenderObject_h__
 
-
 #define GLEW_STATIC
 #include <stdint.h>
 #include "Maths.h"
@@ -70,6 +69,5 @@ protected:
   bool uniformsUploaded = false;
   bool attributesUploaded = false;
 };
-
 
 #endif // RenderObject_h__

@@ -257,17 +257,30 @@
     <ClCompile Include="src\Substance.cpp">
       <Filter>Projects\Substance</Filter>
     </ClCompile>
-    <ClCompile Include="src\MDSParticle.cpp">
-      <Filter>Projects\Substance</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MDSRegion.cpp">
-      <Filter>Projects\Substance</Filter>
+    <ClCompile Include="src\ParticleSim.cpp">
+      <Filter>Projects\ParticleSim</Filter>
     </ClCompile>
     <ClCompile Include="src\MolecularDynamicSimulator.cpp">
-      <Filter>Projects\Substance</Filter>
+      <Filter>Projects\ParticleSim</Filter>
     </ClCompile>
-    <ClCompile Include="src\MDSTask.cpp" />
-    <ClCompile Include="src\MolecualrDynamicsSimulator.cpp" />
+    <ClCompile Include="src\MolecualrDynamicsSimulator.cpp">
+      <Filter>Projects\ParticleSim</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MDSTask.cpp">
+      <Filter>Projects\ParticleSim</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MDSParticle.cpp">
+      <Filter>Projects\ParticleSim</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MDSRegion.cpp">
+      <Filter>Projects\ParticleSim</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleSimulator.cpp">
+      <Filter>Projects\ParticleSim</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MagicaVoxels.cpp">
+      <Filter>Engine\MagicaVoxels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -595,17 +608,26 @@
     <ClInclude Include="src\Substance.h">
       <Filter>Projects\Substance</Filter>
     </ClInclude>
+    <ClInclude Include="src\ParticleSim.h">
+      <Filter>Projects\ParticleSim</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticleSimulator.h">
+      <Filter>Projects\ParticleSim</Filter>
+    </ClInclude>
     <ClInclude Include="src\MolecualrDynamicsSimulator.h">
-      <Filter>Projects\Substance</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MDSRegion.h">
-      <Filter>Projects\Substance</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MDSTask.h">
-      <Filter>Projects\Substance</Filter>
+      <Filter>Projects\ParticleSim</Filter>
     </ClInclude>
     <ClInclude Include="src\MDSParticle.h">
-      <Filter>Projects\Substance</Filter>
+      <Filter>Projects\ParticleSim</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MDSRegion.h">
+      <Filter>Projects\ParticleSim</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MDSTask.h">
+      <Filter>Projects\ParticleSim</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MagicaVoxels.h">
+      <Filter>Engine\MagicaVoxels</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -866,6 +888,12 @@
     </Filter>
     <Filter Include="Projects\Substance">
       <UniqueIdentifier>{26725f2f-9c54-4b4b-a172-45114f07a784}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\ParticleSim">
+      <UniqueIdentifier>{d6be7530-bec5-46e7-9d34-c43d5f4e6edb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\MagicaVoxels">
+      <UniqueIdentifier>{123e49eb-edcb-41cd-9700-459f7b6a93ef}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,5 +1,15 @@
 #include "Maths.h"
 
+vec3 s_unpackRGB(uint32_t c)
+{
+  return{ float((c >> 0) & 255) / 255.0f,float((c >> 8) & 255) / 255.0f, float((c >> 16) & 255) / 255.0f };
+}
+
+uint32_t s_packRGB(vec3 c)
+{
+  return uint8_t(c.x * 255) | (uint8_t(c.y * 255) << 8) | (uint8_t(c.z * 255) << 16) | (255 << 24);
+}
+
 float IntersectRaySphere(vec3 rayStart, vec3 rayDir, vec3 sphereCentre, float radius)
 {
   vec3 rayToSphere = sphereCentre - rayStart;

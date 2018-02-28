@@ -1,0 +1,127 @@
+layer(id = 'l_root' minSize = '100 100' fitSize = '1 1') ::
+{
+	hbox(id = 'sad') ::
+	{
+		hbox(def = 'bg' id = 'v_1') ::
+		{
+			vbox(def = 'bg' size = '12')
+	
+			ui = 'palette.ui'(size = '146' max = '600' flex = '-1')
+
+			sp(id = 'v_1_p' bgColor = '0 0 0 255' hidden = '1')(size = '1')
+		}
+
+		vbox(def = 'bg' id = 'v_1_h' hidden = '1')(size = '24' next = '1') ::
+		{
+			switch(class = 'view')(def = 'sw-view' view = [['v_1' 'v_1_h']] text = '\x1c' text2 = '\x1c' textSize = '10 14')(next = '4' size = '24')
+		}
+
+		vbox(def = 'bg' id = 'v_2_h' hidden = '1')(size = '24') ::
+		{
+			switch(class = 'view')(def = 'sw-view' view = [['v_2' 'v_2_h' 'v_1_p']] text = '\x1c' text2 = '\x1c' textSize = '10 14')(next = '4' size = '24')
+		}
+
+		hbox(def = 'bg' id = 'v_2' max = '244' flex = '-1') ::
+		{
+			layer(id = 'v_light' hidden = '1' size = '121' flex = '1' fitSize = '0 1') ::
+			{
+				hbox(align = '1') ::
+				{
+					sep(def = 'vsep' axis = '1' size = '2')
+					ui = 'light.ui'(size = '121')
+				}
+			}
+
+			layer(id = 'v_tool' size = '121' flex = '1' fitSize = '0 1') ::
+			{
+				hbox ::
+				{
+					ui = 'otool.ui'(flex = '1')
+				}
+				
+				hbox(id = 'v_brush' hidden = '1' align = '1') ::
+				{
+					sep(def = 'vsep' axis = '1' size = '2')
+					ui = 'mtool.ui'(size = '121' margin = '12 12 0 0')
+				}			
+			}
+		}
+
+		vbox(flex = '1' prev = '1' next = '1') ::
+		{
+			layer(fitSize = '0 1') ::
+			{
+				ui = 'upper.ui'
+			}
+
+			scene(id = 'scene' snap = '5' ruler = '0' cube = '1')(flex = '1' prev = '1' next = '1')
+			(hint = 'Rotate [RButton] : Move [MButton]')
+		
+			layer(fitSize = '0 1') ::
+			{	
+				ui = 'lower.ui'
+			}
+		}
+	
+		hbox(def = 'bg' id = 'v_3' max = '244' flex = '-1')::
+		{
+			layer(id = 'v_mtl' hidden = '1' size = '121' flex = '1') ::
+			{
+				hbox ::
+				{
+					ui = 'mtl.ui'(size = '121')
+					sep(def = 'vsep' axis = '1' size = '2')
+				}
+			}
+		
+			layer(id = 'v_edit' size = '121' flex = '1') ::
+			{
+				vbox ::
+				{
+					group(next = '4' size = '24')(margin = '12 12 0 0') ::
+					{	
+						switch(class = 'view')(def = 'sw-view' view = [['v_3' 'v_3_h' 'v_4_p']] selected = '1' text = 'Edit')
+				
+						hbox ::
+						{
+							resizer(class = 'hbox')(view = 'v_3' dir = '-1' size = '16' )
+						}
+					}
+				
+					hbox(size = '28')(margin = '12 12 0 0') ::
+					{
+						button(def = 'bn-save' id = 'undo' onClick = 'cmd undo' text = '\x15' textSize = '16 18' repeated = '1')(flex = '1' next = '1')(margin = '0 0 1 1' corner ='15')(hint = 'Undo [CTRL+Z]')
+						button(def = 'bn-save' id = 'redo' onClick = 'cmd redo' text = '\x16' textSize = '16 18' repeated = '1')(flex = '1')(margin = '0 0 1 1' corner ='15')(hint = 'Redo [CTRL+Y] : [CTRL+SHIFT+Z]')
+					}
+				
+					hbox(flex = '1') ::
+					{
+						ui = 'medit.ui'(size = '121' margin = '12 12 0 0')
+						ui = 'oedit.ui'(size = '121' margin = '12 12 0 0')
+						sep(def = 'vsep' axis = '1' size = '2')
+						ui = 'medit2.ui'(size = '121' margin = '12 12 0 0')
+					}
+				}
+			}
+		}
+		
+		vbox(def = 'bg' id = 'v_3_h' hidden = '1')(size = '24') ::
+		{
+			switch(class = 'view')(def = 'sw-view' view = [['v_3' 'v_3_h' 'v_4_p']] text = '\x1b' text2 = '\x1b' textSize = '10 14')(size = '24')
+		}
+
+		vbox(def = 'bg' id = 'v_4_h' hidden = '1')(size = '24' prev = '1') ::
+		{
+			switch(class = 'view')(def = 'sw-view' view = [['v_4' 'v_4_h']] text = '\x1b' text2 = '\x1b' textSize = '10 14')(size = '24')
+		}
+
+		hbox(def = 'bg' id = 'v_4') ::
+		{
+			sp(id = 'v_4_p' bgColor = '0 0 0' hidden = '1')(size = '1')
+			
+			ui = 'file.ui'(size = '146'  max = '600' flex = '-1')
+	
+			vbox(def = 'bg' size = '12')
+		}		
+	}
+}

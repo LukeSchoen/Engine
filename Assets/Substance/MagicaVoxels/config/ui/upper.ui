@@ -1,0 +1,94 @@
+vbox(bgColor = '58 58 58') ::
+{
+	hbox(size = '26') ::
+	{
+		opBox(class = 'tab')(index = '0') ::
+		{
+			hbox ::
+			{
+				option(def = 'op-title' id = [['top0' 'v_tool' 'v_edit']] text = 'Model')
+				(size = '65' prev ='2')
+				(hint = 'Switch to Model Editor')
+
+				option(class = 'cmd')(def = 'op-title' id = [['top1' 'v_light' 'v_mtl' 'v_r_color']] onClick = 'set pt' text = 'Render')
+				(size = '65' next ='2')
+				(hint = 'Switch to Renderer')
+			}
+		}
+
+		textField(id = 'name' onEnter = 'name' default = 'project' maxLength = '128' align = '2' once = '1' enter = '1' textSize = '9 19' border = '12')
+		(textColor = '255 255 255 230' bgColor = '110 115 113')	
+		(flex = '1' size = '150')(radius = '2' corner ='5')
+		(hint = 'Rename Project')
+
+		sp(size = '1' bgColor = '10 10 10')
+		button(def = 'bn-dark' id = 'unsaved' onClick = 'save' delayed = '1' bgColor-s = '70 70 70')(size = '13')(hint = 'Save Model Changes')
+	}
+
+	sep(size = '2')
+	
+	hbox(size = '29') ::
+	{
+		hbox(id = 'top0' hidden = '0')(flex = '1')(margin = '0 0 0 3') ::
+		{
+			sp(flex = '1')
+			
+			hbox(id = 'v_size' hidden = '1' prev = '6') ::
+			{
+				// label(text = 'Size' textColor = '255 255 255 180')(size = '56')
+				button(def = 'bn-dark' onClick = 'shrink' )(corner = '4' radius = '2')(size = '14' next = '1')(hint = 'Fit Model Size')
+				
+				textField(def = 'tf' id = 'size' onEnter = 'size' default = 'size' maxLength = '12')
+				(border = '1' )//textColor = '255 255 255 230' bgColor = '90 95 93')	
+				(corner = '8' size = '125' next = '6')
+				(hint = 'Resize Model [1 - 126]')
+			}
+			
+			hbox(id = 'v_obj' prev = '9') ::
+			{
+				button(id = 'ogroup' def = 'bn-bar2' id = 'obj_group' onClick = 'ogroup' text = '\xd' textSize = '18 18.5')(corner = '4' radius = '2')(size = '40' next = '0')(hint = 'Group Objects [CTRL+R]')
+				sp(bgColor = '0 0 0')(size = '2')
+				button(id = 'oungroup' def = 'bn-bar2' id = 'obj_ungroup' onClick = 'oungroup' text = '\xb' textSize = '18 18.5')(corner = '8' radius = '2')(size = '40' next = '9')(hint = 'Ungroup Objects [CTRL+SHIFT+R]')
+
+				button(def = 'bn-bar3' id = 'lv_prev' onClick = 'olevel -1' repeated = '1' timeStep = '120' text = '\x14' textSize = '20 24') // 
+				(corner = '4' radius = '2')(size = '40' next = '0')
+				(hint = 'Leave Group [SHIFT+TAB]')
+
+				sp(bgColor = '0 0 0')(size = '2')
+			
+				button(def = 'bn-bar3' id = 'lv_next' onClick = 'olevel +1' repeated = '1' timeStep = '120' text = '\x10' textSize = '20 24') // 
+				(corner = '8' radius = '2')(size = '40' next = '9')
+				(hint = 'Enter Group [TAB]')
+			}
+
+			switch(class = 'toggle')(def = 'ssw-edit' id = 'lv_edit' onClick = 'olevel -2' text2 = 'Edit' text = 'World' textSize = '8 18')
+			(corner = '12' radius = '2' size = '60' next = '6')
+			(hint = 'Switch between Model/World Editor [TAB]')
+		}
+
+		hbox(id = 'top1' hidden = '1')(flex= '1') ::
+		{
+			sp(flex='1')
+			switch(class = 'toggle')(onClick = 'set pt_auto' selected = '1' text = '\x1a' text2 = '\x1c' textSize = '12 12')
+			(corner = '15' radius = '4')(margin = '0 0 2 2' size = '26')(hint = 'Toggle Progressive Rendering')
+			
+			label(text = 'Image' textColor = '255 255 255 180')(size = '60')
+
+			textField(def = 'tf' id = 'pt_image' onEnter = 'set pt_image' default = 'image' maxLength = '10')
+			(corner = '4')(size = '110')(margin = '0 0 0 1')
+			(hint = 'Image Size [16 - 2048]')
+			resizer(class = 'image')(range = '16 2048' step = '5')(size = '8')(margin = '0 0 0 1')
+
+			label(text = 'Sample' textColor = '255 255 255 180')(size = '65')
+
+			textField(def = 'tf' id = 'pt_spp' onEnter = 'set pt_spp' default = 'sample' maxLength = '7')
+			(corner = '4')(size = '90')(margin = '0 0 0 1')
+			(hint = 'Samples Per Pixel [512 - 100000]')
+			resizer(class = 'int')(range = '512 100000' step = '10')(next = '4' size = '8')(margin = '0 0 0 1')
+
+			switch(onClick = 'set pt_jit' selected = '0' text = 'GI')
+			(corner = '15')(margin = '0 0 2 2' size = '26' next = '4')																
+			(hint = 'GI : Stochastic Sampling Global Illumination')
+		}
+	}
+}

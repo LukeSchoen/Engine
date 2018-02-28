@@ -1,0 +1,140 @@
+vbox ::
+{
+	vbox(margin = '12 12 0 0') ::
+	{
+		group(next = '4' size = '24') ::
+		{	
+			switch(class = 'view')(def = 'sw-view' view = [['v_2' 'v_2_h' 'v_1_p']] selected = '1' text = 'Light' text2 = 'Light')
+		
+			hbox(align = '1') ::
+			{
+				resizer(class = 'hbox')(view = 'v_2' dir = '1' size = '16')
+			}
+		}
+	
+		opBox(id = 'pt_bounce' onClick = 'set pt_bounce' value = '1') ::
+		{
+			vbox ::
+			{
+				hbox(size = '28' next = '1') ::
+				{
+					option(id = '0' text = '0')(flex = '1' next = '1'	)(hint = 'Light Bounces 0')
+					option(id = '1' text = '1')(flex = '1' next = '1'	)(hint = 'Light Bounces 1')
+					option(id = '2' text = '2')(flex = '1'				)(hint = 'Light Bounces 2')
+				}
+				hbox(size = '28' next = '2') ::
+				{
+					option(id = '4' text = '4')(flex = '1' next = '1'	)(hint = 'Light Bounces 4')
+					option(id = '6' text = '6')(flex = '1' next = '1'	)(hint = 'Light Bounces 6')
+					option(id = '8' text = '8')(flex = '1'				)(hint = 'Light Bounces 8')
+				}
+			}
+		}
+	
+		label(text = 'Sun' size = '28' next = '1')
+		hbox(size = '28' next = '8') ::
+		{
+			textField(id = 'pt_sun_p' onEnter = 'set pt_sun_p' enter = '1' maxLength = '3' textSize = '8 16' align = '2' border = '3')
+			(corner = '5')(flex = '1')
+			(hint = 'Pitch Angle of Sun Light [-90 - +90]')
+			resizer(class = 'int')(range = '-90 90' step = '1' space = '2')(size = '8')
+
+			textField(id = 'pt_sun_y' onEnter = 'set pt_sun_y' enter = '1' maxLength = '3' textSize = '8 16' align = '2' border = '3')
+			(flex = '1')
+			(hint = 'Yaw Angle of Sun Light [0 - 360]')
+			resizer(class = 'int')(range = '0 360' step = '1')(size = '8')
+		}
+	}
+
+	label(text = 'Shadow' size = '24' next = '1')
+	slider(id = 'pt_shadow' onChange = 'set pt_shadow')(margin = '9 9 0 0' size = '28' next = '3')(hint = 'Shadow Softness')
+
+	label(text = 'I-Sun' size = '24' next = '1')
+	hbox(size = '28' next = '3')(margin = '3 9 0 0') ::
+	{
+		colpick(id = 'pt_sun_col' pal = 'pal' onChange = 'set pt_sun_col' border = '1')(margin = '0 0 2 2' size = '24' prev = '4' next = '4')(corner = '15')(hint = 'Choose Sun Color')
+		slider(id = 'pt_isun' onChange = 'set pt_isun')(flex = '1')(hint = 'Sun Light Intensity')
+	}
+
+	label(text = 'I-Sky' size = '24' next = '1')
+	hbox(size = '28' next = '3')(margin = '3 9 0 0') ::
+	{
+		colpick(id = 'pt_sky_col' pal = 'pal' onChange = 'set pt_sky_col' border = '1')(margin = '0 0 2 2' size = '24' prev = '4' next = '4')(corner = '15')(hint = 'Choose Sky Color')
+		slider(id = 'pt_isky' onChange = 'set pt_isky')(flex = '1')(hint = 'Sky Light Intensity')
+	}
+
+	switch(id = 'pt_fog' onClick = 'set pt_fog' text = 'Fog' selected = '0')
+	(size = '24' next = '1')(corner = '15' radius = '2' margin = '30 30 2 2')
+	(hint = 'Enable Fog Scattering')
+	hbox(size = '28' next = '3')(margin = '3 9 0 0') ::
+	{
+		colpick(id = 'pt_fog_col' pal = 'pal' onChange = 'set pt_fog_col' border = '1')(margin = '0 0 2 2' size = '24' prev = '4' next = '4')(corner = '15')(hint = 'Choose In-Scattering Color')
+		slider(id = 'pt_fog_et' onChange = 'set pt_fog_et')(flex = '1')(hint = 'Fog Density')
+	}
+
+	sp(flex='1')
+
+	vbox(margin = '12 12 0 0') ::
+	{
+/*
+		switch(class = 'panel')(text = 'Shape' selected = '0')(size = '28' next = '1')
+		opBox(onClick = 'set pt_prim' value = 'cube')(next = '1') ::
+		{
+			vbox(bgColor = '40 40 40')(corner = '15' radius = '2') ::
+			{
+				hbox(size = '24') ::
+				{
+					option(def = 'sw-bw' id = 'cube'	text = 'Cube'	)(flex = '1')(hint = 'Cube : Cubic Voxel')
+				}
+				hbox(size = '24') ::
+				{
+					option(def = 'sw-bw' id = 'lego'	text = 'Lego'	)(flex = '1')(hint = 'Lego : Lego Voxel')
+					option(def = 'sw-bw' id = 'mc'	text = 'MC'		)(flex = '1')(hint = 'MC : Marching Cube')
+				}
+				hbox(size = '24') ::
+				{
+					option(def = 'sw-bw' id = 'rg'	text = 'RG'		)(flex = '1')(hint = 'RG : Rounded Grids')
+					option(def = 'sw-bw' id = 're'	text = 'RE'		)(flex = '1')(hint = 'RE : Rounded Edges')
+				}
+				hbox(size = '24') ::
+				{
+					option(def = 'sw-bw' id = 'sphr'	text = 'Sphr'	)(flex = '1')(hint = 'Sphr : Sphere Voxel')
+					option(def = 'sw-bw' id = 'cyli' text = 'Cyli'	)(flex = '1')(hint = 'Cyli : Cylinder Voxel')
+				}
+			}
+		}
+*/
+		//----------------
+		// View
+		//----------------
+		switch(class = 'panel')(selected = '1' text = 'View')(size = '28' next = '1')
+		vbox(bgColor = '40 40 40')(corner = '15' radius = '2') ::
+		{
+			hbox(size = '24') ::
+			{
+				colpick(id = 'pt_gd_col' pal = 'pal' onChange = 'set pt_gd_col' border = '1')(margin = '0 0 4 4' size = '8' prev = '2' next = '2')(corner = '15')(hint = 'Choose Ground Color')
+				
+				switch(def = 'sw-bw' id = 'pt_gd'	onClick = 'set pt_show gd'	selected = '1' text = 'GD'  )(flex = '1')(hint = 'GD : Display Ground [CTRL+U]')
+				
+				colpick(id = 'pt_edge_col' pal = 'pal' onChange = 'set pt_edge_col' border = '1')(margin = '0 0 4 4' size = '8' prev = '2' next = '2')(corner = '15')(hint = 'Choose Edge Color')
+				
+				switch(def = 'sw-bw' id = 'pt_edge' onClick = 'set pt_show edge'	selected = '0' text = 'Edge')(flex = '1.5' next = '4')(hint = 'Edge : Display Edges [CTRL+E]')
+			}
+
+			hbox(size = '24') ::
+			{
+				switch(def = 'sw-bw' id = 'pt_sw'	onClick = 'set pt_show sw'		selected = '1' text = 'SW'  )(prev = '12' flex = '1')(hint = 'SW : Display Shadow [CTRL+W]')
+				switch(def = 'sw-bw' id = 'pt_grid'	onClick = 'set pt_show grid'	selected = '0' text = 'Grid')(prev = '12' flex = '1.5' next = '4')(hint = 'Grid : Display Grids [CTRL+G]')
+			}
+
+			hbox(size = '24') ::
+			{
+				switch(def = 'sw-bw' id = 'pt_aa'	onClick = 'set pt_show aa'		selected = '1' text = 'AA' )(prev = '12' flex = '1')(hint = 'AA : Enable Anti-Aliasing')
+
+				colpick(id = 'pt_bg_col' pal = 'pal' onChange = 'set pt_bg_col' border = '1')(margin = '0 0 4 4' size = '8' prev = '2' next = '2')(corner = '15')(hint = 'Choose Background Color')
+
+				switch(def = 'sw-bw' id = 'pt_bg_c'	onClick = 'set pt_show bg_c'	selected = '1' text = 'Back' )(flex = '1.5' next = '4' )(hint = 'Back : Display Background Color [CTRL+B]')
+			}
+		}
+	}
+}

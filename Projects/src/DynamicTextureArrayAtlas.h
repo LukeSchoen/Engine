@@ -43,7 +43,7 @@ struct DynamicTextureArrayAtlas
     //DELETE texture here
   }
 
-  void UploadToGPU()
+  bool UploadToGPU()
   {
     if (texture == glUndefined)
     {
@@ -56,26 +56,54 @@ struct DynamicTextureArrayAtlas
       glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_GENERATE_MIPMAP, GL_FALSE);
       glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, width, height, layers);
     }
-    if (updates.size() == 0) return;
+    if (updates.size() == 0) return true;
     glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
 
     // Fast rect upload
     // Combine and upload once!
 
-    // Slow rect upload
-    for (int rectID = 0; rectID < updates.size(); rectID++)
+
+    //Process some rects
+    if (true)
     {
-      if (rectID == 8041)
-        rectID = rectID;
-      Rect &rect = updates[rectID];
-      uint32_t *img = new uint32_t[rect.width * rect.height];
-      for (int y = 0; y < rect.height; y++)
-        for (int x = 0; x < rect.width; x++)
-          img[x + y * rect.width] = image[rect.xpos + x + ((rect.ypos + y) * width) + (rect.layer * width * height)];
-      glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, rect.xpos, rect.ypos, rect.layer, rect.width, rect.height, 1, GL_RGBA, GL_UNSIGNED_BYTE, img);
-      delete[] img;
+      // Slow rect upload
+      int uploads = 0;
+      int maxUploads = 64;
+      while (updates.size())
+      {
+        if(uploads++ > maxUploads)
+          return false;
+        Rect &rect = updates[0];
+        uint32_t *img = new uint32_t[rect.width * rect.height];
+        for (int y = 0; y < rect.height; y++)
+          for (int x = 0; x < rect.width; x++)
+            img[x + y * rect.width] = image[rect.xpos + x + ((rect.ypos + y) * width) + (rect.layer * width * height)];
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, rect.xpos, rect.ypos, rect.layer, rect.width, rect.height, 1, GL_RGBA, GL_UNSIGNED_BYTE, img);
+        delete[] img;
+        updates.erase(updates.begin());
+      }
     }
-    updates.clear();
+
+
+    //Process all rects
+    if(false)
+    {
+      // Slow rect upload
+      for (int rectID = 0; rectID < updates.size(); rectID++)
+      {
+        Rect &rect = updates[rectID];
+        uint32_t *img = new uint32_t[rect.width * rect.height];
+        for (int y = 0; y < rect.height; y++)
+          for (int x = 0; x < rect.width; x++)
+            img[x + y * rect.width] = image[rect.xpos + x + ((rect.ypos + y) * width) + (rect.layer * width * height)];
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, rect.xpos, rect.ypos, rect.layer, rect.width, rect.height, 1, GL_RGBA, GL_UNSIGNED_BYTE, img);
+        delete[] img;
+      }
+      updates.clear();
+    }
+
+
+    return true;
   }
 
   bool AddTile(uint32_t *_image, int _width, int _height, int _layer, vec2 *TopLeftUVs, vec2 *BotRightUVs)

@@ -1,0 +1,55 @@
+vbox(bgColor = '55 55 55') ::
+{
+	hbox(size = '24' prev = '4' next = '4') ::
+	{
+		switch(class = 'view')(def = 'sw-view' view = [['hint']] selected = '1')
+		(text = '\x0e' text2 = '\x0f' textSize = '12 13')
+		(size = '26' prev = '3' next = '3')(corner = '15' radius = '6') 
+		(hint = 'Toggle Hint')
+
+		button(def = 'bn-dark' onClick = 'snap scene' delayed = '1' text = '\x08' textSize = '20 18')
+		(size = '32' next = '1')(corner = '5') 
+		(hint = 'Screenshot [6] : Window [CTRL+6]')
+
+		switch(onClick = 'set pt_show bg_a' selected = '0')
+		(size = '14' next = '3')(corner = '10') 
+		(hint = 'Toggle Alpha Channel of Screenshot')
+
+		textField(id = 'cmd' onEnter = '/' default = 'console' maxLength = '128' clear = '1' history = '1' textSize = '9 19')
+		(flex = '1' size = '90' next = '3')(corner = '15' radius = '8') 
+		(hint = 'Console : Activate [F1] : History [UP/DOWN]')
+
+		opBox(id = 'v_cam' value = '0' onClick = 'ui_set scene proj')(next = '3') ::
+		{
+			hbox ::
+			{
+				option(def = 'op-cam' id = '0' text = 'Pers')(size = '45')(corner = '15' radius = '1')(hint = 'Pers : Perspective Camera')
+				option(def = 'op-cam' id = '3' text = 'Free')(size = '45')(corner = '15' radius = '1')(hint = 'Free : Freestyle Camera : Move [WASDQE]')
+				option(def = 'op-cam' id = '1' text = 'Orth')(size = '45')(corner = '15' radius = '1')(hint = 'Orth : Orthogonal Camera')
+				option(def = 'op-cam' id = '2' text = 'Iso' )(size = '45')(corner = '15' radius = '1')(hint = 'Iso : Isometric Camera')
+			}
+		}
+
+		button(class = 'lr')(def = 'bn-dark' id = 'cam_slot' text = '0' onClick = 'cam load' onRightClick = 'cam save')
+		(size = '17' next = '1')(corner = '5')
+		(hint = 'Camera [NumPad 0-9] : Load/Save [L/R-Click] : [7/8]')
+
+		button(def = 'bn-dark' onClick = 'cam focus' text = '\x1e' textSize = '16 18')
+		(size = '32' next = '1')
+		(hint = 'Recenter Camera [4] : Face View [5]')
+		
+		switch(class = 'toggle')(def = 'ssw-dark' onClick = 'ui_set scene ruler' selected = '0' delayed = '0')
+		(text = '\xc' text2 = '\xc' textSize = '18 20' textColor = '240 240 240 210' bgColor = '105 105 105')
+		(size = '32' next = '1')
+		(hint = 'Camera Ruler : Drag on Ruler [LButton]')
+
+		switch(onClick = 'ui_set scene cube' selected = '1')(size = '14' next = '4')(corner = '10')(hint = 'Toggle View Cube')
+	}
+
+	vbox(id = 'hint') ::
+	{
+		sep(size = '2')
+
+		hint(textSize = '8.5 18' size = '24')(hint = 'Hint : [HotKey]')
+	}
+}	

@@ -22,15 +22,55 @@ MDSRegion::MDSRegion(int64_t a_regionx, int64_t a_regiony, int64_t a_regionz, in
 
 }
 
+class ProcessAccelerator
+{
+public:
+  struct Node
+  {
+    Node();
+    int children;
+  };
+
+  int AddParticle(MDSOldParticle particle)
+  {
+    //int rootNode = 0;
+    //int x = particleID;
+    //octreeNodes[rootNode].children;
+  }
+
+  void GetParticles(int x, int y, int z, int radius, std::vector<int> *pIds)
+  {
+
+    pIds;
+  }
+
+  std::vector<Node> octreeNodes;
+  std::vector<int> octreeData;
+  //dist < 2.0 + maxMom * 200 /*steps*/;
+};
+
+
+
 void MDSRegion::Process()
 {
+
+
+
+
   for (int a = 0; a < particles.size() - 1; a++)
+
     for (int b = a + 1; b < particles.size(); b++) // Discovery
+
       particles[a].Interact(particles[b]); //Interaction
+
+
+
+
+
   for (auto &particle : particles) particle.TimeStep(xPos, yPos, zPos); // Time step
 }
 
-void MDSRegion::AddPoint(MDSOldParticle p)
+void MDSRegion::AddPoint(MDSParticle p)
 {
   particles.push_back(p);
 }

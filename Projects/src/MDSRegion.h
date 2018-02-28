@@ -20,12 +20,16 @@ public:
   int64_t yMom;
   int64_t zMom;
 
+  const static int regionWidth = 256;
+  const static int regionHeight = 256;
+  const static int regionDepth = 256;
+
   void Process();
 
-  void AddPoint(MDSOldParticle p);
+  void AddPoint(MDSParticle p);
 
   //Private
-  std::vector<MDSOldParticle> particles;
+  std::vector<MDSParticle> particles;
 };
 
 #endif // MDSRegion_h__

@@ -1,0 +1,67 @@
+vbox( id = 'v_medit2' hidden = '1') ::
+{
+	//----------------
+	// Sym
+	//----------------
+	switch(class = 'panel')(selected = '0' text = 'Mirror' size = '28' prev = '3')
+	hbox(size = '28' next = '1')(hint = 'Mirror') ::
+	{
+		button(onClick = 'mir x' text = 'X' repeated = '1')(corner = '4')(flex = '1' next = '1')
+		button(onClick = 'mir y' text = 'Y' repeated = '1')(flex = '1' next = '1')
+		button(onClick = 'mir z' text = 'Z' repeated = '1')(corner = '8')(flex = '1')
+	}
+
+	switch(class = 'panel')(selected = '0' text = 'Dia' size = '28')
+	hbox(size = '28' next = '1')(hint = 'Diagonal') ::
+	{
+		button(onClick = 'dia x' text = 'X' repeated = '1')(corner = '1')(flex = '1' next = '1')
+		button(onClick = 'dia y' text = 'Y' repeated = '1')(flex = '1' next = '1')
+		button(onClick = 'dia z' text = 'Z' repeated = '1')(corner = '2')(flex = '1')
+	}
+	
+	//----------------
+	// Misc
+	//----------------
+	switch(class = 'panel')(selected = '0' text = 'Misc' size = '28')
+	vbox(next = '1') ::
+	{
+		hbox(size = '28' next = '1') ::
+		{
+			button(onClick = 'flood 0' text = 'Shell')(flex = '1' next = '1')(corner = '4')(hint = 'Shell : Remove All Invisible Voxels')
+			button(onClick = 'flood'   text = 'I')(size = '28')(corner = '8')(hint = 'I : Fill All Invisible Space')
+		}
+		hbox(size = '28' next = '1') ::
+		{
+			button(onClick = 'fractal' text = 'Fract')(flex = '1' next = '1')(hint = 'Fract : Fractal Model')
+			button(onClick = 'rand'    text = 'R')(size = '28')(hint = 'R : Random Color')
+		}
+		hbox(size = '28') ::
+		{
+			button(onClick = 'dil' repeated = '1'	text = 'Dilat')(flex = '1' next = '1')(corner = '1')(hint = 'Dilat : Dilation')
+			button(onClick = 'ero' repeated = '1'	text = 'E')(size = '28')(corner = '2')(hint = 'E : Erosion')
+		}
+	}
+
+	//----------------
+	// Prim
+	//----------------
+	switch(class = 'panel')(selected = '0' text = 'Shape' size = '28')
+	vbox(next = '1') ::
+	{
+		hbox(size = '28' next = '1') ::
+		{
+			button(onClick = 'prim elli'	text = 'Elli'	flex = '1' next = '1')(corner = '4')(hint = 'Elli : Ellipsoid')
+			button(onClick = 'prim cyli'	text = 'Cyli'	flex = '1')(corner = '8')(hint = 'Cyli : Cylinder')
+		}
+		hbox(size = '28' next = '1') ::
+		{
+			button(onClick = 'prim pyra'	text = 'Pyra'	flex = '1' next = '1')(hint = 'Pyra : Pyramid')
+			button(onClick = 'prim cone'	text = 'Cone'	flex = '1')(hint = 'Cone : Cone')
+		}
+		hbox(size = '28') ::
+		{
+			button(onClick = 'maze'		text = 'Maze'	flex = '1' next = '1')(corner = '1')(hint = 'Maze : Maze [Edge Length]')
+			button(onClick = 'noise -1'	text = 'Perl'	flex = '1')(corner = '2')(hint = 'Perl : Perlin Noise')
+		}
+	}
+}

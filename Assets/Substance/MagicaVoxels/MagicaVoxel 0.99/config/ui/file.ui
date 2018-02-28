@@ -1,0 +1,100 @@
+vbox(id = 'v_file') ::
+{
+	group(next = '4' size = '24') ::
+	{	
+		switch(class = 'view')(def = 'sw-view' view = [['v_4' 'v_4_h']] selected = '1' text = 'File' text2 = 'File')
+		
+		hbox ::
+		{
+			resizer(class = 'hbox')(view = 'v_file' dir = '-1' size = '16' )
+		}
+	}
+
+	opBox(class = 'tab')(index = '0' size = '28' next = '4') ::
+	{
+		hbox ::
+		{
+			option(def = 'op-tool' id = [['menu_model']] text = 'Model')
+			(flex = '1' next = '1')(hint = 'Model List')
+			option(def = 'op-tool' id = [['menu_patt']]	text = 'Pattern')
+			(flex = '1')(hint = 'Model List for Pattern Brush')
+		}
+	}
+
+	//----------------
+	// Model File
+	//----------------
+	vbox(id = 'menu_model')(flex = '1') ::
+	{
+		hbox(size = '26') ::
+		{
+			button(def = 'bn-save' onClick = 'save'	text = 'Save'	delayed = '1' textSize = '8 17')(flex = '1')(corner = '4')(hint = 'Save Project [CTRL+S]')
+			sp(def = 'sp-f')(size = '2')
+			button(def = 'bn-save' onClick = 'save as'text = 'As'	delayed = '1' textSize = '8 17')(flex = '1')(hint = 'Save Project As [CTRL+SHIFT+S]')
+			sp(def = 'sp-f')(size = '2')
+			button(def = 'bn-save' onClick = 'open'	text = 'Open'	delayed = '1' textSize = '8 17'	)(flex = '1')(corner = '8')(hint = 'Open Project [CTRL+O]')
+		}
+
+		sp(def = 'fileList')(size = '1')
+		layer(id = 'l_file' flex = '1') ::
+		{
+			list(def = 'fileList' id = 'file' root = [[$/vox]] ext = "vox" onSelect = 'open')(hint = 'Model List')
+		}
+		sp(def = 'fileList')(size = '1')
+	
+		hbox(size = '26') ::
+		{
+			button(def = 'bn-save' onClick = 'new'	text = 'New'	delayed = '1' textSize = '8 17')(flex = '1' corner = '1')(hint = 'New Project [CTRL+P]')
+			sp(def = 'sp-f')(size = '2')
+			button(def = 'bn-save' id = 'v_dup' onClick = 'dup' delayed = '1' text = '\x17' textSize = '13 15')(flex = '1')(hint = 'Duplicate Project [CTRL+SHIFT+P]')
+			sp(def = 'sp-f')(size = '2')
+			button(def = 'bn-save' onClick = 'del'	text = '\x13'	delayed = '1' textSize = '16 18')(flex = '1' corner = '2')(hint = 'Remove Project to Trash')
+		}
+	}
+
+	//----------------
+	// Palette File
+	//----------------
+	vbox(id = 'menu_patt' flex = '1' hidden = '1') ::
+	{
+		layer(id = 'l_patt' flex = '1') ::
+		{
+			list(def = 'fileList' id = 'file_patt' root = [[$/vox]] ext = 'vox' onSelect = 'ipatt')(flex = '1')(corner = '12')(hint = 'Model List for Pattern Brush')
+		}
+		sp(def = 'fileList')(size = '1')
+
+		hbox(size = '26') ::
+		{
+			button(def = 'bn-save' onClick = 'ipatt' text = 'Load' delayed = '1' textSize = '8 17')(flex = '1')(corner = '3')(hint = 'Load Pattern Model')
+		}
+	}
+
+	//----------------
+	// Export
+	//----------------
+	vbox(def = 'bg' prev = '1') ::
+	{
+		switch(class = 'panel')(selected = '0' text = 'Export' size = '28')
+		vbox ::
+		{
+			hbox(size = '28' next = '1') ::
+			{
+				button(onClick = 'o obj'	text = 'obj'	delayed = '1' 	)(flex = '1' next = '1')(corner = '4')(hint = 'obj : Export obj mesh')
+				button(onClick = 'o ply'	text = 'ply'	delayed = '1' 	)(flex = '1' next = '1')(corner = '0')(hint = 'ply : Export ply mesh')
+				button(onClick = 'o mc'		text = 'mc'		delayed = '1' 	)(flex = '1' next = '0')(corner = '8')(hint = 'mc : Export Marching Cubes')
+			}
+			hbox(size = '28' next = '1') ::
+			{
+				button(onClick = 'o xraw'   text = 'xraw'	delayed = '1' 	)(flex = '1' next = '1')(hint = 'vox : Export xraw volume')
+				button(onClick = 'o slab'	text = 'slab'	delayed = '1' 	)(flex = '1' next = '1')(hint = 'slab : Export slab6 vox volume')
+				button(onClick = 'o qb'		text = 'qb'		delayed = '1' 	)(flex = '1' next = '0')(hint = 'qb : Export qb volume')
+			}
+			hbox(size = '28') ::
+			{
+				button(onClick = 'o vox'	text = 'vox'	delayed = '1' 	)(flex = '1' next = '1')(corner = '1')(hint = 'vox : Export vox voxels')
+				button(onClick = 'o iso'	text = 'iso'	delayed = '1' 	)(flex = '1' next = '1')(corner = '0')(hint = 'iso : Export isometric pixel sprite')
+				button(onClick = 'o 2d'		text = '2d'		delayed = '1' 	)(flex = '1' next = '0')(corner = '2')(hint = '2d : Export 2D sprite')
+			}
+		}
+	}
+}

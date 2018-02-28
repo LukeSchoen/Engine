@@ -3,7 +3,7 @@
 
 #include "stdint.h"
 
-const static float s_gravity = 0.01;
+const static float s_gravity = 0.00005f;
 const static float s_bounce = 0.5;
 const static float s_strength = 0.5;
 const static float s_momentum = 0.5;

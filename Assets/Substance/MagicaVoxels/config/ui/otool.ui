@@ -1,0 +1,120 @@
+vbox(id = 'v_layer') ::
+{
+	group(next = '4' size = '24')( margin = '12 12 0 0' ) ::
+	{	
+		switch(class = 'view')(def = 'sw-view' view = [['v_2' 'v_2_h' 'v_1_p']] selected = '1' text = 'Object')
+	
+		hbox(align = '1') ::
+		{
+			resizer(class = 'hbox')(view = 'v_2' dir = '1' size = '16')
+		}
+	}
+
+	textfield(id = 'oname' onEnter = 'oname' default = 'object' maxlength = '64' align = '1' enter = '1' once = '1')
+	(textColor = '255 255 255 240' textSize = '8 17' border = '6')
+	(size = '26' margin = '6 6 0 0' corner = '15' raddius = '2')
+	(hint = 'Object : Name')
+
+	opBox(onClick = 'set b_obj' index = '0')(size = '30' prev = '6' next = '6' margin = '12 12 0 0') ::
+	{
+		hbox(bgColor = '152 152 154' corner = '15')::
+		{
+			option(def = 'op-brush2' id = '0' text = '\x6' textSize = '19 21')(flex = '1')(corner = '15')(hint = 'Select : Add [+SHIFT] : Remove [+SHIFT+ALT]')
+			(onClick = [[ui_view 'v_b_bsel']])
+			sp(def = 'sp-b')(size = '1')
+		
+			option(def = 'op-brush2' id = '1' text = '\x5' textSize = '20 22')(flex = '1')(corner = '15')(hint = 'Free Move [CTRL+LButton] : Reference [+SHIFT]')
+			sp(def = 'sp-b')(size = '1')
+	
+			option(def = 'op-brush2' id = '2' text = '\x11' textSize = '14 16')(flex = '1')(corner = '15')(hint = 'Pick Color [ALT+LButton]')
+			(onClick = [[ui_view 'v_b_rsel']])
+		}
+	}
+
+	switch(class = 'panel')(selected = '1' text = 'Layer')(size = '28' next = '1' margin = '12 12 0 0')
+	vbox ::
+	{
+		hbox(bgColor = '10 10 10')(hint = 'Set Layer Visibility') ::
+		{
+			vbox(id = 'lay_vis' size = '18' next = '1' prev = '1')(hint = 'Layer : Visibility') ::
+			{
+				switch(class = 'toggle')(def = 'ssw-layer' onClick = 'lay_show 0' text = '\x1d' text2 = '' textSize = '10 11' size = '24' next = '1' prev = '2' )
+				switch(class = 'toggle')(def = 'ssw-layer' onClick = 'lay_show 1' text = '\x1d' text2 = '' textSize = '10 11' size = '24' next = '1')
+				switch(class = 'toggle')(def = 'ssw-layer' onClick = 'lay_show 2' text = '\x1d' text2 = '' textSize = '10 11' size = '24' next = '1')
+				switch(class = 'toggle')(def = 'ssw-layer' onClick = 'lay_show 3' text = '\x1d' text2 = '' textSize = '10 11' size = '24' next = '1')
+				switch(class = 'toggle')(def = 'ssw-layer' onClick = 'lay_show 4' text = '\x1d' text2 = '' textSize = '10 11' size = '24' next = '1')
+				switch(class = 'toggle')(def = 'ssw-layer' onClick = 'lay_show 5' text = '\x1d' text2 = '' textSize = '10 11' size = '24' next = '1')
+				switch(class = 'toggle')(def = 'ssw-layer' onClick = 'lay_show 6' text = '\x1d' text2 = '' textSize = '10 11' size = '24' next = '1')
+				switch(class = 'toggle')(def = 'ssw-layer' onClick = 'lay_show 7' text = '\x1d' text2 = '' textSize = '10 11' size = '24' next = '2')
+			}
+
+			vbox(id = 'lay_col' size = '4' next = '1')(hint = 'Layer : Color') ::
+			{
+				colpick(size = '24' next = '1' prev = '2' )
+				colpick(size = '24' next = '1')
+				colpick(size = '24' next = '1')
+				colpick(size = '24' next = '1')
+				colpick(size = '24' next = '1')
+				colpick(size = '24' next = '1')
+				colpick(size = '24' next = '1')
+				colpick(size = '24' next = '2')
+			}
+
+			opBox( id = 'lay_cur' index = '0' onClick = 'lay_cur' )( flex = '1' next = '1' )(hint = 'Layer : for New Objects') ::
+			{
+				vbox ::
+				{
+					option(def = 'op-layer' id = '0' size = '24' next = '1' prev = '2' )
+					option(def = 'op-layer' id = '1' size = '24' next = '1' )
+					option(def = 'op-layer' id = '2' size = '24' next = '1' )
+					option(def = 'op-layer' id = '3' size = '24' next = '1' )
+					option(def = 'op-layer' id = '4' size = '24' next = '1' )
+					option(def = 'op-layer' id = '5' size = '24' next = '1' )
+					option(def = 'op-layer' id = '6' size = '24' next = '1' )
+					option(def = 'op-layer' id = '7' size = '24' next = '2' )
+				}
+			}
+
+			opBox( id = 'lay_sel' index = '0' onClick = 'lay_sel' )(size = '14' next = '1')(hint = 'Layer : for Selected Objects') ::
+			{
+				vbox ::
+				{
+					option(def = 'op-lay-sel' id = '0' size = '24' next = '1' prev = '2' )
+					option(def = 'op-lay-sel' id = '1' size = '24' next = '1' )
+					option(def = 'op-lay-sel' id = '2' size = '24' next = '1' )
+					option(def = 'op-lay-sel' id = '3' size = '24' next = '1' )
+					option(def = 'op-lay-sel' id = '4' size = '24' next = '1' )
+					option(def = 'op-lay-sel' id = '5' size = '24' next = '1' )
+					option(def = 'op-lay-sel' id = '6' size = '24' next = '1' )
+					option(def = 'op-lay-sel' id = '7' size = '24' next = '2' )
+				}
+			}
+		}					
+	
+		textfield(id = 'lay_name' onEnter = 'lay_name' default = '[layer]' maxlength = '64' align = '1' enter = '1' once = '1')
+		(textColor = '255 255 255 240' textSize = '8 17' border = '6')
+		(prev = '4' size = '26' margin = '6 6 0 0' corner = '15' raddius = '2')
+		(hint = 'Layer : Name')
+	}
+
+	sp(flex='1')
+
+	//----------------
+	// View
+	//----------------
+	switch(class = 'panel')(selected = '1' text = 'View')(size = '28' next = '1' margin = '12 12 0 0')
+	vbox(bgColor = '40 40 40' radius = '2' corner = '15' margin = '12 12 0 0') ::
+	{
+		hbox(size = '24') ::
+		{
+			switch(def = 'sw-bw' id = 'rs_bg'	onClick = 'set rs_show bg'		text = 'BG'  )(size = '40' hint = 'BG : Display Background Objects [CTRL+B]')
+			switch(def = 'sw-bw' id = 'rs_edge'	onClick = 'set rs_show edge'	text = 'Edge')(flex = '1' corner = '8' radius = '2')(hint = 'Edge : Display Edges [CTRL+E]')
+		}
+
+		hbox(size = '24') ::
+		{
+			switch(def = 'sw-bw' id = 'rs_wr'	onClick = 'set rs_show wr'		text = 'WR'  )(size = '40' corner = '4' radius = '2')(hint = 'WR: Display Wireframes [CTRL+M]')
+			switch(def = 'sw-bw' id = 'rs_grid'	onClick = 'set rs_show grid'	text = 'Grid')(flex = '1' hint = 'Grid : Display Grids [CTRL+G]')
+		}
+	}
+}

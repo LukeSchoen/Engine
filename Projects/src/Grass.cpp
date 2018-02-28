@@ -45,7 +45,6 @@ void _UpdateWorld()
       case MoveRight: {GPix &ow = SetNewGPixOffset(1, 0); const GPix &o = GetGPixOffset(1, 0); if (o.useable)  { SetNewGPixOffset(0, 0) = gpix; ow = gpix; MutateAgent(&ow), gpix.energy = 0; gpix.red = 0; gpix.green = 0; gpix.blue = 0; } } break;
       case MoveUp: {GPix &ow = SetNewGPixOffset(0, -1); const GPix &o = GetGPixOffset(0, -1); if (o.useable)   { SetNewGPixOffset(0, 0) = gpix; ow = gpix; MutateAgent(&ow), gpix.energy = 0; gpix.red = 0; gpix.green = 0; gpix.blue = 0; } } break;
       case MoveDown: {GPix &ow = SetNewGPixOffset(0, 1); const GPix &o = GetGPixOffset(0, 1); if (o.useable)   { SetNewGPixOffset(0, 0) = gpix; ow = gpix; MutateAgent(&ow), gpix.energy = 0; gpix.red = 0; gpix.green = 0; gpix.blue = 0; } } break;
-      
       case GiveLeft: {GPix &ow = SetNewGPixOffset(-1, 0); const GPix &o = GetGPixOffset(-1, 0); if (o.energy == 0) { gpix.energy /= 2; ow = gpix; } else { ow.energy = Min(o.energy + gpix.energy / 2, 255); gpix.energy /= 2; ow = std::move(o); } } break;
       case GiveRight: {GPix &ow = SetNewGPixOffset(1, 0); const GPix &o = GetGPixOffset(1, 0); if (o.energy == 0) { gpix.energy /= 2; ow = gpix; } else { ow.energy = Min(o.energy + gpix.energy / 2, 255); gpix.energy /= 2; ow = std::move(o); } } break;
       case GiveUp: {GPix &ow = SetNewGPixOffset(0, -1); const GPix &o = GetGPixOffset(0, -1); if (o.energy == 0) { gpix.energy /= 2; ow = gpix; } else { ow.energy = Min(o.energy + gpix.energy / 2, 255); gpix.energy /= 2;  ow = std::move(o); } } break;

@@ -1,0 +1,119 @@
+vbox(id = 'v_oedit') ::
+{
+	//----------------
+	// Tool
+	//----------------
+	switch(class = 'panel')(selected = '1' text = 'Tool' size = '28' prev = '3')
+	vbox(next = '1') ::
+	{
+		hbox(size = '28' next = '1') ::
+		{
+			button(id = 'onew' onClick = 'onew' text = '\x17' textSize = '15 16.5' flex = '1' next = '1')(corner = '4')(hint = 'New Object [CTRL+N]')
+			button(id = 'odel' onClick = 'odel' text = '\x18' textSize = '12 16' flex = '1')(corner = '8')(hint = 'Delete Objects [Backspace/Delete]')
+		}
+
+		button(onClick = 'ounion' text = 'Union')(corner = '3')(size = '28')(hint = 'Union Combination of Objects [U]')
+	}
+	
+	//----------------
+	// Select
+	//----------------
+	switch(class = 'panel')(selected = '1' text = 'Select' size = '28')
+	vbox(next = '1') ::
+	{
+		hbox(size = '28' next = '1') ::
+		{
+			button(onClick = 'osel_all' text = 'All')(flex = '1' next = '1')(corner = '4')(hint = 'Select All [CTRL+A]')
+			button(onClick = 'osel_inv' text = 'Inv')(flex = '1')(corner = '8')(hint = 'Select Inverse [CTRL+I]')
+		}
+
+		hbox(size = '28' next = '2') ::
+		{
+			button(onClick = 'osel_none' text = 'None')(flex = '1')(hint = 'Select None [CTRL+D]')
+		}
+
+		hbox(size = '28' next = '1') ::
+		{
+			button(onClick = 'ocopy'   text = 'Copy')(flex = '1' next = '1')(hint = 'Copy Objects [CTRL+C]')
+			button(onClick = 'ocut'    text = 'Cut' )(flex = '1')(hint = 'Cut Objects [CTRL+X]')
+		}
+	
+		hbox(size = '28' next = '1') ::
+		{
+			button(onClick = 'ocopy ref' text = 'Ref' )(flex = '1' next = '1')(hint = 'Copy as Reference [CTRL+SHIFT+C]')
+			button(id = 'r2d' onClick = 'oref2obj'  text = 'R-D' )(flex = '1')(hint = 'Convert Reference to Duplicate [CTRL+T]')
+		}		
+
+		hbox(size = '28') ::
+		{
+			button(onClick = 'opaste' text = 'Paste')(flex = '1')(corner = '3')(hint = 'Paste Objects [CTRL+V]')
+		}		
+	}
+
+	//----------------
+	// Rot
+	//----------------
+	switch(class = 'panel')(selected = '0' text = 'Rot' size = '28')
+	hbox(size = '28' next = '1')(hint = 'Rotate Objects 90 Degrees [-/+]') ::
+	{
+		button(onClick = 'orot x 1' text = 'X' flex = '1' next = '1')(corner = '5')
+		button(onClick = 'orot y 1' text = 'Y' flex = '1' next = '1')
+		button(onClick = 'orot z 1' text = 'Z' flex = '1')(corner = '10')
+	}
+
+	//----------------
+	// Flip
+	//----------------
+	switch(class = 'panel')(selected = '0' text = 'Flip' size = '28')
+	hbox(size = '28' next = '1')(hint = 'Flip Objects') ::
+	{
+		button(onClick = 'oflip x' text = 'X' flex = '1' next = '1')(corner = '5')
+		button(onClick = 'oflip y' text = 'Y' flex = '1' next = '1')
+		button(onClick = 'oflip z' text = 'Z' flex = '1')(corner = '10')
+	}
+
+	//----------------
+	// Move
+	//----------------
+	switch(class = 'panel')(selected = '0' text = 'Move' size = '28')
+	vbox(hint = 'Move Objects [Arrow/Page]') ::
+	{
+		hbox(size = '28' next = '1') ::
+		{
+			button(onClick = 'omove x +1' text = '+X' repeated = '1')(corner = '4')(flex = '1' next = '1')
+			button(onClick = 'omove y +1' text = '+Y' repeated = '1')(flex = '1' next = '1')
+			button(onClick = 'omove z +1' text = '+Z' repeated = '1')(corner = '8')(flex = '1')
+		}
+
+		hbox(size = '28' next = '1') ::
+		{
+			button(onClick = 'omove x -1' text = '-X' repeated = '1')(flex = '1' next = '1')
+			button(onClick = 'omove y -1' text = '-Y' repeated = '1')(flex = '1' next = '1')
+			button(onClick = 'omove z -1' text = '-Z' repeated = '1')(flex = '1')
+		}
+
+		button(onClick = 'omove g' text = 'Ground')(corner = '3')(size = '28' next = '1')(hint = 'Move Objects to Ground [G]')
+	}
+	
+	sp(flex='1')
+	
+	//----------------
+	// Hide
+	//----------------
+	switch(class = 'panel')(selected = '0' text = 'Hide' size = '28')
+	hbox(size = '28' next = '1') ::
+	{
+		button(id = 'ohide' onClick = 'ohide 1' text = 'Hide' flex = '1' next = '1')(corner = '5')(hint = 'Hide Objects [CTRL+H]')
+		button(id = 'oshow' onClick = 'ohide 0' text = 'Show' flex = '1')(corner = '10')(hint = 'Show Objects [CTRL+SHIFT+H]')
+	}
+	
+	//----------------
+	// Order
+	//----------------
+	switch(class = 'panel')(selected = '0' text = 'Order' size = '28')
+	hbox(size = '28' next = '1')(hint = 'Order : Render Order') ::
+	{
+		button(onClick = 'order 1' text = 'First' flex = '1' next = '1')(corner = '5')(hint = 'Bring to First')
+		button(onClick = 'order 0' text = 'Last'  flex = '1')(corner = '10')(hint = 'Bring to Last')
+	}
+}

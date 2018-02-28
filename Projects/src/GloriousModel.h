@@ -34,7 +34,7 @@ struct GloriousBlock
 
 struct GloriousModel
 {
-  int64_t quality = 64;
+  int64_t quality = 256;
 
   std::mutex renderLock;
 
@@ -43,9 +43,9 @@ struct GloriousModel
   StreamFileReader *fileStream;
 
   GloriousModel(const char *NCSfile)
-    : atlas(64, 64, 64)
+    : atlas(256, 256, 256)
   {
-    atlas.UploadToGPU();
+    while (!atlas.UploadToGPU());
     Load(NCSfile);
   }
 
@@ -122,12 +122,12 @@ private:
     if (dist < quality * layerSize)
     {
       bool kidsAllReady = true;
-      renderLock.lock();
+      //renderLock.lock();
       for (uint8_t cItr = 0; cItr < 8; cItr++)
         if (block->children[cItr])
           if (!block->childPtr[cItr] || !block->childPtr[cItr]->Ready)
             kidsAllReady = false;
-      renderLock.unlock();
+      //renderLock.unlock();
       if (kidsAllReady)
       {
         SortedList childList;
@@ -152,21 +152,24 @@ private:
       for (uint8_t cItr = 0; cItr < 8; cItr++)
         if (block->childPtr[cItr])
         {
-          renderLock.lock();
+          //renderLock.lock();
           RecursiveUnload(block->childPtr[cItr]);
           block->childPtr[cItr] = nullptr;
-          renderLock.unlock();
+          //renderLock.unlock();
         }
     }
 
     if (leaf)
     {
-      //renderLock.lock();
-      atlas.UploadToGPU();
-      block->Smodel->AssignUniform("LAYER", UT_1f, &layerSize);
-      block->Smodel->AssignUniform("regionPos", UT_3f, block->position.Data());
-      block->Smodel->Render(MVP);
-      //renderLock.unlock();
+      renderLock.lock();
+      bool suceess = atlas.UploadToGPU();
+      renderLock.unlock();
+      if (suceess)
+      {
+        block->Smodel->AssignUniform("LAYER", UT_1f, &layerSize);
+        block->Smodel->AssignUniform("regionPos", UT_3f, block->position.Data());
+        block->Smodel->Render(MVP);
+      }
     }
   }
 
@@ -297,7 +300,10 @@ private:
           }
         }
 
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 128, 128);
+    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0.1, 0);
+    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0.2, 0);
+    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0.4, 0);
+    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0.6, 0);
 
     //printf("built block\n");
     int tile = -1;
@@ -316,7 +322,7 @@ private:
           img[x + z * tops[i].width] = c;
         }
 
-      //renderLock.lock();
+      renderLock.lock();
       bool added = false;
       for (int t : block->tiles)
         if (atlas.AddTile(img, tops[i].width, tops[i].height, t, &tl, &br))
@@ -332,7 +338,7 @@ private:
         atlas.AddTile(img, tops[i].width, tops[i].height, tile, &tl, &br);
       }
       delete[] img;
-      //renderLock.unlock();
+      renderLock.unlock();
 
       vec3 c(rand() / (RAND_MAX + 0.0), rand() / (RAND_MAX + 0.0), rand() / (RAND_MAX + 0.0));
       c = vec3(1, 1, 1);

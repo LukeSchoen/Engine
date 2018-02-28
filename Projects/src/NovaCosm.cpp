@@ -60,6 +60,7 @@ void NovaCosm()
   //NovaCosmModel model("D:/temp/CarrickHill.ncs");
   //NovaCosmModel model("C:/temp/map.ncs");
   NovaCosmModel model("F:/temp/Colledge.ncs");
+  //NovaCosmModel model("F:/Luke/Programming/Visual Studio/pixelly/Software Tracer/Expressway.pcf");
 
   Controls::SetMouseLock(true);
 
@@ -70,7 +71,7 @@ void NovaCosm()
   {
     window.Clear(0, 190, 255);
     // Update Camera & World
-    Camera::Update(1);
+    Camera::Update(10);
 
     // Skybox
     Textures::SetTextureFilterMode(false);
