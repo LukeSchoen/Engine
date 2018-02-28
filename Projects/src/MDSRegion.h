@@ -26,10 +26,10 @@ public:
 
   void Process();
 
-  void AddPoint(MDSParticle p);
+  void AddPoint(MDSOldParticle p);
 
   //Private
-  std::vector<MDSParticle> particles;
+  std::vector<MDSOldParticle> particles;
 };
 
 #endif // MDSRegion_h__

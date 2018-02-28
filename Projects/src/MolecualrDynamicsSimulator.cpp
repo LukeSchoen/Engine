@@ -20,11 +20,11 @@ void MolecularDynamicsSimulator::AddPoint(std::tuple<vec3, uint32_t> point)
     auto &region = task.m_region;
     if (pos.x >= region.xPos && pos.x < region.xPos + 256 && pos.y >= region.yPos && pos.y < region.yPos + 256 && pos.z >= region.zPos && pos.z < region.zPos + 256)
     {
-      MDSParticle newParticle;
+      MDSOldParticle newParticle;
       newParticle.mass = 10;
-      newParticle.xPos = (pos.x - region.xPos) * 256.f;
-      newParticle.yPos = (pos.y - region.yPos) * 256.f;
-      newParticle.zPos = (pos.z - region.zPos) * 256.f;
+      newParticle.xPos = (pos.x);// - region.xPos) * 256.f;
+      newParticle.yPos = (pos.y);// - region.yPos) * 256.f;
+      newParticle.zPos = (pos.z);// - region.zPos) * 256.f;
       newParticle.color = col;
       task.AddPoint(newParticle);
       return;
@@ -87,7 +87,8 @@ std::vector<std::tuple<vec3, uint32_t>> MolecularDynamicsSimulator::RequestPoint
   ret.clear();
   for (auto & task : m_tasks)
     for (auto & particle : task.m_region.particles)
-      ret.emplace_back(vec3((particle.xPos / 255.0f) + task.m_region.xPos, (particle.yPos / 255.0f) + task.m_region.yPos, (particle.zPos / 255.0f) + task.m_region.zPos), particle.color);
+      ret.emplace_back(vec3(particle.xPos, particle.yPos, particle.zPos), particle.color);
+      //ret.emplace_back(vec3((particle.xPos / 255.0f) + task.m_region.xPos, (particle.yPos / 255.0f) + task.m_region.yPos, (particle.zPos / 255.0f) + task.m_region.zPos), particle.color);
   //ret.emplace_back(vec3(float(particle.xPos) / 256 + task.m_region.xPos, float(particle.yPos) / 256 + task.m_region.yPos, float(particle.zPos) / 256 + task.m_region.zPos), 255);
   return ret;
 }

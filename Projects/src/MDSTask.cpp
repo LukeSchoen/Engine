@@ -23,7 +23,7 @@ void MDSTask::Process()
   m_region.Process();
 }
 
-void MDSTask::AddPoint(MDSParticle particle)
+void MDSTask::AddPoint(MDSOldParticle particle)
 {
   //m_lock.lock();
   m_newParticles.push_back(particle);

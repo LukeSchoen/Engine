@@ -14,12 +14,12 @@ public:
   MDSTask();
   MDSTask(int64_t a_regionx, int64_t a_regiony, int64_t a_regionz, int64_t a_regionMomX, int64_t a_regionMomY, int64_t a_regionMomZ);
 
-  std::vector<MDSParticle> m_newParticles;
+  std::vector<MDSOldParticle> m_newParticles;
   MDSRegion m_region;
 
   void Process();
 
-  void AddPoint(MDSParticle particle);
+  void AddPoint(MDSOldParticle particle);
 };
 
 #endif // MDSTask_h__

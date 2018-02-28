@@ -70,7 +70,7 @@ void MDSRegion::Process()
   for (auto &particle : particles) particle.TimeStep(xPos, yPos, zPos); // Time step
 }
 
-void MDSRegion::AddPoint(MDSParticle p)
+void MDSRegion::AddPoint(MDSOldParticle p)
 {
   particles.push_back(p);
 }
