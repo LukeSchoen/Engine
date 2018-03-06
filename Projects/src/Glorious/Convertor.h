@@ -474,13 +474,14 @@ struct Convertor
     uint32_t *Bgrid = (uint32_t*)calloc(gridSize * gridSize * gridSize, sizeof(uint32_t));
     uint32_t *Sgrid = (uint32_t*)calloc(gridSize * gridSize * gridSize, sizeof(uint32_t));
 
-    const int holFillSize = 0;
+    const int holFillSize = 1;
 
     printf("blitting!\n");
 
     // Read PCF
     int64_t handSize = sizeof(point) * 65536;
     StreamFileReader inputPCF(inputPath, nullptr, handSize);
+
     // Calculate Models Extents
     int64_t maxX, maxY, maxZ, minX, minY, minZ;
     maxX = maxY = maxZ = -1000000000;
@@ -506,7 +507,7 @@ struct Convertor
         uint32_t pG = (p.color >> 8) & 255;
         uint32_t pB = (p.color >> 0) & 255;
 
-        if (holFillSize == 0)
+        //if (holFillSize == 0)
         {
           // Single sample
           Rgrid[x + y * gridSize + z * gridSize * gridSize] += pR;
@@ -514,25 +515,34 @@ struct Convertor
           Bgrid[x + y * gridSize + z * gridSize * gridSize] += pB;
           Sgrid[x + y * gridSize + z * gridSize * gridSize]++;
         }
-        else
-        {
-          // Hole filler
-          for (int iz = -holFillSize; iz <= holFillSize; iz++)
-            for (int iy = -holFillSize; iy <= holFillSize; iy++)
-              for (int ix = -holFillSize; ix <= holFillSize; ix++)
-                if (x + ix >= 0 && y + iy >= 0 && z + iz >= 0 && x + ix < gridSize && y + iy < gridSize  && z + iz < gridSize)
-                {
-                  float l = vec3(ix * 2, iy * 2, iz * 2).LengthSquared() + 1;
-                  int dm = Min(Max(256.0f / (l * l * l * l), 1), 256);
-                  int i = (x + ix) + (y + iy) * gridSize + (z + iz) * gridSize * gridSize;
-                  Rgrid[i] += pR * dm;
-                  Ggrid[i] += pG * dm;
-                  Bgrid[i] += pB * dm;
-                  Sgrid[i] += dm;
-                }
-        }
+        //else
+        //{
+        //  // Hole filler
+        //  for (int iz = -holFillSize; iz <= holFillSize; iz++)
+        //    for (int iy = -holFillSize; iy <= holFillSize; iy++)
+        //      for (int ix = -holFillSize; ix <= holFillSize; ix++)
+        //        if (x + ix >= 0 && y + iy >= 0 && z + iz >= 0 && x + ix < gridSize && y + iy < gridSize  && z + iz < gridSize)
+        //        {
+        //          float l = vec3(ix * 2, iy * 2, iz * 2).LengthSquared() + 1;
+        //          int dm = Min(Max(256.0f / (l * l * l * l), 1), 256);
+        //          int i = (x + ix) + (y + iy) * gridSize + (z + iz) * gridSize * gridSize;
+        //          Rgrid[i] += pR * dm;
+        //          Ggrid[i] += pG * dm;
+        //          Bgrid[i] += pB * dm;
+        //          Sgrid[i] += dm;
+        //        }
+        //}
       }
     }
+
+
+
+    // Simple HoleFill
+    {
+
+    }
+
+
 
     printf("combining!\n");
     for (int z = 0; z < gridSize; z++)
@@ -548,25 +558,25 @@ struct Convertor
             grid[x + y * gridSize + z * gridSize * gridSize] = gR + gG * 256 + gB * 256 * 256;
           }
         }
-
-    // Corrosion pass
-    if (holFillSize > 0)
-    {
-      for (int z = 0; z < gridSize; z++)
-        for (int y = 0; y < gridSize; y++)
-          for (int x = 0; x < gridSize; x++)
-            if (grid[x + y * gridSize + z * gridSize * gridSize])
-            {
-              bool c = false;
-              for (int iz = -holFillSize; iz <= holFillSize; iz++)
-                for (int iy = -holFillSize; iy <= holFillSize; iy++)
-                  for (int ix = -holFillSize; ix <= holFillSize; ix++)
-                    if (x + ix >= 0 && y + iy >= 0 && z + iz >= 0 && x + ix < gridSize && y + iy < gridSize  && z + iz < gridSize)
-                      if (Sgrid[(x + ix) + (y + iy) * gridSize + (z + iz) * gridSize * gridSize] == 0)
-                        c = true;
-              if (c) grid[x + y * gridSize + z * gridSize * gridSize] = 0;
-            }
-    }
+     
+     
+     // l
+     //if (holFillSize > 0)
+     //{
+     //  for (int z = 0; z < gridSize; z++)
+     //    for (int y = 0; y < gridSize; y++)
+     //      for (int x = 0; x < gridSize; x++)
+     //        if (grid[x + y * gridSize + z * gridSize * gridSize])
+     //        {
+     //          bool c = false;
+     //          for (int iz = -holFillSize; iz <= holFillSize; iz++)
+     //            for (int iy = -holFillSize; iy <= holFillSize; iy++)
+     //              for (int ix = -holFillSize; ix <= holFillSize; ix++)
+     //                if (x + ix >= 0 && y + iy >= 0 && z + iz >= 0 && x + ix < gridSize && y + iy < gridSize  && z + iz < gridSize)
+     //                  if (Sgrid[(x + ix) + (y + iy) * gridSize + (z + iz) * gridSize * gridSize] == 0)
+     //                    c = true;
+     //          if (c) grid[x + y * gridSize + z * gridSize * gridSize] = 0;
+     //        }
 
     int64_t voxelCount = 0;
     struct { uint8_t x, y, z, r, g, b; } voxel;
@@ -656,9 +666,7 @@ struct Convertor
       splitTask.erase(splitTask.begin());
     }
 
-    printf("Finished %d\n", clock() - startTime);
-    getchar();
-    exit(0);
+    printf("Finished conversion in %d\n", clock() - startTime);
 
     // Create NovaCosm
     StreamFileWriter NovaCosmModel(outputPath);

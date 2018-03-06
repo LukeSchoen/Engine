@@ -70,6 +70,15 @@ void RenderObject::AssignShader(const char *vertFile, const char *fragFile, cons
   shadersUploaded = false;
 }
 
+void RenderObject::AssignShader(unsigned int shaderID)
+{
+  shadersUploaded = true;
+  attributesUploaded = false;
+  uniformsUploaded = false;
+  texturesUploaded = false;
+  program = shaderID;
+}
+
 void RenderObject::AssignTexture(const char *varName, GLuint textureID, GLTextureType textureType)
 {
   char textureData[5];
@@ -318,12 +327,16 @@ void RenderObject::UploadToGPU()
       }
   }
   if (!uniformsUploaded)
+  {
     for (int uID = 0; uID < uniformCount; uID++) // Uniforms
       if (!pUniformData[uID].loaded)
       {
-        pUniformData[uID].glLoc = glGetUniformLocation(program, pUniformData[uID].name); // Store Uniform Shader Layout
+        if(pUniformData[uID].glLoc  == glUndefined)
+          pUniformData[uID].glLoc = glGetUniformLocation(program, pUniformData[uID].name); // Store Uniform Shader Layout
         pUniformData[uID].loaded = true;
       }
+    uniformsUploaded = true;
+  }
   if (!texturesUploaded)
     for (int tItr = 0; tItr < textureCount; tItr++) // Textures
       if (!pTextureData[tItr].loaded)

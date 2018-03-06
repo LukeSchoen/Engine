@@ -1,4 +1,4 @@
-#ifndef MDSParticle_h__
+ #ifndef MDSParticle_h__
 #define MDSParticle_h__
 
 #include "stdint.h"

@@ -3,18 +3,22 @@
 in vec3 position;
 in vec3 color;
 uniform float LAYER;
-
-uniform float SWAY;
-uniform float swayAmount;
+uniform mat4 MVP;
 uniform vec3 regionPos;
 out vec3 VERTCOLOR;
 
 void main()
 {
 	VERTCOLOR = color;
-	float y = (position + regionPos).y * LAYER;
-	float ys = cos(y*0.2) * 1.5;
-	vec3 sway = vec3(sin(SWAY + y) * ys, 0, cos(SWAY + y) * ys);
-	gl_Position = vec4((position + regionPos) * LAYER + sway*swayAmount, 1);
-//	gl_Position = vec4((position + regionPos) * LAYER, 1);
+	gl_Position = MVP * vec4((position + regionPos) * LAYER, 1);
+	
+	//if(gl_Position.z  < 1 || abs(gl_Position.x) > gl_Position.z || abs(gl_Position.y) > gl_Position.z)
+	//{
+	//	gl_Position = vec4(0, 0, 0, -1);
+	//	gl_PointSize = 1;
+	//}
+	//else
+	{
+		gl_PointSize = (0.5 + max(1300.0 / gl_Position.z * LAYER, 0.5));
+	}
 }

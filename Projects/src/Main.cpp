@@ -23,9 +23,9 @@
 
 void main() // console entry
 {
-  ParticleSim();
+  //ParticleSim();
   //Substance();
-  //NovaCosm();
+  NovaCosm();
   //Simple();
   //Reductio();
   //Grass();

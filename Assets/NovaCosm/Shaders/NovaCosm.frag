@@ -1,6 +1,6 @@
 #version 330 core
 
-in vec3 GEOMCOLOR;
+in vec3 VERTCOLOR;
 
 out vec3 color;
 
@@ -11,8 +11,7 @@ vec3 saturation(vec3 rgb, float adjustment)
     return mix(intensity, rgb, adjustment);
 }
 
-
 void main()
 {
-	color = saturation(GEOMCOLOR, 1.5);
+	color = saturation(VERTCOLOR, 1.5);
 }

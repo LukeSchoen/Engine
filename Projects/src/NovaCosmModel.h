@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include "Controls.h"
 #include "Assets.h"
+#include "Shaders.h"
 
 struct voxel 
 {
@@ -26,11 +27,17 @@ struct NovaCosmBlock
 
 struct NovaCosmModel
 {
+  float QUALITY = 512.f;
+
   NovaCosmBlock *root;
 
   StreamFileReader *fileStream;
 
-  NovaCosmModel(const char *NCSfile) { Load(NCSfile); }
+  NovaCosmModel(const char *NCSfile)
+  {
+    glEnable(GL_PROGRAM_POINT_SIZE);
+    Load(NCSfile); 
+  }
 
   ~NovaCosmModel() {}
 
@@ -47,10 +54,6 @@ struct NovaCosmModel
 
   void Stream()
   {
-    //vec3 camPos = vec3(0) - Camera::Position();
-    // Recurse Scene Blocks
-    // Check if we're close to the camera
-    // If so stream in child blocks
     RecursiveStream(root);
   }
 
@@ -85,16 +88,22 @@ private:
       RecursiveAddPoint(block->childPtr[child], layer + 1, pos, col);
   }
 
-  void RecursiveStream(NovaCosmBlock *block)
+  bool RecursiveStream(NovaCosmBlock *block)
   {
     for (uint8_t cItr = 0; cItr < 8; cItr++)
       if (block->childPtr[cItr])
-        RecursiveStream(block->childPtr[cItr]);
+      {
+        if (!RecursiveStream(block->childPtr[cItr]))
+          return false;
+      }
       else
       {
         int64_t childAddress = block->children[cItr];
         if (childAddress > 0)
+        {
           block->childPtr[cItr] = LoadBlock(childAddress);
+          return false;
+        }
       }
   }
 
@@ -108,7 +117,7 @@ private:
 
     bool leaf = true;
     // Close enough to split ?
-    if (dist < 326 * layerSize)
+    if (dist < QUALITY * layerSize)
     //if (false)
     {
       for (uint8_t cItr = 0; cItr < 8; cItr++)
@@ -123,25 +132,20 @@ private:
           if (childAddress > 0)
             block->childPtr[cItr] = LoadBlock(childAddress);
         }
-
-
     }
     if (leaf)
     {
-      static float SWAY = 0;
-      SWAY = SWAY + 0.00025;
+      mat4 TMVP = MVP;
+      TMVP.Transpose();
+      vec4 sp = TMVP * vec4(blockPos.x, blockPos.y, blockPos.z, 1);
 
-      static float swayAmount = 0;
-      if (Controls::KeyDown(SDL_SCANCODE_SPACE))
-        swayAmount = Min(swayAmount + 0.002, 1);
-      else
-        swayAmount = Max(swayAmount - 0.002, 0);
-
-      block->model.AssignUniform("swayAmount", UT_1f, &swayAmount);
-      block->model.AssignUniform("SWAY", UT_1f, &SWAY);
-      block->model.AssignUniform("LAYER", UT_1f, &layerSize);
-      block->model.AssignUniform("regionPos", UT_3f, block->position.Data());
-      block->model.RenderPoints(MVP);
+      float s = 256.f / (1LL << layer);
+      if (dist < s || (sp.z > 0 && abs(sp.x) < sp.z + s && abs(sp.y) < sp.z + s))
+      {
+        block->model.AssignUniform("LAYER", UT_1f, &layerSize);
+        block->model.AssignUniform("regionPos", UT_3f, block->position.Data());
+        block->model.RenderPoints(MVP);
+      }
     }
   }
 
@@ -170,7 +174,8 @@ private:
     free(data);
 
     // GPU
-    block->model.AssignShader(ASSETDIR "NovaCosm/shaders/NovaCosm.vert", ASSETDIR "NovaCosm/shaders/NovaCosm.frag", ASSETDIR "NovaCosm/shaders/NovaCosm.geom");
+    static unsigned int shaderID = Shaders::Load(ASSETDIR "NovaCosm/shaders/NovaCosm.vert", ASSETDIR "NovaCosm/shaders/NovaCosm.frag");
+    block->model.AssignShader(shaderID);
     block->model.AssignAttribute("position", GLAttributeType::AT_UNSIGNED_BYTE, block->voxelPosData, 3, block->voxelCount);
     block->model.AssignAttribute("color", GLAttributeType::AT_UNSIGNED_BYTE_NORM, block->voxelColData, 3, block->voxelCount);
 

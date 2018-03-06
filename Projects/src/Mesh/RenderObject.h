@@ -15,7 +15,7 @@
 struct RenderObject
 {
 public:
-
+  void AssignShader(unsigned int shaderID);
   void AssignShader(const char *vertFile, const char *fragFile, const char *geomFile = nullptr);
   void AssignTexture(const char *varName, const char *texturePath, GLTextureType textureType = TT_2D);
   void AssignTexture(const char *varName, GLuint textureID, GLTextureType textureType = TT_2D);
