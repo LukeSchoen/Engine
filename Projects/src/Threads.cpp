@@ -8,12 +8,22 @@ static uint64_t systemMask;
 void Threads::SetFastMode()
 {
   SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-  SetProcessAffinityMask(GetCurrentProcess(), 1);
+  SetThreadAffinity(1);
 }
 
 void Threads::SetSlowMode()
 {
   SetPriorityClass(GetCurrentProcess(), THREAD_PRIORITY_NORMAL);
+  SetThreadAffinityToAll();
+}
+
+void Threads::SetThreadAffinity(int core)
+{
+  SetProcessAffinityMask(GetCurrentProcess(), 1 << core);
+}
+
+void Threads::SetThreadAffinityToAll()
+{
   GetProcessAffinityMask(GetCurrentProcess(), (PDWORD_PTR)&processMask, (PDWORD_PTR)&systemMask);
   SetProcessAffinityMask(GetCurrentProcess(), systemMask);
 }

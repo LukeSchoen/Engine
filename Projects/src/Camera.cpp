@@ -19,15 +19,19 @@ vec3 Camera::Direction()
   return vec3(camSinY * camCosX, camSinX, camCosY * camCosX).Normalized();
 }
 
-void Camera::Update(float speed, bool only2D, bool useTimeDelta)
+void Camera::Update(float speed, bool only2D, bool useTimeDelta, bool useMouse)
 {
   const float MouseTurnSensitivity = 1.0f / 1000.0f;
   const float ControllerTurnSensitivity = 1.0f / 1000.0f * 2000;
   const float controllerDeadZone = 0.2;
 
-  vec2 mouseTurn = Controls::GetMouseRelative();
-  dir.y -= mouseTurn.x * MouseTurnSensitivity;
-  dir.x += mouseTurn.y * MouseTurnSensitivity;
+  vec2 mouseTurn;
+  if (useMouse)
+  {
+    mouseTurn = Controls::GetMouseRelative();
+    dir.y -= mouseTurn.x * MouseTurnSensitivity;
+    dir.x += mouseTurn.y * MouseTurnSensitivity;
+  }
 
   int time = clock();
   float timeDelta = (time - lastClock) / 1000.0;

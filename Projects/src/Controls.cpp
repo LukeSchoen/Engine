@@ -1,20 +1,27 @@
 #include "Controls.h"
 
-static uint8_t const* keyboardState;
+static uint8_t const* keyboardState = nullptr;
+static uint8_t lastKeyboardState[512];
+
 static int mouseX = 0;
 static int mouseY = 0; 
 static int mouseScroll = 0;
 static GamePads controllers;
 static bool leftClick = false;
 static bool rightClick = false;
+static bool middleClick = false;
 
 bool Controls::Update()
 {
   SDL_PumpEvents(); // request fresh mouse position
+  lastKeyboardState;
+  if (keyboardState == nullptr) keyboardState = SDL_GetKeyboardState(NULL);
+  memcpy(lastKeyboardState, keyboardState, sizeof(lastKeyboardState));
   keyboardState = SDL_GetKeyboardState(NULL);
   uint32_t state = SDL_GetRelativeMouseState(&mouseX, &mouseY);
   leftClick = (state & SDL_BUTTON_LMASK) > 0;
   rightClick = (state & SDL_BUTTON_RMASK) > 0;
+  middleClick = (state & SDL_BUTTON_MMASK) > 0;
 
   SDL_Event e;
   while (SDL_PollEvent(&e))
@@ -31,6 +38,20 @@ bool Controls::Update()
 bool Controls::KeyDown(SDL_Scancode key)
 {
   return keyboardState[key];
+}
+
+
+bool Controls::KeyPressed(SDL_Scancode key)
+{
+  if(!keyboardState)
+    return false;
+  bool ret = keyboardState[key] && !lastKeyboardState[key];
+  return ret;
+}
+
+bool Controls::KeyReleased(SDL_Scancode key)
+{
+  return keyboardState && !keyboardState[key] && lastKeyboardState[key];
 }
 
 vec2i Controls::GetMouse()
@@ -57,6 +78,11 @@ bool Controls::GetRightClick()
   return rightClick;
 }
 
+bool Controls::GetMiddleClick()
+{
+  return middleClick;
+}
+
 void Controls::SetMouseLock(bool lock)
 {
   SDL_SetRelativeMouseMode(lock ? SDL_TRUE : SDL_FALSE);
@@ -72,4 +98,11 @@ bool Controls::GetControllerButton(int buttonID /*= 0*/, int gameController /*= 
 {
   if (gameController >= controllers.gamePadCount) return false; // Make sure controller is attached
   return controllers.gamePads[gameController].buttons[buttonID];
+}
+
+int Controls::GetMouseScroll()
+{
+  int ret = mouseScroll;
+  mouseScroll = 0;
+  return ret;
 }

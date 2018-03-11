@@ -75,6 +75,7 @@
     <ClCompile Include="src\MDSParticle.cpp" />
     <ClCompile Include="src\MDSRegion.cpp" />
     <ClCompile Include="src\MDSTask.cpp" />
+    <ClCompile Include="src\MeanShiftSeg.cpp" />
     <ClCompile Include="src\Mesh\AlphaRenderObject.cpp" />
     <ClCompile Include="src\Mesh\Assimp.cpp" />
     <ClCompile Include="src\Mesh\Buffer.cpp" />
@@ -112,6 +113,7 @@
     <ClCompile Include="src\Region.cpp" />
     <ClCompile Include="src\Round.cpp" />
     <ClCompile Include="src\SecondStream.cpp" />
+    <ClCompile Include="src\Segmentation.cpp" />
     <ClCompile Include="src\Simple.cpp" />
     <ClCompile Include="src\StreamTest.cpp" />
     <ClCompile Include="src\FilePath.cpp" />
@@ -150,6 +152,7 @@
     <ClInclude Include="src\MDSParticle.h" />
     <ClInclude Include="src\MDSRegion.h" />
     <ClInclude Include="src\MDSTask.h" />
+    <ClInclude Include="src\MeanShiftSeg.h" />
     <ClInclude Include="src\ModelView.h" />
     <ClInclude Include="src\MolecualrDynamicsSimulator.h" />
     <ClInclude Include="src\ParticleSim.h" />
@@ -232,6 +235,7 @@
     <ClInclude Include="src\Region.h" />
     <ClInclude Include="src\Round.h" />
     <ClInclude Include="src\SecondStream.h" />
+    <ClInclude Include="src\Segmentation.h" />
     <ClInclude Include="src\Simple.h" />
     <ClInclude Include="src\SortedList.h" />
     <ClInclude Include="src\StreamTest.h" />

@@ -4,7 +4,7 @@
 
 struct Camera
 {
-  static void Update(float speed = 10, bool only2D = false, bool useTimeDelta = true);
+  static void Update(float speed = 10, bool only2D = false, bool useTimeDelta = true, bool useMouse = true);
   static vec3 Position();
   static vec2 Rotation();
   static vec3 Direction();

@@ -233,7 +233,7 @@ struct Convertor
     for (int i = 0; i < 8; i++)
     {
       FilePath outFileName = lTask.filePath;
-      
+
       char nodeIDtxt[2];
       sprintf(nodeIDtxt, "%d", i + 1);
       std::string fullName = outFileName.GetNameNoExt() + nodeIDtxt + outFileName.GetExtension();
@@ -289,7 +289,7 @@ struct Convertor
 
   }
 
-  static int64_t PCFLongestSide(const char *inputPath)
+  static int64_t PCFLongestSide(const char *inputPath, vec3i *pMin = nullptr, vec3i *pMax = nullptr, vec3i *pSize = nullptr)
   {
     printf("Measuring input model...\n");
     int64_t handSize = sizeof(point) * 65536;
@@ -319,7 +319,9 @@ struct Convertor
       }
     }
 
-    // Create Transformed Point Cloud File
+    if (pSize) *pSize = vec3(maxX - minX, maxY - minY, maxZ - minZ);
+    if (pMin) *pMin = vec3(minX, minY, minZ);
+    if (pMax) *pMax = vec3(maxX, maxY, maxZ);
     return Max(Max(maxX - minX + 1, maxY - minY + 1), maxZ - minZ + 1);
   }
 
@@ -377,6 +379,49 @@ struct Convertor
       }
     }
     outputPCF.StopStream();
+  }
+
+  static void PCFtoPNG(const char *inputPath, const char *outputPath)
+  {
+    vec3i bounds, minPos, maxPos;
+    PCFLongestSide(inputPath, &minPos, &maxPos, &bounds);
+
+    bounds = bounds + vec3(1, 1, 1);
+
+    // alocate image;
+    printf("Allocating image memory\n");
+    int64_t elementNum = bounds.x * bounds.z;
+    int64_t imgSize = elementNum * sizeof(uint32_t);
+    int64_t depthSize = elementNum * sizeof(float);
+    uint32_t *imgData = (uint32_t*)malloc(imgSize);
+    float *depthData = (float*)malloc(depthSize);
+    memset(imgData, 0, imgSize);
+    for (int64_t i = 0; i < elementNum; i++)
+      depthData[i] = 0-FLT_MAX;
+    printf("Building png image...\n");
+    int64_t handSize = sizeof(point) * 65536;
+    StreamFileReader inputPCF(inputPath, nullptr, handSize);
+    while (true)
+    {
+      // Read PCF
+      int64_t pointCount;
+      point *points = (point*)inputPCF.ReadBytes(handSize, &pointCount);;
+      if (pointCount == 0) break;
+      pointCount /= sizeof(point);
+
+      // Calculate PCF extents
+      for (int64_t i = 0; i < pointCount; i++)
+      {
+        point &p = points[i];
+        int64_t index = p.x + p.z * bounds.x;
+        if (p.y > depthData[index])
+        {
+          depthData[index] = p.y;
+          imgData[index] = p.color;
+        }
+      }
+    }
+    ImageFile::WriteImagePNG(outputPath, imgData, bounds.x, bounds.z);
   }
 
   static void ExportPCFtoGlorious(const char *inputPath, const char *outputPath, const char *tempDirectory, uint32_t modelSize)
@@ -476,6 +521,8 @@ struct Convertor
 
     const int holFillSize = 1;
 
+    // Blit voxels into grid
+
     printf("blitting!\n");
 
     // Read PCF
@@ -535,14 +582,71 @@ struct Convertor
       }
     }
 
-
-
-    // Simple HoleFill
+    // Super Fast O(N) hole fill
+    if(false)
     {
+      printf("Hole filling!\n");
+      for (int z = 0; z < gridSize; z++)
+        for (int y = 0; y < gridSize; y++)
+          for (int x = 0; x < gridSize; x++)
+          {
+            // Look for empty cells
+            uint32_t gS = Sgrid[x + y * gridSize + z * gridSize * gridSize];
+            if (!gS)
+            {
+              // check if orthographic neighbor hood exists
+              int holeFillSize = 1;
+              bool done = false;
+              for (int iz = -holeFillSize; (!done) & !!(iz < holeFillSize); iz++)
+                for (int iy = -holeFillSize; (!done) & !!(iy < holeFillSize); iy++)
+                  for (int ix = -holeFillSize; (!done) & !!(ix < holeFillSize); ix++)
+                    if ((ix || iy || iz) && (x + ix >= 0 && x + ix < 256) && (y + iy >= 0 && y + iy < 256) && (z + iz >= 0 && z + iz < 256))
+                    {
+                      uint32_t me = Sgrid[(x + ix) + (y + iy) * gridSize + (z + iz) * gridSize * gridSize];
+                      if (me)
+                      {
+                        if ((x - ix >= 0 && x - ix < 256) && (y - iy >= 0 && y - iy < 256) && (z - iz >= 0 && z - iz < 256))
+                        {
+                          uint32_t he = Sgrid[(x - ix) + (y - iy) * gridSize + (z - iz) * gridSize * gridSize];
+                          if (he)
+                          {
+                            done = true;
+                            uint32_t sumWeight = 0;
+                            uint32_t sumRed = 0;
+                            uint32_t sumGreen = 0;
+                            uint32_t sumBlue = 0;
+                            for (int nz = -holeFillSize; !!(nz < holeFillSize); nz++)
+                              for (int ny = -holeFillSize; !!(ny < holeFillSize); ny++)
+                                for (int nx = -holeFillSize; !!(nx < holeFillSize); nx++)
+                                  if ((x + nx >= 0 && x + nx < 256) && (y + ny >= 0 && y + ny < 256) && (z + nz >= 0 && z + nz < 256))
+                                  {
+                                    uint32_t n = Sgrid[(x + nx) + (y + ny) * gridSize + (z + nz) * gridSize * gridSize];
+                                    if (n)
+                                    {
+                                      uint32_t r = Rgrid[(x + nx) + (y + ny) * gridSize + (z + nz) * gridSize * gridSize];
+                                      uint32_t g = Ggrid[(x + nx) + (y + ny) * gridSize + (z + nz) * gridSize * gridSize];
+                                      uint32_t b = Bgrid[(x + nx) + (y + ny) * gridSize + (z + nz) * gridSize * gridSize];
+                                      sumWeight += n;
+                                      sumRed += r;
+                                      sumGreen += g;
+                                      sumBlue += b;
+                                    }
+                                  }
+                            Sgrid[x + y* gridSize + z* gridSize * gridSize] = sumWeight;
+                            Rgrid[x + y* gridSize + z* gridSize * gridSize] = sumRed;
+                            Ggrid[x + y* gridSize + z* gridSize * gridSize] = sumGreen;
+                            Bgrid[x + y* gridSize + z* gridSize * gridSize] = sumBlue;
+                          }
 
+                        }
+                      }
+                    }
+            }
+          }
     }
 
 
+    // combine samples
 
     printf("combining!\n");
     for (int z = 0; z < gridSize; z++)
@@ -558,8 +662,9 @@ struct Convertor
             grid[x + y * gridSize + z * gridSize * gridSize] = gR + gG * 256 + gB * 256 * 256;
           }
         }
-     
-     
+
+    // write out point cloud
+
      // l
      //if (holFillSize > 0)
      //{

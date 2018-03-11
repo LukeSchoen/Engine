@@ -6,6 +6,7 @@ uniform float LAYER;
 uniform mat4 MVP;
 uniform vec3 regionPos;
 out vec3 VERTCOLOR;
+uniform float POINTSIZE;
 
 void main()
 {
@@ -19,6 +20,6 @@ void main()
 	//}
 	//else
 	{
-		gl_PointSize = (0.5 + max(1300.0 / gl_Position.z * LAYER, 0.5));
+		gl_PointSize = max(POINTSIZE * (0.5 + max(1300.0 / gl_Position.z * LAYER, 0.5)), 1);
 	}
 }

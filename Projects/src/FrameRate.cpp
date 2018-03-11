@@ -16,8 +16,11 @@ void FrameRate::Update()
     LastTime = ThisTime;
     if (frameRate)
     {
-      printf("FPS: %d\n", frameRate);
-      printf("POLYS: %d\n", draws / frameRate);
+      if (SDL_GetTicks() > 2000)
+      {
+        printf("FPS: %d\n", frameRate);
+        printf("POLYS: %d\n", draws / frameRate);
+      }
       //printf("x %f, y %f, z %f", Camera::Position().x, Camera::Position().y, Camera::Position().z);
     }
     frameRate = 0;

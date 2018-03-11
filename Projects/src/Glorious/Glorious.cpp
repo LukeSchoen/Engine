@@ -33,8 +33,8 @@ void Glorious()
 #ifdef _DEBUG
   Window window("Game", true, 640, 480, false); // Create Debug Game Window
 #else
-  //Window window("Game", true, 1920, 1080, true); // Create Game Window
-  Window window("Game", true, 800, 600, false); // Create Game Window
+  Window window("Game", true, 1920, 1080, true); // Create Game Window
+  //Window window("Game", true, 800, 600, false); // Create Game Window
 #endif
 
   Controls::SetMouseLock(true);

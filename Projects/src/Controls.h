@@ -6,19 +6,24 @@
 
 struct Controls
 {
+
   static bool Update();
   
   static bool KeyDown(SDL_Scancode key);
+  static bool KeyPressed(SDL_Scancode key);
+  static bool KeyReleased(SDL_Scancode key);
 
   static vec2i GetMouse();
 
   static vec2 GetMouseRelative();
 
   static bool GetLeftClick();
-
   static bool GetRightClick();
+  static bool GetMiddleClick();
 
   static void SetMouseLock(bool lock);
+
+  static int GetMouseScroll();
 
   static vec2 GetController2DAxis(int axisID = 0, int gameController = 0);
 
