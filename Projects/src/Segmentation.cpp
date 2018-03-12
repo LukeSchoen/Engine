@@ -17,7 +17,7 @@ void Segmentation()
 {
   Window window;
 
-  MeanShiftSeg::ApplySegmentation("C:/Users/Luke/Desktop/segment.png", "C:/Users/Luke/Desktop/output.png", 7, 6.5, 100);
+  MeanShiftSeg::ApplySegmentation("C:/Users/Luke/Desktop/segment.png", "C:/Users/Luke/Desktop/output.png", 7, 6.5, 20);
   exit(0);
 
   uint32_t imgSizeX, imgSizeY;

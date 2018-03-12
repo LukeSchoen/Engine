@@ -20,15 +20,17 @@
 #include "Simple.h"
 #include "Substance.h"
 #include "ParticleSim.h"
+#include "Segmentation.h"
 
 void main() // console entry
 {
+  //Segmentation();
+  NovaCosm();
   //ParticleSim();
   //Substance();
-  NovaCosm();
   //Simple();
   //Reductio();
-  //Grass();
+  //Grass();d
   //PixeLife();
   //DLux();
   //Pokemon();

@@ -60,7 +60,8 @@ private:
   static int min_size_;
   static float speed_threshold_;
 
-  static void Filter(vec3 *inp, MeanShiftSegmentationState& state);
+  static void   FilterSlow(vec3 *inp, MeanShiftSegmentationState& state);
+  static void FilterFast(vec3 *inp, MeanShiftSegmentationState& state);
   static void Fill(int regionLoc, int label, int neigh[], MeanShiftSegmentationState& state);
   static void Connect(MeanShiftSegmentationState& state);
   static bool InWindow(const MeanShiftSegmentationState& state, int mode1, int mode2);
@@ -71,7 +72,8 @@ private:
 
 public:
 
-  static void ApplySegmentation(std::string input, std::string output, int sigmaS = 7, float sigmaR = 6.5, int minRegionSize = 20);
+  static void ApplySegmentation(std::string input, std::string output, int sigmaS = 7, float sigmaR = 6.5, int minRegionSize = 20, bool fastFilter = false);
+  static void ApplySegmentation(uint32_t *pInput, int width, int height, uint32_t *pOutput, int sigmaS = 7, float sigmaR = 6.5, int minRegionSize = 20, bool fastFilter = false);
 };
 
 #endif // MeanShiftSeg_h__

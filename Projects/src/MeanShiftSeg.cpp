@@ -7,7 +7,6 @@ const double TC_DIST_FACTOR = 0.5;
 const int LIMIT = 100;
 const float LUV_THRESHOLD = 0.1f;
 const int NODE_MULTIPLE = 10;
-
 const double Xn = 0.95050;
 const double Yn = 1.00000;
 const double Zn = 1.08870;
@@ -15,23 +14,17 @@ const double Un_prime = 0.19784977571475;
 const double Vn_prime = 0.46834507665248;
 const double Lt = 0.008856;
 
-//RGB to LUV conversion
-const double XYZ[3][3] = { { 0.4125,  0.3576,  0.1804 },
+const double LUV[3][3] = { { 0.4125,  0.3576,  0.1804 },
 { 0.2125,  0.7154,  0.0721 },
 { 0.0193,  0.1192,  0.9502 } };
-
-//LUV to RGB conversion
-const double RGB[3][3] = { { 3.2405, -1.5371, -0.4985 },
-{ -0.9693,  1.8760,  0.0416 },
-{ 0.0556, -0.2040,  1.0573 } };
 
 vec3 RGBtoLUV(uint32_t rgb)
 {
   uint8_t *pRGB = (uint8_t*)&rgb;
   double	x, y, z, L0, u_prime, v_prime, constant;
-  x = XYZ[0][0] * pRGB[0] + XYZ[0][1] * pRGB[1] + XYZ[0][2] * pRGB[2];
-  y = XYZ[1][0] * pRGB[0] + XYZ[1][1] * pRGB[1] + XYZ[1][2] * pRGB[2];
-  z = XYZ[2][0] * pRGB[0] + XYZ[2][1] * pRGB[1] + XYZ[2][2] * pRGB[2];
+  x = LUV[0][0] * pRGB[0] + LUV[0][1] * pRGB[1] + LUV[0][2] * pRGB[2];
+  y = LUV[1][0] * pRGB[0] + LUV[1][1] * pRGB[1] + LUV[1][2] * pRGB[2];
+  z = LUV[2][0] * pRGB[0] + LUV[2][1] * pRGB[1] + LUV[2][2] * pRGB[2];
   L0 = y / (255.0 * Yn);
   vec3 ret;
   ret.x = L0 > Lt ? (float)(116.0 * (pow(L0, 1.0 / 3.0)) - 16.0) : (float)(903.3 * L0);
@@ -44,6 +37,10 @@ vec3 RGBtoLUV(uint32_t rgb)
 }
 
 inline int my_round(double in_x) { return in_x < 0 ? (int)(in_x - 0.5) : (int)(in_x + 0.5); }
+
+const double RGB[3][3] = { { 3.2405, -1.5371, -0.4985 },
+{ -0.9693,  1.8760,  0.0416 },
+{ 0.0556, -0.2040,  1.0573 } };
 
 uint32_t LUVtoRGB(vec3 luv)
 {
@@ -169,9 +166,9 @@ RegionAdjacencyTable::RegionAdjacencyTable(const MeanShiftSegmentationState& sta
   {
     for (j = 0; j < width - 1; j++)
     {
-      curLabel = labels[i*width + j];	
-      rightLabel = labels[i*width + j + 1];	
-      bottomLabel = labels[(i + 1)*width + j];	                                  
+      curLabel = labels[i*width + j];
+      rightLabel = labels[i*width + j + 1];
+      bottomLabel = labels[(i + 1)*width + j];
       if (curLabel != rightLabel)
       {
         raNode1 = free_rgn_adj_lists;
@@ -239,7 +236,7 @@ RegionAdjacencyTable::RegionAdjacencyTable(const MeanShiftSegmentationState& sta
   }
 }
 
-void MeanShiftSeg::Filter(vec3 *inp, MeanShiftSegmentationState& state)
+void MeanShiftSeg::FilterFast(vec3 *inp, MeanShiftSegmentationState& state)
 {
   int width = state.width;
   int height = state.height;
@@ -532,6 +529,286 @@ void MeanShiftSeg::Filter(vec3 *inp, MeanShiftSegmentationState& state)
     }
     for (j = 0; j < N; j++)
       msRawData[N*i + j] = (float)(yk[j + 2]);
+  }
+}
+
+void MeanShiftSeg::FilterSlow(vec3 *inp, MeanShiftSegmentationState& state)
+{
+  int N = 3;
+  int		iterationCount, i, j, k, modeCandidateX, modeCandidateY, modeCandidate_i;
+  double	mvAbs, diff, el;
+  int width = state.width;
+  int height = state.height;
+  int L = height * width;
+  if (((state.h[0] = static_cast<float>(sigma_s_)) <= 0) || ((state.h[1] = sigma_r_) <= 0))
+    throw std::exception("sigmaS and/or sigmaR is zero or negative.");
+  int lN = N + 2;
+  std::vector<double> yk(lN);
+  std::vector<double> Mh(lN);
+  const float* data = inp->Data();
+  float* msRawData = state.image[0].Data();
+  std::vector<float> sdata(lN*L);
+  int idxs, idxd;
+  idxs = idxd = 0;
+  if (N == 3)
+  {
+    for (i = 0; i < L; i++)
+    {
+      sdata[idxs++] = (i%width) / static_cast<float>(sigma_s_);
+      sdata[idxs++] = (i / width) / static_cast<float>(sigma_s_);
+      sdata[idxs++] = data[idxd++] / sigma_r_;
+      sdata[idxs++] = data[idxd++] / sigma_r_;
+      sdata[idxs++] = data[idxd++] / sigma_r_;
+    }
+  }
+  else if (N == 1)
+  {
+    for (i = 0; i < L; i++)
+    {
+      sdata[idxs++] = (i%width) / static_cast<float>(sigma_s_);
+      sdata[idxs++] = (i / width) / static_cast<float>(sigma_s_);
+      sdata[idxs++] = data[idxd++] / sigma_r_;
+    }
+  }
+  else
+  {
+    for (i = 0; i < L; i++)
+    {
+      sdata[idxs++] = (i%width) / static_cast<float>(sigma_s_);
+      sdata[idxs++] = (i / width) / static_cast<float>(sigma_s_);
+      for (j = 0; j < N; j++)
+        sdata[idxs++] = data[idxd++] / sigma_r_;
+    }
+  }
+  std::vector<int> slist(L);
+  int bucNeigh[27];
+  float sMins;
+  float sMaxs[3];
+  sMaxs[0] = width / static_cast<float>(sigma_s_);
+  sMaxs[1] = height / static_cast<float>(sigma_s_);
+  sMins = sMaxs[2] = sdata[2];
+  idxs = 2;
+  float cval;
+  for (i = 0; i < L; i++)
+  {
+    cval = sdata[idxs];
+    if (cval < sMins)
+      sMins = cval;
+    else if (cval > sMaxs[2])
+      sMaxs[2] = cval;
+
+    idxs += lN;
+  }
+  int nBuck1, nBuck2, nBuck3;
+  int cBuck1, cBuck2, cBuck3, cBuck;
+  nBuck1 = (int)(sMaxs[0] + 3);
+  nBuck2 = (int)(sMaxs[1] + 3);
+  nBuck3 = (int)(sMaxs[2] - sMins + 3);
+  std::vector<int> buckets(nBuck1*nBuck2*nBuck3);
+  for (i = 0; i < (nBuck1*nBuck2*nBuck3); i++)
+    buckets[i] = -1;
+  idxs = 0;
+  for (i = 0; i < L; i++)
+  {
+    cBuck1 = (int)sdata[idxs] + 1;
+    cBuck2 = (int)sdata[idxs + 1] + 1;
+    cBuck3 = (int)(sdata[idxs + 2] - sMins) + 1;
+    cBuck = cBuck1 + nBuck1*(cBuck2 + nBuck2*cBuck3);
+
+    slist[i] = buckets[cBuck];
+    buckets[cBuck] = i;
+
+    idxs += lN;
+  }
+  idxd = 0;
+  for (cBuck1 = -1; cBuck1 <= 1; cBuck1++)
+  {
+    for (cBuck2 = -1; cBuck2 <= 1; cBuck2++)
+    {
+      for (cBuck3 = -1; cBuck3 <= 1; cBuck3++)
+      {
+        bucNeigh[idxd++] = cBuck1 + nBuck1*(cBuck2 + nBuck2*cBuck3);
+      }
+    }
+  }
+  double wsuml;
+  double hiLTr = 80.0 / sigma_r_;
+  memset(&(state.mode_table[0]), 0, width*height);
+  for (i = 0; i < L; i++)
+  {
+    if (state.mode_table[i] == 1)
+      continue;
+    state.point_count = 0;
+    idxs = i*lN;
+    for (j = 0; j < lN; j++)
+      yk[j] = sdata[idxs + j];
+    for (j = 0; j < lN; j++)
+      Mh[j] = 0;
+    wsuml = 0;
+    cBuck1 = (int)yk[0] + 1;
+    cBuck2 = (int)yk[1] + 1;
+    cBuck3 = (int)(yk[2] - sMins) + 1;
+    cBuck = cBuck1 + nBuck1*(cBuck2 + nBuck2*cBuck3);
+    for (j = 0; j < 27; j++)
+    {
+      idxd = buckets[cBuck + bucNeigh[j]];
+      while (idxd >= 0)
+      {
+        idxs = lN*idxd;
+        el = sdata[idxs + 0] - yk[0];
+        diff = el*el;
+        el = sdata[idxs + 1] - yk[1];
+        diff += el*el;
+        if (diff < 1.0)
+        {
+          el = sdata[idxs + 2] - yk[2];
+          if (yk[2] > hiLTr)
+            diff = 4 * el*el;
+          else
+            diff = el*el;
+          if (N > 1)
+          {
+            el = sdata[idxs + 3] - yk[3];
+            diff += el*el;
+            el = sdata[idxs + 4] - yk[4];
+            diff += el*el;
+          }
+          if (diff < 1.0)
+          {
+            double weight = 1.0;
+            for (k = 0; k < lN; k++)
+              Mh[k] += weight*sdata[idxs + k];
+            wsuml += weight;
+          }
+        }
+        idxd = slist[idxd];
+      }
+    }
+    if (wsuml > 0)
+    {
+      for (j = 0; j < lN; j++)
+        Mh[j] = Mh[j] / wsuml - yk[j];
+    }
+    else
+    {
+      for (j = 0; j < lN; j++)
+        Mh[j] = 0;
+    }
+    mvAbs = (Mh[0] * Mh[0] + Mh[1] * Mh[1])*sigma_s_*sigma_s_;
+    if (N == 3)
+      mvAbs += (Mh[2] * Mh[2] + Mh[3] * Mh[3] + Mh[4] * Mh[4])*sigma_r_*sigma_r_;
+    else
+      mvAbs += Mh[2] * Mh[2] * sigma_r_*sigma_r_;
+    iterationCount = 1;
+    while ((mvAbs >= EPSILON) && (iterationCount < LIMIT))
+    {
+      for (j = 0; j < lN; j++)
+        yk[j] += Mh[j];
+      modeCandidateX = (int)(sigma_s_*yk[0] + 0.5);
+      modeCandidateY = (int)(sigma_s_*yk[1] + 0.5);
+      modeCandidate_i = modeCandidateY*width + modeCandidateX;
+      if ((state.mode_table[modeCandidate_i] != 2) && (modeCandidate_i != i))
+      {
+        diff = 0;
+        idxs = lN*modeCandidate_i;
+        for (k = 2; k < lN; k++)
+        {
+          el = sdata[idxs + k] - yk[k];
+          diff += el*el;
+        }
+        if (diff < TC_DIST_FACTOR)
+        {
+          if (state.mode_table[modeCandidate_i] == 0)
+          {
+            state.point_list[state.point_count++] = modeCandidate_i;
+            state.mode_table[modeCandidate_i] = 2;
+          }
+          else
+          {
+            for (j = 0; j < N; j++)
+              yk[j + 2] = msRawData[modeCandidate_i*N + j] / sigma_r_;
+            state.mode_table[i] = 1;
+            mvAbs = -1;
+            break;
+          }
+        }
+      }
+      for (j = 0; j < lN; j++)
+        Mh[j] = 0;
+      wsuml = 0;
+      cBuck1 = (int)yk[0] + 1;
+      cBuck2 = (int)yk[1] + 1;
+      cBuck3 = (int)(yk[2] - sMins) + 1;
+      cBuck = cBuck1 + nBuck1*(cBuck2 + nBuck2*cBuck3);
+      for (j = 0; j < 27; j++)
+      {
+        idxd = buckets[cBuck + bucNeigh[j]];
+        while (idxd >= 0)
+        {
+          idxs = lN*idxd;
+          el = sdata[idxs + 0] - yk[0];
+          diff = el*el;
+          el = sdata[idxs + 1] - yk[1];
+          diff += el*el;
+          if (diff < 1.0)
+          {
+            el = sdata[idxs + 2] - yk[2];
+            if (yk[2] > hiLTr)
+              diff = 4 * el*el;
+            else
+              diff = el*el;
+            if (N > 1)
+            {
+              el = sdata[idxs + 3] - yk[3];
+              diff += el*el;
+              el = sdata[idxs + 4] - yk[4];
+              diff += el*el;
+            }
+            if (diff < 1.0)
+            {
+              double weight = 1.0;
+              for (k = 0; k < lN; k++)
+                Mh[k] += weight*sdata[idxs + k];
+              wsuml += weight;
+            }
+          }
+          idxd = slist[idxd];
+        }
+      }
+      if (wsuml > 0)
+      {
+        for (j = 0; j < lN; j++)
+          Mh[j] = Mh[j] / wsuml - yk[j];
+      }
+      else
+      {
+        for (j = 0; j < lN; j++)
+          Mh[j] = 0;
+      }
+      mvAbs = (Mh[0] * Mh[0] + Mh[1] * Mh[1])*sigma_s_*sigma_s_;
+      if (N == 3)
+        mvAbs += (Mh[2] * Mh[2] + Mh[3] * Mh[3] + Mh[4] * Mh[4])*sigma_r_*sigma_r_;
+      else
+        mvAbs += Mh[2] * Mh[2] * sigma_r_*sigma_r_;
+      iterationCount++;
+    }
+    if (mvAbs >= 0)
+    {
+      for (j = 0; j < lN; j++)
+        yk[j] += Mh[j];
+      state.mode_table[i] = 1;
+    }
+    for (k = 0; k < N; k++)
+      yk[k + 2] *= sigma_r_;
+    for (j = 0; j < state.point_count; j++)
+    {
+      modeCandidate_i = state.point_list[j];
+      state.mode_table[modeCandidate_i] = 1;
+      for (k = 0; k < N; k++)
+        msRawData[N * modeCandidate_i + k] = (float)(yk[k + 2]);
+    }
+    for (j = 0; j < N; j++)
+      msRawData[N * i + j] = (float)(yk[j + 2]);
   }
 }
 
@@ -865,25 +1142,35 @@ void MeanShiftSeg::FuseRegions(MeanShiftSegmentationState& state)
   }
 }
 
-void MeanShiftSeg::ApplySegmentation(std::string input, std::string output, int sigmaS /*= 7*/, float sigmaR /*= 6.5*/, int minRegionSize /*= 20*/)
+void MeanShiftSeg::ApplySegmentation(std::string input, std::string output, int sigmaS /*= 7*/, float sigmaR /*= 6.5*/, int minRegionSize /*= 20*/, bool fastFilter /*= false*/)
+{
+  printf("Loading\n");
+  uint32_t imageWidth, imageHeight;
+  uint32_t *rgbImage = ImageFile::ReadImage(input.c_str(), &imageWidth, &imageHeight);
+  ApplySegmentation(rgbImage, imageWidth, imageHeight, rgbImage, sigma_s_, sigmaR, minRegionSize, fastFilter);
+  ImageFile::WriteImagePNG(output.c_str(), rgbImage, imageWidth, imageHeight);
+  delete rgbImage;
+}
+
+void MeanShiftSeg::ApplySegmentation(uint32_t *pInput, int width, int height, uint32_t *pOutput, int sigmaS /*= 7*/, float sigmaR /*= 6.5*/, int minRegionSize, bool fastFilter /*= false*/)
 {
   sigma_r_ = sigmaR;
   sigma_s_ = sigmaS;
   min_size_ = minRegionSize;
   speed_threshold_ = 0.5f;
-  printf("Loading\n");
-  uint32_t imageWidth, imageHeight;
-  uint32_t *rgbImage = ImageFile::ReadImage(input.c_str(), &imageWidth, &imageHeight);
-  vec3 *luvInput = new vec3[imageWidth * imageHeight];
-  for (int y = 0; y < imageHeight; y++) for (int x = 0; x < imageWidth; x++) luvInput[x + y * imageWidth] = RGBtoLUV(rgbImage[x + y * imageWidth]);
-  MeanShiftSegmentationState state(imageWidth, imageHeight);
+  vec3 *luvInput = new vec3[width * height];
+  for (int y = 0; y < height; y++) for (int x = 0; x < width; x++) luvInput[x + y * width] = RGBtoLUV(pInput[x + y * width]);
+  MeanShiftSegmentationState state(width, height);
   printf("Filtering\n");
-  Filter(luvInput, state);
+  if (fastFilter)
+    FilterFast(luvInput, state);
+  else
+    FilterSlow(luvInput, state);
   printf("Connecting\n");
   Connect(state);
   printf("Fusing\n");
   FuseRegions(state);
   printf("Saving\n");
-  for (int y = 0; y < imageHeight; y++) for (int x = 0; x < imageWidth; x++) rgbImage[x + y * imageWidth] = LUVtoRGB(state.image[x + y * imageWidth]);
-  ImageFile::WriteImagePNG(output.c_str(), rgbImage, imageWidth, imageHeight);
+  for (int y = 0; y < height; y++) for (int x = 0; x < width; x++) pOutput[x + y * width] = LUVtoRGB(state.image[x + y * width]);
+  delete[] luvInput;
 }

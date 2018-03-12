@@ -59,8 +59,8 @@ void NovaCosm()
   //NovaCosmModel model("C:/temp/map.ncs");
   //exit(0);
 
-  Camera::SetPosition(vec3(-122.661377, -18.7013016, -115.216904));
-  Camera::SetRotation(vec2(0.748996258, 0.716999233));
+  Camera::SetPosition(vec3(-120.317215, -58.7549934, -127.834129));
+  Camera::SetRotation(vec2(0.984997272, 0.321998835));
 
   mat4 projectionMat;
   vec2 nearFar(0.02, 8000);
@@ -129,12 +129,8 @@ void NovaCosm()
       int scroll = Controls::GetMouseScroll();
       if (scroll)
       {
-        if (scroll > 0)
-          scroll = 1;
-
-        if (scroll < 0)
-          scroll = -2;
-
+        if (scroll > 0) scroll = 1; 
+        if (scroll < 0) scroll = -2;
         vec3 diff = vec3() - moveDir * 0.5 * scroll;
         scrollOffset = scrollOffset + diff;
         if (scrollOffset.Length() > diff.Length())
@@ -155,19 +151,84 @@ void NovaCosm()
       for (int s = 0; s < dist; s++)
       {
         pModel->AddPoint(sPos, 0xFFFFFF);
-
         pModel->AddPoint(sPos + vec3(-stepSize, 0, 0), 0xFFFFFF);
         pModel->AddPoint(sPos + vec3(stepSize, 0, 0), 0xFFFFFF);
         pModel->AddPoint(sPos + vec3(0, -stepSize, 0), 0xFFFFFF);
         pModel->AddPoint(sPos + vec3(0, stepSize, 0), 0xFFFFFF);
         pModel->AddPoint(sPos + vec3(0, 0, -stepSize), 0xFFFFFF);
         pModel->AddPoint(sPos + vec3(0, 0, stepSize), 0xFFFFFF);
-
         sPos = sPos + dir * stepSize;
       }
     }
     lastVoxelHovered = voxelHovered;
     lastMouseWorldPos = mouseWorldPos;
+    
+    // Mouse Segmentation Selection
+    // if left mouse click
+    NovaCosmBlock *block;
+    if(!Controls::GetLeftClick())
+    {
+      static uint32_t *colData = nullptr;
+      static int colDataSize = 0;
+      int layer;
+      block = pModel->GetCamBlock(mouseWorldPos, &layer);
+      if (block)
+      {
+        if(block->voxelCount * 3 > colDataSize)
+        {
+          colDataSize = block->voxelCount * 3;
+          colData = (uint32_t*)realloc(colData, colDataSize);
+        }
+        memcpy(colData, block->voxelColData, block->voxelCount * 3);
+
+        // find which segment the mouse lies in
+        auto seg =(uint8_t*)block->voxelSegmentData;
+        uint8_t segR = seg[0]; uint8_t segG = seg[1]; uint8_t segB = seg[2];
+
+        float bestDist = 512;
+        for (int64_t vItr = 0; vItr < block->voxelCount; vItr++)
+        {
+          auto xyz = &((uint8_t*)block->voxelPosData)[vItr * 3];
+          auto segData = &((uint8_t*)block->voxelSegmentData)[vItr * 3];
+          auto rgb = &((uint8_t*)block->voxelColData)[vItr * 3];
+
+          float layerSize = (1.0 / (1LL << layer));
+          vec3 blockPos = (vec3(xyz[0], xyz[1], xyz[2]) + block->position) * layerSize;
+          float dist = (blockPos - mouseWorldPos).Length();
+          if (dist < bestDist)
+          {
+            bestDist = dist;
+            segR = segData[0];
+            segG = segData[1];
+            segB = segData[2];
+          }
+        }
+        // Generate cp;pr
+        uint8_t cr = 0x1E;
+        uint8_t cg = 0x90;
+        uint8_t cb = 0xFF;
+        float occ = 1-abs(sin(clock() /500.f));
+        cr += occ * (255 - cr);
+        cg += occ * (255 - cg);
+        cb += occ * (255 - cb);
+        for (int64_t vItr = 0; vItr < block->voxelCount; vItr++)
+        {
+          auto xyz = &((uint8_t*)block->voxelPosData)[vItr * 3];
+          auto segData = &((uint8_t*)block->voxelSegmentData)[vItr * 3];
+          auto rgb = &((uint8_t*)block->voxelColData)[vItr * 3];
+          if (segData[0] == segR && segData[1] == segG && segData[2] == segB)
+          {
+            rgb[0] = (rgb[0] + cr) / 2;
+            rgb[1] = (rgb[1] + cg) / 2;
+            rgb[2] = (rgb[2] + cb) / 2;
+          }
+        }
+        block->Updated = false;
+        block->voxels.AssignAttribute("color", AT_UNSIGNED_BYTE_NORM, block->voxelColData, 3, block->voxelCount);
+        memcpy(block->voxelColData, colData, block->voxelCount * 3);
+      }
+    }
+
 
     // Skybox
     Textures::SetTextureFilterMode(false);
@@ -193,10 +254,12 @@ void NovaCosm()
 
     pModel->Render(MVP, debugging);
 
+    if(block) block->Updated = true;
+
     glFinish();
     window.Swap(false); // Swap Window
 
-    // Calculate mouse location
+    // Retrieve mouse location
     GLfloat depth_comp;
     vec2i mouse = Controls::GetMouse();
     mouse.y = window.height - 1 - mouse.y;
@@ -213,20 +276,8 @@ void NovaCosm()
       mouseWorldPos = mouseWorldPos / mouseWorldPos.w;
     }
 
-
     if (Controls::KeyDown(SDL_SCANCODE_F))
       pModel->Stream();
-
-    if (Controls::GetControllerButton(11)) pModel->AddPoint(vec3() - Camera::Position(), 0x0000FF);
-    if (Controls::GetControllerButton(10)) pModel->AddPoint(vec3() - Camera::Position(), 0x00FF00);
-    if (Controls::GetControllerButton(12)) pModel->AddPoint(vec3() - Camera::Position(), 0xFF0000);
-    if (Controls::GetControllerButton(13)) pModel->AddPoint(vec3() - Camera::Position(), 0xFFFFFF);
-
-    if (Controls::KeyDown(SDL_SCANCODE_1)) pModel->AddPoint(vec3() - Camera::Position(), 0x0000FF);
-    if (Controls::KeyDown(SDL_SCANCODE_2)) pModel->AddPoint(vec3() - Camera::Position(), 0x00FF00);
-    if (Controls::KeyDown(SDL_SCANCODE_3)) pModel->AddPoint(vec3() - Camera::Position(), 0xFF0000);
-    if (Controls::KeyDown(SDL_SCANCODE_4)) pModel->AddPoint(vec3() - Camera::Position(), 0xFFFFFF);
-    if (Controls::KeyDown(SDL_SCANCODE_5)) pModel->AddPoint(vec3() - Camera::Position(), 0x000000);
 
     FrameRate::Update();
   }

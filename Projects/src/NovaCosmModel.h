@@ -7,6 +7,7 @@
 #include "Controls.h"
 #include "Assets.h"
 #include "Shaders.h"
+#include "MeanShiftSeg.h"
 
 struct voxel 
 {
@@ -24,7 +25,9 @@ struct NovaCosmBlock
   int64_t voxelCount;
   void *voxelPosData;
   void *voxelColData;
-  RenderObject model;
+  void *voxelSegmentData;
+  RenderObject voxels;
+  RenderObject segments;
   RenderObject regionLines;
 
 };
@@ -32,7 +35,7 @@ struct NovaCosmBlock
 struct NovaCosmModel
 {
   float qMult = 512.f;
-  float qOff = 0.f;
+  bool segmentation = true;
 
   NovaCosmBlock *root;
 
@@ -74,7 +77,37 @@ struct NovaCosmModel
     RecursiveExportPCF(&stream, root);
   }
 
+  NovaCosmBlock *GetCamBlock(vec3 pos, int *layer)
+  {
+    if (segmentation)
+      return RecursiveGetCamBlock(root, 0, pos, layer);
+    else
+      return nullptr;
+  }
+
 private:
+  NovaCosmBlock *RecursiveGetCamBlock(NovaCosmBlock *block, int layer, vec3 pos, int *outLayer)
+  {
+    float layerSize = (1.0 / (1LL << layer));
+    vec3 blockPos = (block->position + vec3(128, 128, 128)) * layerSize;
+    vec3 camPos = vec3(0) - Camera::Position();
+    float dist = Max(Max(fabs(camPos.x - blockPos.x), fabs(camPos.y - blockPos.y)), fabs(camPos.z - blockPos.z));
+
+    // Close enough to split ?
+    if (dist < qMult * (layerSize * 2))
+    {
+      vec3 localPos = (pos * (1LL << layer)) - block->position;
+      bool midx = localPos.x >= 128;
+      bool midy = localPos.y >= 128;
+      bool midz = localPos.z >= 128;
+      uint8_t child = midx + midy * 2 + midz * 4;
+      if (block->childPtr[child] && block->childPtr[child]->Ready)
+        return RecursiveGetCamBlock(block->childPtr[child], layer + 1, pos, outLayer);
+    }
+    *outLayer = layer;
+    return block;
+  }
+
   void RecursiveExportPCF(StreamFileWriter *stream, NovaCosmBlock *block)
   {
     bool leaf = true;
@@ -113,9 +146,9 @@ private:
     block->voxelCount++;
     block->voxelPosData = realloc(block->voxelPosData, block->voxelCount * 3);
     block->voxelColData = realloc(block->voxelColData, block->voxelCount * 3);
-    ((uint8_t*)block->voxelPosData)[(block->voxelCount - 1) * 3 + 0] = round(localPos.x);
-    ((uint8_t*)block->voxelPosData)[(block->voxelCount - 1) * 3 + 1] = round(localPos.y);
-    ((uint8_t*)block->voxelPosData)[(block->voxelCount - 1) * 3 + 2] = round(localPos.z);
+    ((uint8_t*)block->voxelPosData)[(block->voxelCount - 1) * 3 + 0] = Min(round(localPos.x), 255);
+    ((uint8_t*)block->voxelPosData)[(block->voxelCount - 1) * 3 + 1] = Min(round(localPos.y), 255);
+    ((uint8_t*)block->voxelPosData)[(block->voxelCount - 1) * 3 + 2] = Min(round(localPos.z), 255);
 
     ((uint8_t*)block->voxelColData)[(block->voxelCount - 1) * 3 + 0] = col & 0xFF;
     ((uint8_t*)block->voxelColData)[(block->voxelCount - 1) * 3 + 1] = (col >> 8) & 0xFF;
@@ -140,7 +173,7 @@ private:
     float dist = Max(Max(fabs(camPos.x - blockPos.x), fabs(camPos.y - blockPos.y)), fabs(camPos.z - blockPos.z));
 
     // Close enough to split ?
-    if (dist < qMult * layerSize + qOff)
+    if (dist < qMult * layerSize)
     {
       // Create children
       for (uint8_t cItr = 0; cItr < 8; cItr++)
@@ -176,11 +209,12 @@ private:
     //layerSize = 1.0;
     vec3 blockPos = (block->position + vec3(128, 128, 128)) * layerSize;
     vec3 camPos = vec3(0) - Camera::Position();
-    float dist = (camPos - blockPos).Length();
+    //float dist = (camPos - blockPos).Length();
+    float dist = Max(Max(fabs(camPos.x - blockPos.x), fabs(camPos.y - blockPos.y)), fabs(camPos.z - blockPos.z));
 
     bool leaf = true;
     // Close enough to split ?
-    if (dist < qMult * layerSize + qOff)
+    if (dist < qMult * layerSize)
     {
       bool kidsAllReady = true;
       //renderLock.lock();
@@ -207,16 +241,25 @@ private:
       {
         if (block->Updated)
         {
-          block->model.AssignAttribute("position", GLAttributeType::AT_UNSIGNED_BYTE, block->voxelPosData, 3, block->voxelCount);
-          block->model.AssignAttribute("color", GLAttributeType::AT_UNSIGNED_BYTE_NORM, block->voxelColData, 3, block->voxelCount);
+          block->voxels.AssignAttribute("position", GLAttributeType::AT_UNSIGNED_BYTE, block->voxelPosData, 3, block->voxelCount);
+          block->voxels.AssignAttribute("color", GLAttributeType::AT_UNSIGNED_BYTE_NORM, block->voxelColData, 3, block->voxelCount);
           block->Updated = false;
         }
 
-        block->model.AssignUniform("LAYER", UT_1f, &layerSize);
         float pointsize = 1.0 - (debug * 0.8);
-        block->model.AssignUniform("POINTSIZE", UT_1f, &pointsize);
-        block->model.AssignUniform("regionPos", UT_3f, block->position.Data());
-        block->model.RenderPoints(MVP);
+        block->voxels.AssignUniform("LAYER", UT_1f, &layerSize);
+        block->voxels.AssignUniform("POINTSIZE", UT_1f, &pointsize);
+        block->voxels.AssignUniform("regionPos", UT_3f, block->position.Data());
+
+        block->segments.AssignUniform("LAYER", UT_1f, &layerSize);
+        block->segments.AssignUniform("POINTSIZE", UT_1f, &pointsize);
+        block->segments.AssignUniform("regionPos", UT_3f, block->position.Data());
+
+        if(Controls::KeyDown(SDL_SCANCODE_1))
+          block->segments.RenderPoints(MVP);
+        else
+          block->voxels.RenderPoints(MVP);
+
         if(debug)
           block->regionLines.RenderLines(MVP);
       }
@@ -240,6 +283,7 @@ private:
     fileStream->ReadBytes(data, voxelDataSize);
     block->voxelPosData = malloc(block->voxelCount * 3);
     block->voxelColData = malloc(block->voxelCount * 3);
+    block->voxelSegmentData = malloc(block->voxelCount * 3);
     for (int64_t vItr = 0; vItr < block->voxelCount; vItr++)
     {
       for (int c = 0; c < 3; c++) ((uint8_t*)block->voxelPosData)[vItr * 3 + c] = data[vItr * 6 + c]; // Positions
@@ -250,9 +294,45 @@ private:
     // GPU
     // Voxels
     static unsigned int shaderID = Shaders::Load(ASSETDIR "NovaCosm/shaders/NovaCosm.vert", ASSETDIR "NovaCosm/shaders/NovaCosm.frag");
-    block->model.AssignShader(shaderID);
-    block->model.AssignAttribute("position", AT_UNSIGNED_BYTE, block->voxelPosData, 3, block->voxelCount);
-    block->model.AssignAttribute("color", AT_UNSIGNED_BYTE_NORM, block->voxelColData, 3, block->voxelCount);
+    block->voxels.AssignShader(shaderID);
+    block->voxels.AssignAttribute("position", AT_UNSIGNED_BYTE, block->voxelPosData, 3, block->voxelCount);
+    block->voxels.AssignAttribute("color", AT_UNSIGNED_BYTE_NORM, block->voxelColData, 3, block->voxelCount);
+
+    if (segmentation)
+    {
+      // Generate Segments
+      uint32_t *pColorMap = new uint32_t[256 * 256];
+      float *pDepthMap = new float[256 * 256];
+      memset(pColorMap, 0, 256 * 256 * sizeof(uint32_t));
+      memset(pDepthMap, 0, 256 * 256 * sizeof(float));
+      for (int64_t vItr = 0; vItr < block->voxelCount; vItr++)
+      {
+        auto xyz = &((uint8_t*)block->voxelPosData)[vItr * 3];
+        auto rgb = &((uint8_t*)block->voxelColData)[vItr * 3];
+        if (xyz[1] >= pDepthMap[xyz[0] + xyz[2] * 256])
+        {
+          pDepthMap[xyz[0] + xyz[2] * 256] = xyz[1];
+          pColorMap[xyz[0] + xyz[2] * 256] = rgb[0] | rgb[1] << 8 | rgb[2] << 16;
+        }
+      }
+      MeanShiftSeg::ApplySegmentation(pColorMap, 256, 256, pColorMap, 7, 6.5, 50, true);
+      for (int64_t vItr = 0; vItr < block->voxelCount; vItr++)
+      {
+        auto xyz = &((uint8_t*)block->voxelPosData)[vItr * 3];
+        auto rgb = &((uint8_t*)block->voxelSegmentData)[vItr * 3];
+        rgb[0] = (pColorMap[xyz[0] + xyz[2] * 256]) & 255;
+        rgb[1] = (pColorMap[xyz[0] + xyz[2] * 256] >> 8) & 255;
+        rgb[2] = (pColorMap[xyz[0] + xyz[2] * 256] >> 16) & 255;
+      }
+      delete[] pColorMap;
+      delete[] pDepthMap;
+
+      // Upload Segments
+      block->segments.AssignShader(shaderID);
+      block->segments.AssignAttribute("position", AT_UNSIGNED_BYTE, block->voxelPosData, 3, block->voxelCount);
+      block->segments.AssignAttribute("color", AT_UNSIGNED_BYTE_NORM, block->voxelSegmentData, 3, block->voxelCount);
+    }
+
 
     // Lines
     block->regionLines.AssignShader(SHADERDIR "ColouredRenderObject.vert", SHADERDIR "ColouredRenderObject.frag");
@@ -306,6 +386,7 @@ private:
   {
     free(block->voxelPosData);
     free(block->voxelColData);
+    free(block->voxelSegmentData);
     delete block;
   }
 };
