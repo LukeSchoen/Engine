@@ -21,23 +21,24 @@
 #include "Substance.h"
 #include "ParticleSim.h"
 #include "Segmentation.h"
+#include "DepthTest.h"
 
 void main() // console entry
 {
-  //Segmentation();
-  NovaCosm();
-  //ParticleSim();
   //Substance();
+  DepthTest();
+  //ParticleSim();
+  //NovaCosm();
+  //Glorious();
   //Simple();
   //Reductio();
-  //Grass();d
+  //Grass();
   //PixeLife();
   //DLux();
   //Pokemon();
   //BTCBot();
   //SecondStream();
   //StreamTest();
-  //Glorious();
   //DrawTree();
   //Cosmic();
   //Zelda();
@@ -50,4 +51,3 @@ void main() // console entry
 }
 
 int wmain(int pc, char* ps){main();} // windows entry
- 

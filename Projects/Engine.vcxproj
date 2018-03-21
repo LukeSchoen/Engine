@@ -42,6 +42,7 @@
     <ClCompile Include="src\Cosmic.cpp" />
     <ClCompile Include="src\CosmicModel.cpp" />
     <ClCompile Include="src\Decimator.cpp" />
+    <ClCompile Include="src\DepthTest.cpp" />
     <ClCompile Include="src\DLux.cpp" />
     <ClCompile Include="src\DrawTree.cpp" />
     <ClCompile Include="src\Effect Object.cpp" />
@@ -61,6 +62,7 @@
     <ClCompile Include="src\GPix.cpp" />
     <ClCompile Include="src\Grass.cpp" />
     <ClCompile Include="src\Insight.cpp" />
+    <ClCompile Include="src\Kinect.cpp" />
     <ClCompile Include="src\LogicMonday.cpp" />
     <ClCompile Include="src\MagicaVoxels.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -113,7 +115,6 @@
     <ClCompile Include="src\Region.cpp" />
     <ClCompile Include="src\Round.cpp" />
     <ClCompile Include="src\SecondStream.cpp" />
-    <ClCompile Include="src\Segmentation.cpp" />
     <ClCompile Include="src\Simple.cpp" />
     <ClCompile Include="src\StreamTest.cpp" />
     <ClCompile Include="src\FilePath.cpp" />
@@ -141,12 +142,14 @@
     <ClInclude Include="src\BTCBot.h" />
     <ClInclude Include="src\btcFunctions.h" />
     <ClInclude Include="src\btcTypes.h" />
+    <ClInclude Include="src\DepthTest.h" />
     <ClInclude Include="src\DrawTree.h" />
     <ClInclude Include="src\EntityHandler.h" />
     <ClInclude Include="src\EntityMaker.h" />
     <ClInclude Include="src\EntityModel.h" />
     <ClInclude Include="src\GPix.h" />
     <ClInclude Include="src\Grass.h" />
+    <ClInclude Include="src\Kinect.h" />
     <ClInclude Include="src\MagicaVoxels.h" />
     <ClInclude Include="src\MarchingCubes.h" />
     <ClInclude Include="src\MDSParticle.h" />
@@ -235,7 +238,6 @@
     <ClInclude Include="src\Region.h" />
     <ClInclude Include="src\Round.h" />
     <ClInclude Include="src\SecondStream.h" />
-    <ClInclude Include="src\Segmentation.h" />
     <ClInclude Include="src\Simple.h" />
     <ClInclude Include="src\SortedList.h" />
     <ClInclude Include="src\StreamTest.h" />
@@ -329,17 +331,22 @@
     <IntDir>$(SolutionDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
     <CustomBuildBeforeTargets>
     </CustomBuildBeforeTargets>
+    <IncludePath>$(KINECTSDK10_DIR)\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x64;$(KINECTSDK10_DIR)\lib\amd64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\Output\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
     <CustomBuildBeforeTargets />
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\Output\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\Intermediate\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(KINECTSDK10_DIR)\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x64;$(KINECTSDK10_DIR)\lib\amd64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -371,7 +378,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;Kinect10.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -457,7 +464,7 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc1
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;Kinect10.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
     </Link>

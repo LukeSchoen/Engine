@@ -281,11 +281,14 @@
     <ClCompile Include="src\MagicaVoxels.cpp">
       <Filter>Engine\MagicaVoxels</Filter>
     </ClCompile>
-    <ClCompile Include="src\Segmentation.cpp">
-      <Filter>Projects\Segmentation</Filter>
-    </ClCompile>
     <ClCompile Include="src\MeanShiftSeg.cpp">
       <Filter>Engine\MeanShiftSeg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Kinect.cpp">
+      <Filter>Engine\kinect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DepthTest.cpp">
+      <Filter>Projects\DepthTest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -635,11 +638,14 @@
     <ClInclude Include="src\MagicaVoxels.h">
       <Filter>Engine\MagicaVoxels</Filter>
     </ClInclude>
-    <ClInclude Include="src\Segmentation.h">
-      <Filter>Projects\Segmentation</Filter>
-    </ClInclude>
     <ClInclude Include="src\MeanShiftSeg.h">
       <Filter>Engine\MeanShiftSeg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Kinect.h">
+      <Filter>Engine\kinect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DepthTest.h">
+      <Filter>Projects\DepthTest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -907,11 +913,14 @@
     <Filter Include="Engine\MagicaVoxels">
       <UniqueIdentifier>{123e49eb-edcb-41cd-9700-459f7b6a93ef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Projects\Segmentation">
-      <UniqueIdentifier>{f82d4e3a-c110-4452-9ec4-4058bcf864c4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\MeanShiftSeg">
       <UniqueIdentifier>{6b997fb1-c0fe-4d06-a893-d704d6c8412a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\kinect">
+      <UniqueIdentifier>{a1f780a5-3fec-4d06-bdae-b85e8781645a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\DepthTest">
+      <UniqueIdentifier>{7dc0129b-5472-4ab6-98fb-48c21557658a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
