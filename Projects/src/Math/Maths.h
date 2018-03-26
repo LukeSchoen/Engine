@@ -28,9 +28,11 @@
 #include "Triangle.h"
 #include "PolyMesh.h"
 
+// Color
 vec3 s_unpackRGB(uint32_t c);
 uint32_t s_packRGB(vec3 c);
 
+// Raytracing
 float IntersectRaySphere(vec3 rayStart, vec3 rayDir, vec3 sphereCentre, float radius);
 bool RayWillHitTriangle(const vec3 V1, const vec3 V2, const vec3 V3, const vec3 RayPos, const vec3 RayDir, float *pCollisionT);
 bool RayWillHitQuad(const vec3 V1, const vec3 V2, const vec3 V3, const vec3 V4, const vec3 RayPos, const vec3 RayDir, float *pCollisionT);

@@ -33,7 +33,7 @@ void DrawRegionLines(std::vector<vec3> *posData, std::vector<vec3> *colData, vec
 
 void ParticleSimulator::Update(int steps /*= 1*/)
 {
-  for (int i = 0; i < steps; i++) world.Update();
+  for (int i = 0; i < steps; i++) world.Process();
   static std::vector<vec3> posData; posData.clear();
   static std::vector<vec3> colData; colData.clear();
   for (auto & p : world.RequestPoints())

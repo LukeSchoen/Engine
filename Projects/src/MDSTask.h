@@ -17,7 +17,11 @@ public:
   std::vector<MDSOldParticle> m_newParticles;
   MDSRegion m_region;
 
+  void Update();
+
   void Process();
+
+  void GetExitingParticles(std::vector<MDSOldParticle> *pParticles);
 
   void AddPoint(MDSOldParticle particle);
 };

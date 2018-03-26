@@ -104,11 +104,30 @@ void MolecularDynamicsSimulator::MDSwork(MDSTask *pTast)
 {
 }
 
+void MolecularDynamicsSimulator::Process()
+{
+  for (auto & task : m_tasks)
+  {
+    std::vector<MDSOldParticle> transferParticles;
+    std::vector<std::tuple<vec3, uint32_t>> tParticles;
+    task.GetExitingParticles(&transferParticles);
+    for (auto & particle : transferParticles)
+      tParticles.emplace_back(vec3(particle.xPos, particle.yPos, particle.zPos), particle.color);
+    for (auto & tparticle : tParticles)
+      AddPoint(tparticle);
+  }
+  for (auto & task : m_tasks) task.Update();
+
+
+  for (auto & task : m_tasks) task.Process();
+}
+
 void MolecularDynamicsSimulator::Update()
 {
-  for (auto & task : m_tasks) task.Process();
+  for (auto & task : m_tasks) task.Update();
 }
 
 MolecularDynamicsSimulator::MolecularDynamicsSimulator()
 {
+
 }

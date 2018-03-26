@@ -1,7 +1,5 @@
 #include "Ray.h"
 
-
-
 Ray::Ray(const vec3 &_position, const vec3 &_direction)
 {
   position = _position;

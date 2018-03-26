@@ -43,7 +43,7 @@ struct GloriousModel
   StreamFileReader *fileStream;
 
   GloriousModel(const char *NCSfile)
-    : atlas(256, 256, 256)
+    : atlas(256, 256, 4096)
   {
     while (!atlas.UploadToGPU());
     Load(NCSfile);
@@ -64,6 +64,7 @@ struct GloriousModel
   void Render(const mat4 &MVP)
   {
     RecursiveRender(root, MVP, 0);
+    DynamicTextureArrayAtlas::NextFrame();
   }
 
   void Stream()
@@ -161,14 +162,24 @@ private:
 
     if (leaf)
     {
-      renderLock.lock();
-      bool suceess = atlas.UploadToGPU();
-      renderLock.unlock();
-      if (suceess)
+      mat4 TMVP = MVP;
+      TMVP.Transpose();
+      vec4 sp = TMVP * vec4(blockPos.x, blockPos.y, blockPos.z, 1);
+
+      float s = 256.f / (1LL << layer);
+      if (dist < s || (sp.z > 0 && abs(sp.x) < sp.z + s && abs(sp.y * 0.7) < sp.z + s))
       {
-        block->Smodel->AssignUniform("LAYER", UT_1f, &layerSize);
-        block->Smodel->AssignUniform("regionPos", UT_3f, block->position.Data());
-        block->Smodel->Render(MVP);
+        renderLock.lock();
+        bool  suceess = false;
+        while (!suceess)
+          suceess = atlas.UploadToGPU();
+        renderLock.unlock();
+        if (suceess)
+        {
+          block->Smodel->AssignUniform("LAYER", UT_1f, &layerSize);
+          block->Smodel->AssignUniform("regionPos", UT_3f, block->position.Data());
+          block->Smodel->Render(MVP);
+        }
       }
     }
   }
@@ -300,10 +311,19 @@ private:
           }
         }
 
-    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0.5, 0);
-    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 1, 0);
-    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 2, 0);
-    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 4, 0);
+    FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 0);
+
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 16);
+//     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0.25, 0);
+//     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0.5, 0);
+//     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 1, 0);
+//     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 2, 0);
+//     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 4, 0);
+
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0.5, 0);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 1, 0);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 2, 0);
+    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 4, 0);
 
     //printf("built block\n");
     int tile = -1;

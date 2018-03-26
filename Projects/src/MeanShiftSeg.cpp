@@ -1170,7 +1170,13 @@ void MeanShiftSeg::ApplySegmentation(uint32_t *pInput, int width, int height, ui
   Connect(state);
   printf("Fusing\n");
   FuseRegions(state);
+  //for (int i = 0; i < 6; i++)
+  //{
+  //  min_size_ = min_size_ * 1.5;
+  //  FuseRegions(state);
+  //}
   printf("Saving\n");
+
   for (int y = 0; y < height; y++) for (int x = 0; x < width; x++) pOutput[x + y * width] = LUVtoRGB(state.image[x + y * width]);
   delete[] luvInput;
 }

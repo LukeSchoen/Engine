@@ -22,11 +22,15 @@
 #include "ParticleSim.h"
 #include "Segmentation.h"
 #include "DepthTest.h"
+#include "Rays.h"
+#include "SciFi.h"
 
 void main() // console entry
 {
+  SciFi();
+  //Rays();
   //Substance();
-  DepthTest();
+  //DepthTest();
   //ParticleSim();
   //NovaCosm();
   //Glorious();

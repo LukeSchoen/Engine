@@ -103,9 +103,6 @@
     <ClCompile Include="src\math\Exponent.cpp">
       <Filter>Engine\Maths\Algebra\Elementary</Filter>
     </ClCompile>
-    <ClCompile Include="src\Math\Ray.cpp">
-      <Filter>Engine\Maths\Geometry\Ray</Filter>
-    </ClCompile>
     <ClCompile Include="src\Audio.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
@@ -290,6 +287,15 @@
     <ClCompile Include="src\DepthTest.cpp">
       <Filter>Projects\DepthTest</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rays.cpp">
+      <Filter>Projects\Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Ray.cpp">
+      <Filter>Engine\Maths\Geometry\Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SciFi.cpp">
+      <Filter>Projects\Scifi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -372,9 +378,6 @@
     </ClInclude>
     <ClInclude Include="src\Math\Plane.h">
       <Filter>Engine\Maths\Geometry\Plane</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\Ray.h">
-      <Filter>Engine\Maths\Geometry\Ray</Filter>
     </ClInclude>
     <ClInclude Include="src\Math\Sphere.h">
       <Filter>Engine\Maths\Geometry\Sphere</Filter>
@@ -646,6 +649,15 @@
     </ClInclude>
     <ClInclude Include="src\DepthTest.h">
       <Filter>Projects\DepthTest</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rays.h">
+      <Filter>Projects\Ray</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Ray.h">
+      <Filter>Engine\Maths\Geometry\Ray</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SciFi.h">
+      <Filter>Projects\Scifi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -921,6 +933,12 @@
     </Filter>
     <Filter Include="Projects\DepthTest">
       <UniqueIdentifier>{7dc0129b-5472-4ab6-98fb-48c21557658a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Ray">
+      <UniqueIdentifier>{01fe6c8a-b0d7-4eeb-ab5d-4a5a8fc86d73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Scifi">
+      <UniqueIdentifier>{8319b771-124e-4ad3-8b40-b0d6188391fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

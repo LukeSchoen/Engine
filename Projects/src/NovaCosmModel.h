@@ -35,7 +35,7 @@ struct NovaCosmBlock
 struct NovaCosmModel
 {
   float qMult = 512.f;
-  bool segmentation = true;
+  bool segmentation = false;
 
   NovaCosmBlock *root;
 
@@ -315,7 +315,7 @@ private:
           pColorMap[xyz[0] + xyz[2] * 256] = rgb[0] | rgb[1] << 8 | rgb[2] << 16;
         }
       }
-      MeanShiftSeg::ApplySegmentation(pColorMap, 256, 256, pColorMap, 7, 6.5, 50, true);
+      MeanShiftSeg::ApplySegmentation(pColorMap, 256, 256, pColorMap, 7, 6.5, 1, true);
       for (int64_t vItr = 0; vItr < block->voxelCount; vItr++)
       {
         auto xyz = &((uint8_t*)block->voxelPosData)[vItr * 3];
@@ -332,7 +332,6 @@ private:
       block->segments.AssignAttribute("position", AT_UNSIGNED_BYTE, block->voxelPosData, 3, block->voxelCount);
       block->segments.AssignAttribute("color", AT_UNSIGNED_BYTE_NORM, block->voxelSegmentData, 3, block->voxelCount);
     }
-
 
     // Lines
     block->regionLines.AssignShader(SHADERDIR "ColouredRenderObject.vert", SHADERDIR "ColouredRenderObject.frag");
@@ -372,7 +371,6 @@ private:
     linePosData.push_back((block->position + vec3(256, 256, 0)) * layerSize);
     linePosData.push_back((block->position + vec3(256, 256, 256)) * layerSize);
     lineColData.push_back(vec3(0, 1, 0)); lineColData.push_back(vec3(0, 1, 0)); lineColData.push_back(vec3(0, 1, 0)); lineColData.push_back(vec3(0, 1, 0));  lineColData.push_back(vec3(0, 1, 0)); lineColData.push_back(vec3(0, 1, 0)); lineColData.push_back(vec3(0, 1, 0)); lineColData.push_back(vec3(0, 1, 0));
-
 
     block->regionLines.AssignAttribute("position0", AT_FLOAT, linePosData.data(), 3, linePosData.size());
     block->regionLines.AssignAttribute("colour0", AT_FLOAT, lineColData.data(), 3, lineColData.size());

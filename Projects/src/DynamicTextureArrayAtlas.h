@@ -6,8 +6,11 @@
 #include "GLtypes.h"
 #include "RectPacker.h"
 #include "FastPack.h"
+#include <vector>
 
 //#pragma optimize("", off) // debug
+const static int maxUploads = 4024;
+static int uploads = 0;
 
 struct DynamicTextureArrayAtlas
 {
@@ -43,6 +46,11 @@ struct DynamicTextureArrayAtlas
     //DELETE texture here
   }
 
+  static void NextFrame()
+  {
+    uploads = 0;
+  }
+
   bool UploadToGPU()
   {
     if (texture == glUndefined)
@@ -64,29 +72,30 @@ struct DynamicTextureArrayAtlas
 
 
     //Process some rects
-    if (true)
-    {
-      // Slow rect upload
-      int uploads = 0;
-      int maxUploads = 64;
-      while (updates.size())
-      {
-        if(uploads++ > maxUploads)
-          return false;
-        Rect &rect = updates[0];
-        uint32_t *img = new uint32_t[rect.width * rect.height];
-        for (int y = 0; y < rect.height; y++)
-          for (int x = 0; x < rect.width; x++)
-            img[x + y * rect.width] = image[rect.xpos + x + ((rect.ypos + y) * width) + (rect.layer * width * height)];
-        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, rect.xpos, rect.ypos, rect.layer, rect.width, rect.height, 1, GL_RGBA, GL_UNSIGNED_BYTE, img);
-        delete[] img;
-        updates.erase(updates.begin());
-      }
-    }
+//     if (true)
+//     {
+//       static std::vector<uint32_t> img;
+//       // Slow rect upload
+//       while (updates.size())
+//       {
+//         if(uploads++ > maxUploads)
+//           return false;
+//         Rect &rect = updates[0];
+//         if (img.capacity() < rect.width * rect.height) img.reserve(rect.width * rect.height);
+//         for (int y = 0; y < rect.height; y++)
+//           for (int x = 0; x < rect.width; x++)
+//             img[x + y * rect.width] = image[rect.xpos + x + ((rect.ypos + y) * width) + (rect.layer * width * height)];
+//         glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, rect.xpos, rect.ypos, rect.layer, rect.width, rect.height, 1, GL_RGBA, GL_UNSIGNED_BYTE, img.data());
+// 
+//         // Remove swap last
+//         std::swap(*updates.begin(), *(updates.end() - 1));
+//         updates.erase(updates.end() - 1);
+//       }
+//     }
 
 
     //Process all rects
-    if(false)
+    if (true)
     {
       // Slow rect upload
       for (int rectID = 0; rectID < updates.size(); rectID++)
@@ -101,7 +110,6 @@ struct DynamicTextureArrayAtlas
       }
       updates.clear();
     }
-
 
     return true;
   }

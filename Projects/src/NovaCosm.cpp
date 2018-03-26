@@ -53,6 +53,7 @@ void NovaCosm()
   //Window window("Game", true, 1920, 1080, true); // Create Game Window
 
   pModel = new NovaCosmModel("F:/temp/Colledge.ncs");
+  //pModel = new NovaCosmModel("F:/temp/ExpressWay.ncs");
   //NovaCosmModel model("F:/Luke/Programming/Visual Studio/pixelly/Software Tracer/Expressway.pcf");
   //pModel->ExportPCF("F:/temp/ColledgeFull.pcf");
   //NovaCosmModel model("F:/temp/Colledge.ncs");
@@ -166,7 +167,11 @@ void NovaCosm()
     // Mouse Segmentation Selection
     // if left mouse click
     NovaCosmBlock *block;
-    if(!Controls::GetLeftClick())
+    static std::vector<uint8_t> clipboardColorData;
+    static std::vector<uint8_t> clipboardPositionData;
+    static vec3 camCopyPos;
+    static int clipboarSrcLayer;
+    if(!Controls::GetLeftClick() && !turning)
     {
       static uint32_t *colData = nullptr;
       static int colDataSize = 0;
@@ -226,6 +231,28 @@ void NovaCosm()
         block->Updated = false;
         block->voxels.AssignAttribute("color", AT_UNSIGNED_BYTE_NORM, block->voxelColData, 3, block->voxelCount);
         memcpy(block->voxelColData, colData, block->voxelCount * 3);
+
+        // Store 
+        if (Controls::KeyDown(SDL_SCANCODE_LCTRL) && Controls::KeyDown(SDL_SCANCODE_C))
+        {
+          clipboarSrcLayer = layer;
+          camCopyPos = mouseWorldPos;
+          clipboardColorData.resize(block->voxelCount * 3);
+          clipboardPositionData.resize(block->voxelCount * 3);
+          memcpy(clipboardColorData.data(), colData, block->voxelCount * 3);
+          memcpy(clipboardPositionData.data(), block->voxelPosData, block->voxelCount * 3);
+        }
+      }
+    }
+    // Pasting
+    if (Controls::KeyDown(SDL_SCANCODE_LCTRL) && Controls::KeyDown(SDL_SCANCODE_V))
+    {
+      int64_t clipBoardPointCount = clipboardPositionData.size() / 3;
+      for (int64_t i = 0; i < clipBoardPointCount; i++)
+      {
+        auto &pos = clipboardPositionData;
+        auto &col = clipboardColorData;
+        pModel->AddPoint((block->position + vec3(pos[i + 0], pos[i + 1], pos[i + 2])) / (1 << clipboarSrcLayer) - camCopyPos + mouseWorldPos, (uint32_t)col[i + 0] | (uint32_t)col[i + 1] << 8 | (uint32_t)col[i + 2] << 16);
       }
     }
 

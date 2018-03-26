@@ -46,6 +46,7 @@ bool PolyModel::LoadModel(const char *fileName, bool forceReload)
   if (model.faceCount == 0)
     return false;
 
+
   meshCount = model.materialCount;
   pMeshes = new RenderObject[meshCount];
 

@@ -29,8 +29,8 @@ void SpawnParticles(MolecularDynamicsSimulator *pCreation)
 {
   pCreation->Clear();
   std::vector<std::tuple<vec3, uint32_t>> points;
-
-  AddCube(vec3(0, 0, 0), vec3(10, 10, 10), &points);
+  
+  AddCube(vec3(0, 0, 0), vec3(2, 80, 80), &points);
   //AddImage(ASSETDIR "Substance/field.png", &points);
   //points = ReadVoxFile("C:/Luke/Programming/Engine/Assets/Substance/model/drop2.vox");
   //AddCube(vec3(11, 5, 10), vec3(150, 3, 3), &points);
@@ -59,6 +59,6 @@ void ParticleSim()
     creation.Update();
     window.Clear();
     FrameRate::Update();
-    SDL_Delay(14);
+    //SDL_Delay(14);
   }
 }

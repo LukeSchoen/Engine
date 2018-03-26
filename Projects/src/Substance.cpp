@@ -335,15 +335,9 @@
    //AddColorCube(vec3(32, 32, 32));
  
    // Wine
-   if (true)
+   if (false)
    {
-     AddCup(vec3(1, 1, 1), 20);
- 
-     /*AddCylinder(vec3(32, 23, 32), 32, 15);
-     AddDisc(vec3(32, 20, 32), 32, 3);
-     AddBox(vec3(32 - 3, 5, 32 - 3), vec3(7, 15, 7));
-     AddDisc(vec3(32, 0, 32), 32, 5);
-     AddWater(vec3(25, 24, 25), vec3(15, 75, 15));*/
+     AddCup(vec3(1, 1, 1), 10);
    }
  
    //Gears
@@ -436,10 +430,10 @@
  
    for (auto & point : points)
      pCreation->AddPoint(point);
-   pCreation->Update();
+   pCreation->Process();
  }
  
- void Substance()
+ void Substance2()
  {
    #ifdef _DEBUG
      //Window window("Game", true, 800, 600, false);
@@ -501,7 +495,7 @@
      window.Swap();
      FrameRate::Update();
  
-     creation.Update();
+     creation.Process();
      SDL_Delay(10);
  
      if (Controls::KeyDown(SDL_SCANCODE_R))
@@ -512,7 +506,7 @@
    }
  }
  
- void Substance2()
+ void Substance()
  {
  #ifdef _DEBUG
    //Window window("Game", true, 800, 600, false);
@@ -646,7 +640,7 @@
      if (Controls::KeyDown(SDL_SCANCODE_KP_MINUS))
        continue;
  
-     if (!Controls::KeyDown(SDL_SCANCODE_KP_PLUS))
+     if (!Controls::KeyDown(SDL_SCANCODE_KP_PLUS) && !Controls::GetRightClick())
      {
        int startTime = clock();
        int timeTaken = 0;
@@ -662,16 +656,6 @@
              shot = 0;
              AddVoxel(vec3() - Camera::Position() - Camera::Direction() * 4, vec3(1, 1, 0), vec3() - Camera::Direction() * 0.1);
            }
-         }
- 
-         static bool FireWasDown = false;
-         if (FireWasDown && !Controls::GetRightClick())
-           ExtractConnections();
-         FireWasDown = Controls::GetRightClick();
- 
-         if (Controls::GetRightClick())
-         {
-           AddVoxel(vec3() - Camera::Position() - Camera::Direction() * 4, vec3(1, 1, 0), vec3() - Camera::Direction());
          }
  
          // Spawn water
@@ -722,6 +706,12 @@
      }
      else
      {
+       if (Controls::GetRightClick())
+       {
+         AddVoxel(vec3() - Camera::Position() - Camera::Direction() * 4, vec3(1, 1, 0), vec3() - Camera::Direction());
+         ExtractConnections();
+       }
+
        SimulateParticles();
      }
      RebuildMesh();

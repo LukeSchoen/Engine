@@ -107,6 +107,7 @@
     <ClCompile Include="src\pokemon.cpp" />
     <ClCompile Include="src\PolyMesh.cpp" />
     <ClCompile Include="src\Pool.cpp" />
+    <ClCompile Include="src\Rays.cpp" />
     <ClCompile Include="src\RayTracer.cpp" />
     <ClCompile Include="src\RaytracerTypes.cpp" />
     <ClCompile Include="src\RealTimeEngine.cpp" />
@@ -114,6 +115,7 @@
     <ClCompile Include="src\Reductio.cpp" />
     <ClCompile Include="src\Region.cpp" />
     <ClCompile Include="src\Round.cpp" />
+    <ClCompile Include="src\SciFi.cpp" />
     <ClCompile Include="src\SecondStream.cpp" />
     <ClCompile Include="src\Simple.cpp" />
     <ClCompile Include="src\StreamTest.cpp" />
@@ -230,6 +232,7 @@
     <ClInclude Include="src\PolyMesh.h" />
     <ClInclude Include="src\Pool.h" />
     <ClInclude Include="src\Quaternion.h" />
+    <ClInclude Include="src\Rays.h" />
     <ClInclude Include="src\RayTracer.h" />
     <ClInclude Include="src\RayTracerTypes.h" />
     <ClInclude Include="src\RealTimeEngine.h" />
@@ -237,6 +240,7 @@
     <ClInclude Include="src\Reductio.h" />
     <ClInclude Include="src\Region.h" />
     <ClInclude Include="src\Round.h" />
+    <ClInclude Include="src\SciFi.h" />
     <ClInclude Include="src\SecondStream.h" />
     <ClInclude Include="src\Simple.h" />
     <ClInclude Include="src\SortedList.h" />

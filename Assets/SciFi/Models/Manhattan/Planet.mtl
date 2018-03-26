@@ -1,0 +1,10 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2006 Google, Inc.
+
+newmtl _auto_
+Ka 0.000000 0.000000 0.000000
+Kd 0.207843 0.192157 0.356863
+Ks 0.330000 0.330000 0.330000
+map_Kd planet.jpg
+
