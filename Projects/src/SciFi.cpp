@@ -113,7 +113,9 @@ void SciFi()
   auto freeport = LoadModel(ASSETDIR "SciFi/Models/FreePort/FreePort.obj");
   auto factory = LoadModel(ASSETDIR "SciFi/Models/Factory/Factory.obj");
   auto lane = LoadModel(ASSETDIR "SciFi/Models/Lane/Lane.obj");
-
+  auto battleship = LoadModel(ASSETDIR "SciFi/Models/BattleShip/BattleShip.obj");
+  auto dreadnaught = LoadModel(ASSETDIR "SciFi/Models/BattleShip/BattleShip.obj");
+  auto starlight = LoadModel(ASSETDIR "SciFi/Models/StarLight/StarLight.obj");
 
 
   Controls::SetMouseLock(true);
@@ -122,7 +124,36 @@ void SciFi()
   {
     window.Clear();
 
+    // Player Ship
+    static bool freeCam = true;
+    static vec3 playerPos(0, 0, 420);
+    static vec3 playerMom(0, 0, 0);
+    static vec2 playerDir(0, 0);
+
     Camera::Update(60);
+
+
+    // Player Controls
+    if (Controls::KeyDown(SDL_SCANCODE_W))
+    {
+//       float camSinY = sin(playerDir.y);
+//       float camCosY = cos(playerDir.y);
+//       float camSinX = sin(playerDir.x);
+//       float camCosX = cos(playerDir.x);
+//       float speed = 1.0f;
+//       playerPos.x += camSinY * camCosX * speed;
+//       playerPos.y += camSinX * speed;
+//       playerPos.z += camCosY * camCosX * speed;
+//       playerMom = playerMom + ;
+    }
+
+    playerPos = playerPos + playerMom;
+
+    if (!freeCam)
+      Camera::SetPosition(vec3() - playerPos);
+    if (Controls::KeyPressed(SDL_SCANCODE_1))
+      freeCam = !freeCam;
+
 
     mat4 MVP;
     mat4 viewMat = Camera::Matrix();
@@ -140,6 +171,10 @@ void SciFi()
     MVP = projectionMat * viewMat * modelMat;
     MVP.Transpose();
     stars->RenderPoints(MVP);
+
+
+    DrawModel(starlight, projectionMat * viewMat, playerPos, {}, { 0.1f, 0.1f, 0.1f });
+
 
     // Manhattan
     modelMat.LoadIdentity();
@@ -178,6 +213,8 @@ void SciFi()
     DrawModel(lane, projectionMat * viewMat, { 0, 0, 600 }, {}, { 0.1f, 0.1f, 0.1f });
     DrawModel(lane, projectionMat * viewMat, { 0, 0, 1100 }, {}, { 0.1f, 0.1f, 0.1f });
     DrawModel(lane, projectionMat * viewMat, { 0, 0, 1600 }, {}, { 0.1f, 0.1f, 0.1f });
+
+    DrawModel(battleship, projectionMat * viewMat, { -80, 0, 450 }, { 0, 180.f * (float)DegsToRads, 0 }, { 0.2f, 0.2f, 0.2f });
 
     // Pits burg trade route
     DrawModel(lane, projectionMat * viewMat, { 300, 0, 400 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f });
