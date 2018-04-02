@@ -296,6 +296,9 @@
     <ClCompile Include="src\SciFi.cpp">
       <Filter>Projects\Scifi</Filter>
     </ClCompile>
+    <ClCompile Include="src\Tracey.cpp">
+      <Filter>Engine\Tracey</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -659,6 +662,12 @@
     <ClInclude Include="src\SciFi.h">
       <Filter>Projects\Scifi</Filter>
     </ClInclude>
+    <ClInclude Include="src\PlayerShip.h">
+      <Filter>Projects\Scifi</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tracey.h">
+      <Filter>Engine\Tracey</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -939,6 +948,9 @@
     </Filter>
     <Filter Include="Projects\Scifi">
       <UniqueIdentifier>{8319b771-124e-4ad3-8b40-b0d6188391fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Tracey">
+      <UniqueIdentifier>{7e27fb82-9a21-4250-a742-29ba3ad5e549}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

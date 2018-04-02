@@ -6,7 +6,8 @@
 struct PolyModel
 {
 public:
-  PolyModel::PolyModel();
+  PolyModel() = default;
+  PolyModel(char *filePath);
   bool LoadModel(const char *fileName, bool forceReload = false);
   void GetModelExtents(vec3 *pMinimum, vec3 *pMaximum);
   void GetMeshData(int64_t *pMeshCount, RenderObject **ppMeshes);

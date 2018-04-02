@@ -10,12 +10,6 @@
 const int meshModelFileFormatVersion = 1;
 const char *meshModelFileIdentifier = "MeshModel";
 
-PolyModel::PolyModel()
-{
-
-}
-
-
 vec3 TriangleNormal(vec3 v1, vec3 v2, vec3 v3)
 {
   vec3 ab = v1 - v2;
@@ -25,6 +19,7 @@ vec3 TriangleNormal(vec3 v1, vec3 v2, vec3 v3)
   return ab.CrossProduct(ac).Normalized();
 }
 
+PolyModel::PolyModel(char *filePath) { LoadModel(filePath); }
 
 bool PolyModel::LoadModel(const char *fileName, bool forceReload)
 {

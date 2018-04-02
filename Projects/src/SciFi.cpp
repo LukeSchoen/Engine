@@ -52,12 +52,12 @@ PolyModel *LoadModel(std::string filePath)
 
 void DrawModel(PolyModel * pModel, mat4 viewProjection, vec3 pos = vec3(0, 0, 0), vec3 dir = vec3(0, 0, 0), vec3 scale = vec3(1, 1, 1))
 {
-  pModel;
   mat4 modelMat;
   modelMat.Translate(pos);
   modelMat.Scale(scale);
   modelMat.Rotate(dir);
   mat4 MVP = viewProjection * modelMat;
+  modelMat.inverse();
   MVP.Transpose();
   RenderObject *Pros = nullptr; int64_t meshNum = 0;
   pModel->GetMeshData(&meshNum, &Pros); for (int i = 0; i < meshNum; i++)
@@ -77,19 +77,44 @@ void SciFi()
   //Window window("SciFi", true, 800, 600, false);
 
   mat4 projectionMat;
-  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 1.0 / 4.0, 64000);
+  projectionMat.Perspective(50.0f * (float)DegsToRads, (float)window.width / window.height, 1.0 / 4.0, 64000);
 
   glPointSize(2.0f);
 
-  Camera::SetPosition({ 0, 0, -500 });
+  Camera::SetPosition({ 0, -25, -800 });
 
   // Skybox
   PolyModel skybox;
   skybox.LoadModel(ASSETDIR "SciFi/skybox/Planet.obj");
+  
+  // Models
+  PolyModel manhattanBar(ASSETDIR "SciFi/Docks/Manhattan/Bar/Bar.obj");
+  PolyModel manhattanTrdaer(ASSETDIR "SciFi/Docks/Manhattan/CommodityShop/CommodityShop.obj");
+
+  auto manhattan = LoadModel(ASSETDIR "SciFi/Models/Manhattan/Planet.obj");
+  auto overcast = LoadModel(ASSETDIR "SciFi/Models/overcast/Planet.obj");
+  auto pittsburgh = LoadModel(ASSETDIR "SciFi/Models/pittsburgh/Planet.obj");
+  auto pittsburgh_moon = LoadModel(ASSETDIR "SciFi/Models/pittsburgh_moon/Planet.obj");
+  auto dockingRing = LoadModel(ASSETDIR "SciFi/Models/DockingRing/DockingRing.obj");
+  auto outpost = LoadModel(ASSETDIR "SciFi/Models/Outpost/Outpost.obj");
+  auto station = LoadModel(ASSETDIR "SciFi/Models/station/station.obj");
+  auto freeport = LoadModel(ASSETDIR "SciFi/Models/FreePort/FreePort.obj");
+  auto factory = LoadModel(ASSETDIR "SciFi/Models/Factory/Factory.obj");
+  auto sheriff = LoadModel(ASSETDIR "SciFi/Models/sheriff/sheriff.obj");
+  auto lane = LoadModel(ASSETDIR "SciFi/Models/Lane/Lane.obj");
+  auto battleship = LoadModel(ASSETDIR "SciFi/Models/BattleShip/BattleShip.obj");
+  auto dreadnaught = LoadModel(ASSETDIR "SciFi/Models/BattleShip/BattleShip.obj");
+  auto starlight = LoadModel(ASSETDIR "SciFi/Models/StarLight/StarLight.obj");
+  auto asteroid_1 = LoadModel(ASSETDIR "SciFi/Models/Asteroids/Asteroid_1.obj");
+  auto asteroid_2 = LoadModel(ASSETDIR "SciFi/Models/Asteroids/Asteroid_2.obj");
+  auto asteroid_3 = LoadModel(ASSETDIR "SciFi/Models/Asteroids/Asteroid_3.obj");
+  auto asteroid_4 = LoadModel(ASSETDIR "SciFi/Models/Asteroids/Asteroid_4.obj");
+
+  PolyModel *asteroids[4] = { asteroid_1 ,asteroid_2, asteroid_3, asteroid_4 };
 
   // Stars
   ColouredRenderObjectMaker starMaker;
-  for (int i = 0; i < 4000; i++)
+  for (int i = 0; i < 3000; i++)
   {
     vec4 dVec(1, 0, 0, 1);
     mat4 dMat;
@@ -103,20 +128,58 @@ void SciFi()
   };
   RenderObject *stars = starMaker.AssembleRenderObject();
 
-  // Models
-  PolyModel manhattan, pittsburgh, pittsburgh_moon;
-  manhattan.LoadModel(ASSETDIR "SciFi/Models/Manhattan/Planet.obj");
-  pittsburgh.LoadModel(ASSETDIR "SciFi/Models/pittsburgh/Planet.obj");
-  pittsburgh_moon.LoadModel(ASSETDIR "SciFi/Models/pittsburgh_moon/Planet.obj");
-  auto dockingRing = LoadModel(ASSETDIR "SciFi/Models/DockingRing/DockingRing.obj");
-  auto outpost = LoadModel(ASSETDIR "SciFi/Models/Outpost/Outpost.obj");
-  auto freeport = LoadModel(ASSETDIR "SciFi/Models/FreePort/FreePort.obj");
-  auto factory = LoadModel(ASSETDIR "SciFi/Models/Factory/Factory.obj");
-  auto lane = LoadModel(ASSETDIR "SciFi/Models/Lane/Lane.obj");
-  auto battleship = LoadModel(ASSETDIR "SciFi/Models/BattleShip/BattleShip.obj");
-  auto dreadnaught = LoadModel(ASSETDIR "SciFi/Models/BattleShip/BattleShip.obj");
-  auto starlight = LoadModel(ASSETDIR "SciFi/Models/StarLight/StarLight.obj");
-
+  // Asteroids
+  std::vector<mat4> asteroidInstances;
+  for (int i = 0; i < 200; i++)
+  {
+    mat4 pos;
+    pos.Translate(vec3(2300, -100, -140 - 1500));
+    pos.Translate(vec3(rand() % 1500, rand() % 200, rand() % 500));
+    pos.RotateX(DegsToRads * (rand() % 360));
+    pos.RotateY(DegsToRads * (rand() % 360));
+    pos.RotateZ(DegsToRads * (rand() % 360));
+    asteroidInstances.push_back(pos);
+  }
+  for (int i = 0; i < 500; i++)
+  {
+    mat4 pos;
+    pos.Translate(vec3(2300, -100, -140 - 1000));
+    pos.Translate(vec3(rand() % 1500, rand() % 200, rand() % 500));
+    pos.RotateX(DegsToRads * (rand() % 360));
+    pos.RotateY(DegsToRads * (rand() % 360));
+    pos.RotateZ(DegsToRads * (rand() % 360));
+    asteroidInstances.push_back(pos);
+  }
+  for (int i = 0; i < 300; i++)
+  {
+    mat4 pos;
+    pos.Translate(vec3(2300, -100, -140 - 500));
+    pos.Translate(vec3(rand() % 1500, rand() % 200, rand() % 500));
+    pos.RotateX(DegsToRads * (rand() % 360));
+    pos.RotateY(DegsToRads * (rand() % 360));
+    pos.RotateZ(DegsToRads * (rand() % 360));
+    asteroidInstances.push_back(pos);
+  }
+  for (int i = 0; i < 100; i++)
+  {
+    mat4 pos;
+    pos.Translate(vec3(2300, -100, -140));
+    pos.Translate(vec3(rand() % 1500, rand() % 200, rand() % 500));
+    pos.RotateX(DegsToRads * (rand() % 360));
+    pos.RotateY(DegsToRads * (rand() % 360));
+    pos.RotateZ(DegsToRads * (rand() % 360));
+    asteroidInstances.push_back(pos);
+  }
+  for (int i = 0; i < 50; i++)
+  {
+    mat4 pos;
+    pos.Translate(vec3(2300, -100, 440));
+    pos.Translate(vec3(rand() % 1500, rand() % 200, rand() % 500));
+    pos.RotateX(DegsToRads * (rand() % 360));
+    pos.RotateY(DegsToRads * (rand() % 360));
+    pos.RotateZ(DegsToRads * (rand() % 360));
+    asteroidInstances.push_back(pos);
+  }
 
   Controls::SetMouseLock(true);
 
@@ -128,23 +191,22 @@ void SciFi()
     static bool freeCam = true;
     static vec3 playerPos(0, 0, 420);
     static vec3 playerMom(0, 0, 0);
-    static vec2 playerDir(0, 0);
+    static vec2 playerDir(0, 180.0 * DegsToRads);
 
     Camera::Update(60);
 
-
     // Player Controls
-    if (Controls::KeyDown(SDL_SCANCODE_W))
+    if (Controls::KeyDown(SDL_SCANCODE_UP))
     {
-//       float camSinY = sin(playerDir.y);
-//       float camCosY = cos(playerDir.y);
-//       float camSinX = sin(playerDir.x);
-//       float camCosX = cos(playerDir.x);
-//       float speed = 1.0f;
-//       playerPos.x += camSinY * camCosX * speed;
-//       playerPos.y += camSinX * speed;
-//       playerPos.z += camCosY * camCosX * speed;
-//       playerMom = playerMom + ;
+      float shipSinY = sin(playerDir.y);
+      float shipCosY = cos(playerDir.y);
+      float shipSinX = sin(playerDir.x);
+      float shipCosX = cos(playerDir.x);
+      float speed = 1.0f;
+      playerPos.x += shipSinY * shipCosX * speed;
+      playerPos.y += shipSinX * speed;
+      playerPos.z += shipCosY * shipCosX * speed;
+      //playerMom = playerMom + ;
     }
 
     playerPos = playerPos + playerMom;
@@ -153,7 +215,6 @@ void SciFi()
       Camera::SetPosition(vec3() - playerPos);
     if (Controls::KeyPressed(SDL_SCANCODE_1))
       freeCam = !freeCam;
-
 
     mat4 MVP;
     mat4 viewMat = Camera::Matrix();
@@ -172,38 +233,35 @@ void SciFi()
     MVP.Transpose();
     stars->RenderPoints(MVP);
 
+    DrawModel(&manhattanBar, projectionMat * viewMat, { 0, 0, 1800 }, {}, { 4, 4, 4 });
+    DrawModel(&manhattanTrdaer, projectionMat * viewMat, { 200, 0, 1800 }, {}, { 4, 4, 4 });
 
-    DrawModel(starlight, projectionMat * viewMat, playerPos, {}, { 0.1f, 0.1f, 0.1f });
-
+    DrawModel(starlight, projectionMat * viewMat, playerPos, { playerDir.x, playerDir.y }, { 0.1f, 0.1f, 0.1f });
 
     // Manhattan
-    modelMat.LoadIdentity();
-    modelMat.Scale(2);
-    modelMat.RotateY(clock() * -0.00002f);
-    MVP = projectionMat * viewMat * modelMat;
-    MVP.Transpose();
-    manhattan.Render(MVP);
-
+    DrawModel(manhattan, projectionMat * viewMat, {}, vec3(0, clock() * -0.000005f, 0), { 2, 2, 2 });
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glEnable(GL_BLEND);
+    glDepthMask(false);
+    DrawModel(overcast, projectionMat * viewMat, {}, vec3(0, clock() * 0.000002f, 0), { 2.05f, 2.05f, 2.05f});
+    glDepthMask(true);
+    glDisable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);;
 
     // PitsBurgh
     modelMat.LoadIdentity();
-    modelMat.Translate(4300, 0, 200);
-    modelMat.Scale(1.8);
-    modelMat.RotateY(clock() * -0.00002f);
     MVP = projectionMat * viewMat * modelMat;
     MVP.Transpose();
-    pittsburgh.Render(MVP);
+    DrawModel(pittsburgh, projectionMat * viewMat, { 4300, 0, 200 }, vec3(0, clock() * -0.00001f, 0), { 1.8f, 1.8f, 1.8f });
+
     DrawModel(dockingRing, projectionMat * viewMat, { 4025, 0, 200 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f }); // DockingRing
     DrawModel(outpost, projectionMat * viewMat, { 3940, 0, 350 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f }); // Outpost
 
     // PitsBurgh Moon
     modelMat.LoadIdentity();
-    modelMat.Translate(4700, 0, 700);
-    modelMat.Scale(0.8);
-    modelMat.RotateY(clock() * -0.00002f);
     MVP = projectionMat * viewMat * modelMat;
     MVP.Transpose();
-    pittsburgh_moon.Render(MVP);
+    DrawModel(pittsburgh_moon, projectionMat * viewMat, { 4700, 0, 700 }, vec3(0, clock() * -0.00001f, 0), { 0.8f, 0.8f, 0.8f });
 
     DrawModel(dockingRing, projectionMat * viewMat, { 0, 0, 300 }, {}, { 0.1f, 0.1f, 0.1f }); // DockingRing
     DrawModel(freeport, projectionMat * viewMat, { 80, 0, 500 }, { 0, 180.0f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f }); // Freeport
@@ -213,7 +271,6 @@ void SciFi()
     DrawModel(lane, projectionMat * viewMat, { 0, 0, 600 }, {}, { 0.1f, 0.1f, 0.1f });
     DrawModel(lane, projectionMat * viewMat, { 0, 0, 1100 }, {}, { 0.1f, 0.1f, 0.1f });
     DrawModel(lane, projectionMat * viewMat, { 0, 0, 1600 }, {}, { 0.1f, 0.1f, 0.1f });
-
     DrawModel(battleship, projectionMat * viewMat, { -80, 0, 450 }, { 0, 180.f * (float)DegsToRads, 0 }, { 0.2f, 0.2f, 0.2f });
 
     // Pits burg trade route
@@ -221,15 +278,23 @@ void SciFi()
     DrawModel(lane, projectionMat * viewMat, { 800, 0, 400 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f });
     DrawModel(lane, projectionMat * viewMat, { 1300, 0, 400 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f });
     DrawModel(lane, projectionMat * viewMat, { 1800, 0, 400 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f });
-    DrawModel(factory, projectionMat * viewMat, { 1900, 0, 320 }, {}, { 0.1f, 0.1f, 0.1f }); // Factory
+    DrawModel(factory, projectionMat * viewMat, { 2000, 0, 320 }, {}, { 0.1f, 0.1f, 0.1f }); // Factory
+    DrawModel(sheriff, projectionMat * viewMat, { 2050, 15, 450 }, {}, { 0.1f, 0.1f, 0.1f }); // Sheriff
     DrawModel(lane, projectionMat * viewMat, { 2300, 0, 400 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f });
     DrawModel(lane, projectionMat * viewMat, { 2800, 0, 400 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f });
     DrawModel(lane, projectionMat * viewMat, { 3300, 0, 400 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f });
     DrawModel(lane, projectionMat * viewMat, { 3800, 0, 400 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f });
 
+    // Bandit Asteroid base
+    DrawModel(outpost, projectionMat * viewMat, { 3000, 0, -1000 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f }); // Outpost
+    DrawModel(station, projectionMat * viewMat, { 3030, 0, -1000 }, {}, { 0.1f, 0.1f, 0.1f }); // Station
+
+    // Pits burg asteroid field
+    int astID = 0;
+    for (auto & asteroidPos : asteroidInstances)
+      DrawModel(asteroids[astID++ % 4], projectionMat * viewMat* asteroidPos, { 0, 0, 0 }, { 0, 0, 0 }, { 0.3f, 0.3f, 0.3f });
+
     window.Swap();
   }
 
-
 }
-

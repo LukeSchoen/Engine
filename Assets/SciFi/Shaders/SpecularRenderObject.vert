@@ -14,7 +14,9 @@ out vec3 passPosition0;
 void main()
 {
 	passTexcoord0 = texcoord0;
-	passNormal0 = (modelMat * vec4(normal0, 0.0)).xyz;
+	vec4 norm = (modelMat * vec4(normal0, 0.0));
+	passNormal0 = norm.xyz;
+	
 	passPosition0 = (modelMat * vec4(position0, 1.0)).xyz;
 	gl_Position = MVP * vec4(position0, 1.0);
 }

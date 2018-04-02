@@ -24,11 +24,13 @@
 #include "DepthTest.h"
 #include "Rays.h"
 #include "SciFi.h"
+#include "Tracey.h"
 
 void main() // console entry
 {
-  SciFi();
+  //Tracey();
   //Rays();
+  SciFi();
   //Substance();
   //DepthTest();
   //ParticleSim();

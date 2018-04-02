@@ -123,6 +123,7 @@
     <ClCompile Include="src\Substance.cpp" />
     <ClCompile Include="src\Text.cpp" />
     <ClCompile Include="src\Threads.cpp" />
+    <ClCompile Include="src\Tracey.cpp" />
     <ClCompile Include="src\Vector.cpp" />
     <ClCompile Include="src\Window.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
@@ -227,6 +228,7 @@
     <ClInclude Include="src\OpenGL.h" />
     <ClInclude Include="src\PhysicsTest.h" />
     <ClInclude Include="src\PixelLife.h" />
+    <ClInclude Include="src\PlayerShip.h" />
     <ClInclude Include="src\PointCloud.h" />
     <ClInclude Include="src\pokemon.h" />
     <ClInclude Include="src\PolyMesh.h" />
@@ -249,6 +251,7 @@
     <ClInclude Include="src\Substance.h" />
     <ClInclude Include="src\Text.h" />
     <ClInclude Include="src\Threads.h" />
+    <ClInclude Include="src\Tracey.h" />
     <ClInclude Include="src\Vector2.h" />
     <ClInclude Include="src\Vector3.h" />
     <ClInclude Include="src\Vector4.h" />
