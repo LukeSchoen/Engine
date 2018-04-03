@@ -73,15 +73,16 @@ void DrawModel(PolyModel * pModel, mat4 viewProjection, vec3 pos = vec3(0, 0, 0)
 
 void SciFi()
 {
-  Window window("SciFi", true, 1920, 1080, true);
-  //Window window("SciFi", true, 800, 600, false);
+  //Window window("SciFi", true, 1920, 1080, true);
+  Window window("SciFi", true, 800, 600, false);
 
   mat4 projectionMat;
-  projectionMat.Perspective(50.0f * (float)DegsToRads, (float)window.width / window.height, 1.0 / 4.0, 64000);
+  projectionMat.Perspective(50.0f * (float)DegsToRads, (float)window.width / window.height, 2.0, 64000);
 
   glPointSize(2.0f);
 
-  Camera::SetPosition({ 0, -25, -800 });
+  Camera::SetPosition({ -2120.39f, -8.496f, -1750.06f });
+  Camera::SetRotation(vec2(0.228000134, 1.3240029));
 
   // Skybox
   PolyModel skybox;
@@ -92,10 +93,13 @@ void SciFi()
   PolyModel manhattanTrdaer(ASSETDIR "SciFi/Docks/Manhattan/CommodityShop/CommodityShop.obj");
 
   auto manhattan = LoadModel(ASSETDIR "SciFi/Models/Manhattan/Planet.obj");
+  auto sol = LoadModel(ASSETDIR "SciFi/Models/sol/Planet.obj");
+  auto fireball = LoadModel(ASSETDIR "SciFi/Models/fireball/Planet.obj");
   auto overcast = LoadModel(ASSETDIR "SciFi/Models/overcast/Planet.obj");
   auto pittsburgh = LoadModel(ASSETDIR "SciFi/Models/pittsburgh/Planet.obj");
   auto pittsburgh_moon = LoadModel(ASSETDIR "SciFi/Models/pittsburgh_moon/Planet.obj");
   auto dockingRing = LoadModel(ASSETDIR "SciFi/Models/DockingRing/DockingRing.obj");
+  auto shipyard = LoadModel(ASSETDIR "SciFi/Models/Shipyard/Shipyard.obj");
   auto outpost = LoadModel(ASSETDIR "SciFi/Models/Outpost/Outpost.obj");
   auto station = LoadModel(ASSETDIR "SciFi/Models/station/station.obj");
   auto freeport = LoadModel(ASSETDIR "SciFi/Models/FreePort/FreePort.obj");
@@ -111,6 +115,14 @@ void SciFi()
   auto asteroid_4 = LoadModel(ASSETDIR "SciFi/Models/Asteroids/Asteroid_4.obj");
 
   PolyModel *asteroids[4] = { asteroid_1 ,asteroid_2, asteroid_3, asteroid_4 };
+
+  std::vector<vec3>solRaySpd;
+  std::vector<vec3>solRayRot;
+  for (int i = 0; i < 35; i++)
+  {
+    solRaySpd.push_back(vec3(rand() % 256 / 256.f, rand() % 256 / 256.f, rand() % 256 / 256.f));
+    solRayRot.push_back(vec3(rand() % 256 / 64.f, rand() % 256 / 64.f, rand() % 256 / 64.f));
+  }
 
   // Stars
   ColouredRenderObjectMaker starMaker;
@@ -248,6 +260,24 @@ void SciFi()
     glDisable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);;
 
+    // Sun
+    DrawModel(sol, projectionMat * viewMat, { 0,0, 5000 }, vec3(0, clock() * -0.000005f, 0), { 4, 4, 4 });
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glEnable(GL_BLEND);
+    glDepthMask(false);
+
+    float si = 0.05;
+    for (int i = 0; i < solRaySpd.size(); i++)
+    {
+      solRayRot[i] = solRayRot[i] + solRaySpd[i]*0.0005;
+      DrawModel(fireball, projectionMat * viewMat, { 0,0, 5000 }, solRayRot[i], { 4 + si, 4 + si, 4 + si });
+      si += 0.01;
+    }
+
+    glDepthMask(true);
+    glDisable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);;
+
     // PitsBurgh
     modelMat.LoadIdentity();
     MVP = projectionMat * viewMat * modelMat;
@@ -284,6 +314,15 @@ void SciFi()
     DrawModel(lane, projectionMat * viewMat, { 2800, 0, 400 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f });
     DrawModel(lane, projectionMat * viewMat, { 3300, 0, 400 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f });
     DrawModel(lane, projectionMat * viewMat, { 3800, 0, 400 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f });
+
+    // Battleship Yamato
+    DrawModel(lane, projectionMat * viewMat, { 2000, 0, 600 }, {}, { 0.1f, 0.1f, 0.1f });
+    DrawModel(lane, projectionMat * viewMat, { 2000, 0, 1100 }, {}, { 0.1f, 0.1f, 0.1f });
+    DrawModel(lane, projectionMat * viewMat, { 2000, 0, 1600 }, {}, { 0.1f, 0.1f, 0.1f });
+    DrawModel(battleship, projectionMat * viewMat, { 1980, 0, 1750 }, { 0, 150.f * (float)DegsToRads, 0 }, { 0.2f, 0.2f, 0.2f });
+    DrawModel(station, projectionMat * viewMat, { 2050, 0, 1730 }, { 0, 90.f* (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f }); // Station
+    DrawModel(shipyard, projectionMat * viewMat, { 2040, -7, 1718 }, {}, { 0.1f, 0.1f, 0.1f }); // Shipyard
+    DrawModel(shipyard, projectionMat * viewMat, { 2040, -7, 1748 }, {}, { 0.1f, 0.1f, 0.1f }); // Shipyard
 
     // Bandit Asteroid base
     DrawModel(outpost, projectionMat * viewMat, { 3000, 0, -1000 }, { 0, 90.f * (float)DegsToRads, 0 }, { 0.1f, 0.1f, 0.1f }); // Outpost
