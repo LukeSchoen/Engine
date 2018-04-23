@@ -45,7 +45,7 @@ RenderObject *SolidMeshChunk(BlockWorld *world, int chunkX, int chunkZ)
 
   // Setup face lists
   std::vector<Face> tops, bots, fronts, backs, rights, lefts;
-  for (int y = 0; y < Chunk::height; y++)
+  for (int y = 60; y < Chunk::height; y++)
     for (int z = 0; z < Chunk::length; z++)
       for (int x = 0; x < Chunk::width; x++)
       {

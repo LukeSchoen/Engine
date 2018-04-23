@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Audio.cpp" />
+    <ClCompile Include="src\BattleEvolution.cpp" />
     <ClCompile Include="src\Biped.cpp" />
     <ClCompile Include="src\BlockMesher.cpp" />
     <ClCompile Include="src\BlockTypes.cpp" />
@@ -125,6 +126,7 @@
     <ClCompile Include="src\Threads.cpp" />
     <ClCompile Include="src\Tracey.cpp" />
     <ClCompile Include="src\Vector.cpp" />
+    <ClCompile Include="src\VoxelTracer.cpp" />
     <ClCompile Include="src\Window.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\GLM;$(SolutionDir)3rdParty\SDL2Image;$(ProjectDir)</AdditionalIncludeDirectories>
@@ -138,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="src\Assets.h" />
     <ClInclude Include="src\Audio.h" />
+    <ClInclude Include="src\BattleEvolution.h" />
     <ClInclude Include="src\Biped.h" />
     <ClInclude Include="src\BlockMesher.h" />
     <ClInclude Include="src\BlockTypes.h" />
@@ -257,6 +260,7 @@
     <ClInclude Include="src\Vector4.h" />
     <ClInclude Include="src\Vector.h" />
     <ClInclude Include="src\VirtualVector.h" />
+    <ClInclude Include="src\VoxelTracer.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\Zelda\Zelda.h" />
   </ItemGroup>

@@ -299,6 +299,10 @@
     <ClCompile Include="src\Tracey.cpp">
       <Filter>Engine\Tracey</Filter>
     </ClCompile>
+    <ClCompile Include="src\BattleEvolution.cpp">
+      <Filter>Projects\BattleEvolution</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VoxelTracer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -668,6 +672,12 @@
     <ClInclude Include="src\Tracey.h">
       <Filter>Engine\Tracey</Filter>
     </ClInclude>
+    <ClInclude Include="src\BattleEvolution.h">
+      <Filter>Projects\BattleEvolution</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VoxelTracer.h">
+      <Filter>Projects\VoxelTracer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -951,6 +961,15 @@
     </Filter>
     <Filter Include="Engine\Tracey">
       <UniqueIdentifier>{7e27fb82-9a21-4250-a742-29ba3ad5e549}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\NewFilter1">
+      <UniqueIdentifier>{65632869-d38a-4657-a084-2f436f1c2d01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\BattleEvolution">
+      <UniqueIdentifier>{0d132e74-eb2e-4949-a466-481d580f39f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\VoxelTracer">
+      <UniqueIdentifier>{63417fc4-39aa-436c-9311-16ec00dea313}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

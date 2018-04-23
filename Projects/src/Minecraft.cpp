@@ -86,6 +86,8 @@ static void _DrawPlayerHoverBlock(vec3 pos, mat4 VP)
 
 void Minecraft()
 {
+
+
   //Threads::SetFastMode(); // Work in real time mode while loading
 
   //Audio::PlayMP3(ASSETDIR "minecraft/music/great sea.mp3", 1000, nullptr, true);

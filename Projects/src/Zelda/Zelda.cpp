@@ -26,7 +26,6 @@ void Zelda()
   Window window("Game", true, 1920, 1080, true); // Create Game Window
 #endif
 
-
   Controls::SetMouseLock(true);
 
   mat4 projectionMat;

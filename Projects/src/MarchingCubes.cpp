@@ -536,11 +536,16 @@ void MarchingCubes()
     StreamFileReader stream("F:/temp/carrick256.grid");
     stream.ReadBytes(grid, sizeof(float) * gridSize * gridSize *gridSize);
   }
-  //BlurGrid(grid, gridSize, 2);
+  //BlurGrid(grid, gridSize, 3);
 
   // Blur Grid
 
-  std::vector<Tri> tris = MarchingCubesTriangleList(grid, gridSize, 0.5);
+  for (int x = 0; x < 10; x++)
+    for (int y = 0; y < 10; y++)
+      for (int z = 0; z < 10; z++)
+        grid[(32 + x) + (32 + y) * 256 + (32 + z) * 256 * 256] = 1.0;
+
+  std::vector<Tri> tris = MarchingCubesTriangleList(grid, gridSize, 0.05);
 
 #ifdef _DEBUG
   Window window("Game", true, 640, 480, false);

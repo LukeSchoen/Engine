@@ -25,12 +25,15 @@
 #include "Rays.h"
 #include "SciFi.h"
 #include "Tracey.h"
+#include "VoxelTracer.h"
 
 void main() // console entry
 {
+  //BattleEvolution();
   //Tracey();
   //Rays();
-  SciFi();
+  VoxelTracer();
+  //SciFi();
   //Substance();
   //DepthTest();
   //ParticleSim();

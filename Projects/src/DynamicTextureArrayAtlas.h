@@ -14,7 +14,7 @@ static int uploads = 0;
 
 struct DynamicTextureArrayAtlas
 {
-  DynamicTextureArrayAtlas(int _width = 1024, int _height = 1024, int _layers = 1)
+  DynamicTextureArrayAtlas(int _width = 256, int _height = 256, int _layers = 1024)
     : atlas(_width, _height)
   {
     height = _height;
