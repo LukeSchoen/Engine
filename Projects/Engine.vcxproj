@@ -465,7 +465,8 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc1
       <ControlFlowGuard>false</ControlFlowGuard>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointModel>
+      </FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\Assimp\include;$(SolutionDir)3rdParty\Bullet\src;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\GLEW\include;$(SolutionDir)3rdParty\ZLIB;$(SolutionDir)3rdParty\SDL2Image\include;$(ProjectDir)src;$(ProjectDir)src\Mesh;$(ProjectDir)src\Math;$(ProjectDir)src\File;$(ProjectDir)src\VoxelBoy;$(ProjectDir)src\Zelda;$(ProjectDir)src\Glorious</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>

@@ -45,13 +45,15 @@ void Glorious()
   //GloriousModel model("F:/temp/Colledge.ncs");
   //GloriousModel model("F:/temp/Image.ncs");
   //GloriousModel model("F:/temp/CarrickHill.ncs");
+
+  mat4 projectionMat;
+  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 1.0 / 4.0, 515);
+  float *dat = &projectionMat.m[0][0];
+  dat = dat;
   GloriousModel model("F:/temp/Colledge.ncs");
   //GloriousModel model("F:/temp/Expressway.ncs");
 
   MainModel = &model;
-
-  mat4 projectionMat;
-  projectionMat.Perspective(60.0f * (float)DegsToRads, (float)window.width / window.height, 1.0 / 4.0, 515);
 
   Textures::SetTextureFilterMode(false);
 

@@ -74,7 +74,7 @@ void DrawModel(PolyModel * pModel, mat4 viewProjection, vec3 pos = vec3(0, 0, 0)
 void SciFi()
 {
   Window window("SciFi", true, 1920, 1080, true);
-  //Window window("SciFi", true, 800, 600, false);
+  // Window window("SciFi", true, 800, 600, false);
 
   mat4 projectionMat;
   projectionMat.Perspective(50.0f * (float)DegsToRads, (float)window.width / window.height, 2.0, 64000);
@@ -105,14 +105,14 @@ void SciFi()
   auto freeport = LoadModel(ASSETDIR "SciFi/Models/FreePort/FreePort.obj");
   auto factory = LoadModel(ASSETDIR "SciFi/Models/Factory/Factory.obj");
   auto sheriff = LoadModel(ASSETDIR "SciFi/Models/sheriff/sheriff.obj");
-  auto lane = LoadModel(ASSETDIR "SciFi/Models/Lane/Lane.obj");
   auto battleship = LoadModel(ASSETDIR "SciFi/Models/BattleShip/BattleShip.obj");
   auto dreadnaught = LoadModel(ASSETDIR "SciFi/Models/BattleShip/BattleShip.obj");
-  auto starlight = LoadModel(ASSETDIR "SciFi/Models/StarLight/StarLight.obj");
   auto asteroid_1 = LoadModel(ASSETDIR "SciFi/Models/Asteroids/Asteroid_1.obj");
   auto asteroid_2 = LoadModel(ASSETDIR "SciFi/Models/Asteroids/Asteroid_2.obj");
   auto asteroid_3 = LoadModel(ASSETDIR "SciFi/Models/Asteroids/Asteroid_3.obj");
   auto asteroid_4 = LoadModel(ASSETDIR "SciFi/Models/Asteroids/Asteroid_4.obj");
+  auto starlight = LoadModel(ASSETDIR "SciFi/Models/StarLight/StarLight.obj");
+  auto lane = LoadModel(ASSETDIR "SciFi/Models/Lane/Lane.obj");
 
   PolyModel *asteroids[4] = { asteroid_1 ,asteroid_2, asteroid_3, asteroid_4 };
 

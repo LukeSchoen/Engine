@@ -118,10 +118,10 @@ void ModelView()
   Window windowSoft("Software", false, 800, 600, false);
 #else
   Window window("OpenGL", true, 800, 600, false);
-  Window windowSoft("Software", false, 800, 600, false);
+  //Window windowSoft("Software", false, 800, 600, false);
 
   SDL_SetWindowPosition(window.window, 96, 240);
-  SDL_SetWindowPosition(windowSoft.window, 96 + window.width + 32, 240);
+  //SDL_SetWindowPosition(windowSoft.window, 96 + window.width + 32, 240);
 
 #endif
   Controls::SetMouseLock(true);
@@ -138,14 +138,14 @@ void ModelView()
   PolyModel model;
   //model.meshCount = 1;
   //model.pMeshes = maker.AssembleRenderObject();
-  model.LoadModel("C:/Users/lschoen/Desktop/Triangle.obj", true);
+  model.LoadModel("C:/Users/Luke/Desktop/Box/Box.obj", true);
   //model.LoadModel("C:/Users/lschoen/Desktop/Cat/Cat.obj");
   //model.LoadModel(ASSETDIR "Raster/Teapot.dae", true);
 
   while (Controls::Update())
   {
     window.Clear(0, 0, 0);
-    windowSoft.Clear(0, 0, 0);
+    //windowSoft.Clear(0, 0, 0);
     Camera::Update(10);
 
     mat4 viewMat = Camera::Matrix();
@@ -153,14 +153,14 @@ void ModelView()
     mat4 modelMat;
     modelMat.Translate(vec3(0, 0, -3));
     modelMat.Rotate(vec3(DegsToRads * -90, 0, 0));
-    MVP = projectionMat * viewMat * modelMat;
-    DrawPolyModelCPU(model, MVP, windowSoft);
+    MVP = projectionMat;
+    //DrawPolyModelCPU(model, MVP, windowSoft);
 
     MVP.Transpose();
     model.Render(MVP);
 
     window.Swap();
-    windowSoft.Swap();
+    //windowSoft.Swap();
     FrameRate::Update();
   }
 }

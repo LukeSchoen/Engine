@@ -34,7 +34,7 @@ struct GloriousBlock
 
 struct GloriousModel
 {
-  int64_t quality = 512;
+  int64_t quality = 256;
 
   std::mutex renderLock;
 
@@ -312,8 +312,7 @@ private:
         }
 
     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 0);
-
-    //FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 16);
+//     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0, 16);
 //     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0.25, 0);
 //     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 0.5, 0);
 //     FaceOptimizer::SimpleSplitOptimizeCombineFaces(tops, blockTop, 1, 0);

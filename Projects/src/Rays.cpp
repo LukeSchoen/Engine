@@ -3,9 +3,66 @@
 #include "Window.h"
 #include "Controls.h"
 
-void JamesLine(std::vector<vec2i> &pixels, uint32_t sx, uint32_t sy, uint32_t ex, uint32_t ey)
+__forceinline void NewJamesLine(std::vector<vec2i> &pixels, int sx, int sy, int ex, int ey)
 {
-  int startX = sx; 
+  bool swapped = false;
+  int LineStepLen = ey - sy;
+  int lineLen = ex - sx;
+  if (abs(LineStepLen) > abs(lineLen))
+  {
+    std::swap(LineStepLen, lineLen);
+    swapped = true;
+  }
+
+  int incVar = (LineStepLen << 0x10) / lineLen;
+
+  if (swapped)
+  {
+    if (lineLen > 0)
+    {
+      lineLen += sy;
+      for (int j = 0x8000 + (sx << 0x10); sy <= lineLen; sy++)
+      {
+        pixels.emplace_back(j >> 0x10, sy);
+        j += incVar;
+      }
+    }
+    else
+    {
+      lineLen += sy;
+      for (int j = 0x8000 + (sx << 0x10); sy >= lineLen; sy--)
+      {
+        pixels.emplace_back(j >> 0x10, sy);
+        j -= incVar;
+      }
+    }
+  }
+  else
+  {
+    if (lineLen > 0)
+    {
+      lineLen += sx;
+      for (int j = 0x8000 + (sy << 0x10); sx <= lineLen; sx++)
+      {
+        pixels.emplace_back(sx, j >> 0x10);
+        j += incVar;
+      }
+    }
+    else
+    {
+      lineLen += sx;
+      for (int j = 0x8000 + (sy << 0x10); sx >= lineLen; sx--)
+      {
+        pixels.emplace_back(sx, j >> 0x10);
+        j -= incVar;
+      }
+    }
+  }
+}
+
+__forceinline void JamesLine(std::vector<vec2i> &pixels, uint32_t sx, uint32_t sy, uint32_t ex, uint32_t ey)
+{
+  int startX = sx;
   int startY = sy;
   int endX = ex;
   int endY = ey;
@@ -207,7 +264,7 @@ void __MagicLine2D(std::vector<vec2i> &pixels, float sx, float sy, float ex, flo
 
 void Rays()
 {
-  Window window;
+  Window window("", false, 800, 600);
   vec2i start = { 1, 256 };
   vec2i end = { (int)window.width - 1, 256 };
   std::vector<vec2i> pixels;
@@ -229,20 +286,18 @@ void Rays()
       int startTime = clock();
       for (int i = 0; i < lineAmt; i++)
       {
-
-        //pixels.clear();
+        pixels.clear();
+        memset(window.pixels + 800*16, 255, sizeof(uint32_t) * (window.width - 1));
         //for (int i = window.width; i > 0 ; i--)
-        //{
         //  pixels.emplace_back(256, i + 1);
-        //}
 
         //__MagicLine2D(pixels, start.x, start.y, end.x, end.y);
-        JamesLine(pixels, start.x, start.y, end.x, end.y);
+        //JamesLine(pixels, start.x, start.y, end.x, end.y);
+        //NewJamesLine(pixels, start.x, start.y, end.x, end.y);
         //MagicLine2D(pixels, start.x, start.y, end.x, end.y);
       }
       int endTime = clock();
       printf("James line took %d milliseconds to draw %d lines\n\n", endTime - startTime, lineAmt);
-
     }
     for (auto & pix : pixels)
       if(pix.x >= 0 && pix.x < window.width && pix.y >= 0 && pix.y < window.height)

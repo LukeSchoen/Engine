@@ -32,7 +32,7 @@ void main() // console entry
   //BattleEvolution();
   //Tracey();
   //Rays();
-  VoxelTracer();
+  //VoxelTracer();
   //SciFi();
   //Substance();
   //DepthTest();

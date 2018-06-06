@@ -52,13 +52,15 @@
  RenderObject mesh;
  
  RenderObject* lines = nullptr;
+
+ int fastSteps = 50;
  
  float strength = 0.5;
  float bounce = 0.5;
  float momentum = 0.95;
  float bondRange = 0.2;
  float bounceRange = 0.41;
- 
+
  vec3 gravity(0, -0.00005f, 0);
  
  void RebuildMesh()
@@ -258,10 +260,25 @@
      // Hit ground
      if (posData[p].y < 0)
      {
-       posData[p].y = 0;
-       momData[p].y = 0;
-       momData[p].x *= 0.9;
-       momData[p].z *= 0.9;
+       // Remove particle
+       //std::swap(posData[p], posData.back());
+       //posData.pop_back();
+       //p--;
+       //continue;
+
+       // Return particle to stream
+       posData[p].x = 22 + (-1 + (rand() % 11)) * 2;
+       posData[p].y = 60 + rand() % 10;
+       posData[p].z = 11 + (rand() % 4) * 2;
+       momData[p].x = 0;
+       momData[p].y = -0.04;
+       momData[p].z = 0;
+
+       // Stop on floor
+       //posData[p].y = 0;
+       //momData[p].y = 0;
+       //momData[p].x *= 0.9;
+       //momData[p].z *= 0.9;
      }
  
      // Gravity
@@ -277,7 +294,7 @@
    CalculateNextStep();
  }
  
- void ExtractConnections()
+ void ExtractConnections(int skippedSteps)
  {
    connections.clear();
    ColouredRenderObjectMaker makerMaker;
@@ -287,7 +304,7 @@
        float maxMom = (momData[p].Length() + momData[o].Length());
        vec3 dir = posData[p] - posData[o];
        float dist = (dir).Length();
-       if (dist < 2.0 + maxMom * 200)
+       if (dist < 2.0 + maxMom * skippedSteps)
        {
  
          //if (dist > 3.0)
@@ -318,8 +335,8 @@
          }
          else
          {
-           makerMaker.AddVertex(posData[p], vec3(0, 0, 1));
-           makerMaker.AddVertex(posData[o], vec3(0, 0, 1));
+           makerMaker.AddVertex(posData[p], vec3(0.12, 0.1, 0.2));
+           makerMaker.AddVertex(posData[o], vec3(0.12, 0.1, 0.2));
          }
        }
      }
@@ -341,9 +358,11 @@
    }
  
    //Gears
-   if (false)
+   if (true)
    {
      AddGearSet(vec3(44, 20, 0));
+     //AddGear(vec3(58, 17, 0), 32, 3);
+
      AddBox(vec3(44 - 1, 20 - 1, 3), { 3,3,7 }, wood);
    }
  
@@ -371,7 +390,7 @@
    }
  
    // swinging ball
-   if (true)
+   if (false)
    {
      for (int i = 0; i < 1; i++)
      {
@@ -383,7 +402,7 @@
    }
  
    // Water pipe
-   if (false)
+   if (true)
    {
      AddPaddle({ 4,0,0 });
      AddPaddle({ 33,0,0 });
@@ -395,7 +414,7 @@
    }
  
    AmbientOcclusion();
-   ExtractConnections();
+   ExtractConnections(fastSteps);
  }
  
  void SimulateParticles()
@@ -511,10 +530,10 @@
  #ifdef _DEBUG
    //Window window("Game", true, 800, 600, false);
  #else
-   //Window window("Game", true, 1920, 1080, true);
+   Window window("Game", true, 1920, 1080, true);
  #endif
-   Window window("Game", true, 800, 600, false);
- 
+   //Window window("Game", true, 800, 600, false)
+
    Start();
    RebuildMesh();
    glEnable(GL_PROGRAM_POINT_SIZE);
@@ -527,8 +546,8 @@
    makerMaker.AddVertex(vec3(-0.5, -0.5, -0.5), vec2(0, 0));
    makerMaker.AddVertex(vec3(-0.5, -0.5, 128.5), vec2(0, 1));
    makerMaker.AddVertex(vec3(128.5, -0.5, 128.5), vec2(1, 1));
-   makerMaker.SetTexture(ASSETDIR "Substance/grid.png");
    RenderObject *floorMesh = makerMaker.AssembleRenderObject();
+   makerMaker.SetTexture(ASSETDIR "Substance/grid.png");
  
    mat4 projectionMat;
    Controls::SetMouseLock(true);
@@ -549,10 +568,10 @@
      mat4 viewMat = Camera::Matrix();
      MVP = projectionMat * viewMat * modelMat;
      MVP.Transpose();
- 
-     float pointSize = 0.25;
+
+     float pointSize = 0.5;
      if (thickMode)
-       pointSize = 1.4;
+       pointSize = 1;
      mesh.AssignUniform("size", UT_1f, &pointSize);
      if (Controls::KeyDown(SDL_SCANCODE_3))
      {
@@ -569,7 +588,8 @@
  
      window.Swap();
      FrameRate::Update();
- 
+     static int waterWave = 0;
+
      if (Controls::KeyDown(SDL_SCANCODE_R))
      {
        posData.clear();
@@ -579,6 +599,7 @@
        liqData.clear();
        connections.clear();
        Start();
+       waterWave = 0;
      }
  
      static bool thiockWasDown = false;
@@ -600,14 +621,13 @@
        if (!cubeWasDown)
        {
          AddColorCube(vec3(0, 0, 0));
-         ExtractConnections();
+         ExtractConnections(fastSteps);
          cubeWasDown = true;
        }
      }
      else
        cubeWasDown = false;
- 
- 
+
      static bool accelerator = true;
      static bool accellWasDown = false;
      if (Controls::KeyDown(SDL_SCANCODE_KP_MULTIPLY))
@@ -660,21 +680,19 @@
  
          // Spawn water
  
-         static int waterWave = 0;
-         if (waterWave++ % 50 == 1 && waterWave / 50 < 35)
+         if (waterWave < 64 && (waterWave++ % 15) == 1)
          {
            //if (waterWave++ > 15)
            {
-             //for (int x = 0; x < 7; x++)
+             for (int x = -1; x < 10; x++)
              {
-               //for (int y = 0; y < 4; y++)
+               for (int y = 0; y < 4; y++)
                {
                  //AddWater(vec3(26, 40, 26), vec3(10, 5, 10));
-                   //float brightness = (rand() / (0.0f + RAND_MAX)) * 0.5 + 0.5;
-                   //AddVoxel(vec3(22 + x*2, 75, 11 + y*2), vec3(0.2, 0.4, 1.0) * brightness, vec3(0.01 * ((rand() / (0.0f + RAND_MAX)) * 2 - 1), -0.1, 0.01 * ((rand() / (0.0f + RAND_MAX)) * 2 - 1)), 1.0, true);
+                   float brightness = (rand() / (0.0f + RAND_MAX)) * 0.5 + 0.5;
+                   AddVoxel(vec3(22 + x*2, 60, 11 + y*2), vec3(0.2, 0.4, 1.0) * brightness, vec3(0.01 * ((rand() / (0.0f + RAND_MAX)) * 2 - 1), -0.1, 0.01 * ((rand() / (0.0f + RAND_MAX)) * 2 - 1)), 1.0, true);
                }
              }
-             //waterWave = 0;
            }
          }
  
@@ -689,7 +707,6 @@
              }
              else
              {
-               int fastSteps = 200;
                static int step = 0;
                if (step++ < fastSteps)
                  SimulateConnections();
@@ -697,7 +714,7 @@
                {
                  step = 0;
                  SimulateParticles();
-                 ExtractConnections();
+                 ExtractConnections(fastSteps);
                }
              }
          }
@@ -709,7 +726,7 @@
        if (Controls::GetRightClick())
        {
          AddVoxel(vec3() - Camera::Position() - Camera::Direction() * 4, vec3(1, 1, 0), vec3() - Camera::Direction());
-         ExtractConnections();
+         ExtractConnections(fastSteps);
        }
 
        SimulateParticles();

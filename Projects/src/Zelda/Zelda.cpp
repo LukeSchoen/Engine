@@ -20,10 +20,10 @@ void Zelda()
 {
   Threads::SetFastMode();  // Work in real time mode while loading
 
-#ifdef _DEBUG
   Window window("Game", true, 640, 480, false); // Create Debug Game Window
+#ifdef _DEBUG
 #else
-  Window window("Game", true, 1920, 1080, true); // Create Game Window
+  //Window window("Game", true, 1920, 1080, true); // Create Game Window
 #endif
 
   Controls::SetMouseLock(true);

@@ -40,7 +40,7 @@ void VoxelTracer()
       pWorld[x + y * worldWdth * worldHeight] = pImg[y + (255 - x) * 256];
       pWorld[x + y * worldWdth * worldHeight + 255 * worldWdth] = pImg[x + (255 - y) * 256];
       pWorld[x * worldWdth + y * worldWdth * worldHeight] = pImg[x + (255 - y) * 256];
-      pWorld[255 + x * worldWdth + y * worldWdth * worldHeight] = pImg[x + (255 - y) * 256];
+      pWorld[x * worldWdth + y * worldWdth * worldHeight] = pImg[x + (255 - y) * 256 + 255];
     }
 
   Controls::SetMouseLock(true);
@@ -86,7 +86,7 @@ void VoxelTracer()
           {
             float yr = rayDir.y / rayDir.x * d;
             float zr = rayDir.z / rayDir.x * d;
-            while(color == 0)
+            while (color == 0)
             {
               rayPos.x += d;
               rayPos.y += yr;
@@ -128,9 +128,11 @@ void VoxelTracer()
         if (false)
         {
           // Step Tracer
-          while (color == 0)
+          int dist = 0;
+          while (dist < 100 && color == 0)
           {
-            rayPos = rayPos + (rayDir * 0.5f);
+            dist++;
+            rayPos = rayPos + (rayDir * 0.1f);
             if (rayPos.x < 0 || rayPos.x >= worldWdth || rayPos.y < 0 || rayPos.y >= worldWdth || rayPos.z < 0 || rayPos.z >= worldWdth) { color = 0; break; }
             color = pWorld[int(rayPos.x) + int(rayPos.y) * worldWdth + int(rayPos.z) * worldWdth * worldHeight];
           }
@@ -140,8 +142,13 @@ void VoxelTracer()
         {
           // DDA Tracer
           vec3 pos = rayPos;
-          vec3i attitude(rayDir.x > 0, rayDir.y > 0, rayDir.z > 0);
-          vec3i wholePos(floor(pos.x), floor(pos.y), floor(pos.z));
+          vec3i attitude = vec3i((rayDir.x > 0) * 2 - 1, (rayDir.y > 0) * 2 - 1, (rayDir.z > 0) * 2 - 1);
+          vec3i wholePos(floor(pos.x ), floor(pos.y), floor(pos.z));
+
+          if (abs(rayDir.x) < FLT_EPSILON * 100) rayDir.x = FLT_EPSILON * 100;
+          if (abs(rayDir.y) < FLT_EPSILON * 100) rayDir.y = FLT_EPSILON * 100;
+          if (abs(rayDir.z) < FLT_EPSILON * 100) rayDir.z = FLT_EPSILON * 100;
+          
           vec3 invDir = vec3(1) / rayDir;
           while (color == 0)
           {
@@ -151,19 +158,19 @@ void VoxelTracer()
             // Determine first dimension crossed
             int FirstCross = (((crossDist.x >= crossDist.y)*(crossDist.z > crossDist.y))) + (((crossDist.x >= crossDist.z)*(crossDist.y >= crossDist.z)) * 2);
 
-            // step across dimensions
+            // Step across dimensions
             switch (FirstCross)
             {
             case 0:
-              wholePos.x += attitude.x * 2 - 1;
+              wholePos.x += attitude.x;
               pos += rayDir * crossDist.x;
               break;
             case 1:
-              wholePos.y += attitude.y * 2 - 1;
+              wholePos.y += attitude.y;
               pos += rayDir * crossDist.y;
               break;
             case 2:
-              wholePos.z += attitude.z * 2 - 1;
+              wholePos.z += attitude.z;
               pos += rayDir * crossDist.z;
               break;
             }
@@ -172,12 +179,11 @@ void VoxelTracer()
               color = 0;
               break;
             }
-            color = pWorld[int(wholePos.x) + int(wholePos.y) * worldWdth + int(wholePos.z) * worldWdth * worldHeight];
+            color = pWorld[int(pos.x) + int(pos.y) * worldWdth + int(pos.z) * worldWdth * worldHeight];
             if (color)
               break;
           }
         }
-
         window.pixels[x + y * window.width] = color;
       }
     window.Swap();
