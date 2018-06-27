@@ -89,7 +89,7 @@ void ModelView()
   window.Swap();
 
   PolyModel model;
-  model.LoadModel("C:/Users/Luke/Desktop/map/map.obj", true);
+  model.LoadModel("C:/vrml/output.wrl", true);
   //model.LoadModel("C:/Users/Luke/Documents/3DReaperDX/Frames/out/Out.obj", true);
 
   while (Controls::Update())

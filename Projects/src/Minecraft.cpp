@@ -28,7 +28,7 @@ static volatile bool streaming = true;
 #ifdef _DEBUG
 int viewDist = 8;
 #else
-int viewDist = 10;
+int viewDist = 12;
 #endif
 
 BlockWorld *world = nullptr;
@@ -112,10 +112,10 @@ void Minecraft()
   //Textures::SetTextureFilterMode(false);
 
   // Create World
-  //world = new BlockWorld(ASSETDIR "/minecraft/maps/island/", viewDist);
-  world = new BlockWorld("C:/Users/Luke/AppData/Roaming/.technic/modpacks/vanilla/saves/roulette/region/", viewDist);
+  world = new BlockWorld("C:/Users/Luke/Desktop/region/", viewDist);
+  //world = new BlockWorld("C:/Users/Luke/AppData/Roaming/.technic/modpacks/vanilla/saves/roulette/region/", viewDist);
 
-  vec3 playerPos = vec3(-56, 74, -1300);
+  vec3 playerPos = vec3(-3*512, 74, 3*512);
   int64_t playerID = world->entities.Add(EntityMaker::CreatePlayer(world, playerPos));
   Camera::SetPosition(vec3()-playerPos);
 

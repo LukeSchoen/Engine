@@ -25,15 +25,19 @@ void NeuralNetTest()
 
   ImageFile image;
   uint32_t w, h;
-  uint32_t *pImg = image.ReadImage("C:/Users/Luke/Desktop/img.jpg", &w, &h);
+  uint32_t *pImg = image.ReadImage("C:/Luke/Programming/Engine/Assets/a.bmp", &w, &h);
+  //uint32_t *pImg = image.ReadImage("C:/Users/Luke/Desktop/img.jpg", &w, &h);
   
-  NeuralNetwork net({ 2, 32, 32, 32, 32, 3 });
+  NeuralNetwork net({ 2, 64, 32, 64, 32, 64, 3 });
 
-  Window window("NN", false, w, h, false);
+  int winWidth = w;
+  int winHeight = h;
+
+  Window window("NN", false, winWidth, winHeight, false);
 
   while (Controls::Update())
   {
-    for (int64_t i = 0; i < 2000; i++)
+    for (int64_t i = 0; i < winHeight * winWidth; i++)
     {
       std::vector<int64_t> input = { (rand() % w), (rand() % h) };
       net.FeedForward({ ((double)input[0]) / w, ((double)input[1]) / h });
@@ -46,19 +50,16 @@ void NeuralNetTest()
     }
 
     std::vector<double> results;
-    for (int y = 0; y < window.height; y++)
-      for (int x = 0; x < window.width; x++)
+    for (int y = 0; y < winHeight; y++)
+      for (int x = 0; x < winWidth; x++)
       {
-        net.FeedForward({ ((double)x) / window.width, ((double)y) / window.height });
+        net.FeedForward({ ((double)x) / winWidth, ((double)y) / winHeight });
         net.GetResults(results);
-        window.pixels[x + y * window.width] = uint32_t((int)std::max(std::min(results[0] * 256, 255.0), 0.0) + ((int)std::max(std::min(results[1] * 256, 255.0), 0.0)) * 256 + ((int)std::max(std::min(results[2] * 256, 255.0), 0.0)) * 256 * 256);
+        window.pixels[x + y * winWidth] = uint32_t((int)std::max(std::min(results[0] * 256, 255.0), 0.0) + ((int)std::max(std::min(results[1] * 256, 255.0), 0.0)) * 256 + ((int)std::max(std::min(results[2] * 256, 255.0), 0.0)) * 256 * 256);
         //if(x < w && y < h) window.pixels[x + y * window.width] = pImg[x + y * w];
       }
     window.Swap();
   }
-
-
-
 }
 
 //

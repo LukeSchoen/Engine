@@ -17,9 +17,10 @@
 #include "PixelLife.h"
 #include "DrawTree.h"
 #include "NN.h"
-
 #include <vector>
 #include "MergeSort.h"
+#include "Insight.h"
+
 int64_t FindNextComma(char *pData, int64_t i, int64_t size)
 {
  for (int64_t c = i; c < size; c++)
@@ -80,7 +81,7 @@ void main() // console entry
   //Zelda();
   //PhysicsTest();
   //Minecraft();
- NeuralNetTest();
+  //NeuralNetTest();
   //OpenGL();
   //Compression();
   //ModelView();

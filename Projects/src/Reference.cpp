@@ -2,8 +2,8 @@
 #include <cmath>
 #include "Reference.h"
 double Neuron::eta = 0.01;    // overall net learning rate, [0.0..1.0]
-double Neuron::alpha = 0;   // momentum, multiplier of last deltaWeight, [0.0..1.0]
-double NeuralNetwork::m_recentAverageSmoothingFactor = 100.0; // Number of training samples to average over
+double Neuron::alpha = 0.001;   // momentum, multiplier of last deltaWeight, [0.0..1.0]
+double NeuralNetwork::m_recentAverageSmoothingFactor = 1.0; // Number of training samples to average over
 
 static double transfer(double x)
 {
