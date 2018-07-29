@@ -25,16 +25,18 @@
 #include "Rays.h"
 #include "SciFi.h"
 #include "Tracey.h"
+#include "KhanLeastRects.h"
 
 void main() // console entry
 {
   //Tracey();
   //Rays();
-  SciFi();
+  //SciFi();
   //Substance();
   //DepthTest();
   //ParticleSim();
   //NovaCosm();
+  KhanQuadRects();
   //Glorious();
   //Simple();
   //Reductio();
@@ -56,4 +58,4 @@ void main() // console entry
   //MarchingCubes();
 }
 
-int wmain(int pc, char* ps){main();} // windows entry
+int wmain(int pc, char* ps) { main(); } // windows entry

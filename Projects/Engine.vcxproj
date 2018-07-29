@@ -27,6 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AStar.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Biped.cpp" />
     <ClCompile Include="src\BlockMesher.cpp" />
@@ -63,6 +64,7 @@
     <ClCompile Include="src\Grass.cpp" />
     <ClCompile Include="src\Insight.cpp" />
     <ClCompile Include="src\Kinect.cpp" />
+    <ClCompile Include="src\KhanLeastRects.cpp" />
     <ClCompile Include="src\LogicMonday.cpp" />
     <ClCompile Include="src\MagicaVoxels.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -137,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Assets.h" />
+    <ClInclude Include="src\AStar.h" />
     <ClInclude Include="src\Audio.h" />
     <ClInclude Include="src\Biped.h" />
     <ClInclude Include="src\BlockMesher.h" />
@@ -153,6 +156,7 @@
     <ClInclude Include="src\GPix.h" />
     <ClInclude Include="src\Grass.h" />
     <ClInclude Include="src\Kinect.h" />
+    <ClInclude Include="src\KhanLeastRects.h" />
     <ClInclude Include="src\MagicaVoxels.h" />
     <ClInclude Include="src\MarchingCubes.h" />
     <ClInclude Include="src\MDSParticle.h" />
@@ -385,7 +389,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;Kinect10.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -471,7 +475,7 @@ xcopy "$(SolutionDir)3rdParty\Assimp\Lib\$(Platform)\$(Configuration)\assimp-vc1
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;Kinect10.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sdl2.lib;glew.lib;SDL2_image.lib;assimp-vc140-mt.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glew\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\SDL2Image\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\Assimp\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdParty\bullet\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
     </Link>
