@@ -26,6 +26,7 @@
 #include "SciFi.h"
 #include "Tracey.h"
 #include "KhanLeastRects.h"
+#include "CellSim.h"
 
 void main() // console entry
 {
@@ -35,8 +36,9 @@ void main() // console entry
   //Substance();
   //DepthTest();
   //ParticleSim();
+  CellSimulator();
   //NovaCosm();
-  KhanQuadRects();
+  //KhanQuadRects();
   //Glorious();
   //Simple();
   //Reductio();

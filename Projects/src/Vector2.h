@@ -55,5 +55,6 @@ struct Vector2
 
 typedef Vector2<float> vec2;
 typedef Vector2<int> vec2i;
+typedef Vector2<unsigned int> vec2ui;
 
 #endif // Vector2_h__

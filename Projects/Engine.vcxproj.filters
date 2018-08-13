@@ -302,9 +302,6 @@
     <ClCompile Include="src\AStar.cpp">
       <Filter>Engine\AStar</Filter>
     </ClCompile>
-    <ClCompile Include="src\KhanLeastRects.cpp">
-      <Filter>Projects\LeastRects</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls.h">
@@ -680,6 +677,9 @@
     <ClInclude Include="src\KhanLeastRects.h">
       <Filter>Projects\LeastRects</Filter>
     </ClInclude>
+    <ClInclude Include="src\CellSim.h">
+      <Filter>Projects\Cells</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -969,6 +969,9 @@
     </Filter>
     <Filter Include="Projects\LeastRects">
       <UniqueIdentifier>{ce57268c-5f9b-4f86-a381-f4ae294c8c5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projects\Cells">
+      <UniqueIdentifier>{60046152-a1aa-4d2d-a48b-c9cda18f0142}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

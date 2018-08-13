@@ -64,7 +64,6 @@
     <ClCompile Include="src\Grass.cpp" />
     <ClCompile Include="src\Insight.cpp" />
     <ClCompile Include="src\Kinect.cpp" />
-    <ClCompile Include="src\KhanLeastRects.cpp" />
     <ClCompile Include="src\LogicMonday.cpp" />
     <ClCompile Include="src\MagicaVoxels.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -148,6 +147,7 @@
     <ClInclude Include="src\BTCBot.h" />
     <ClInclude Include="src\btcFunctions.h" />
     <ClInclude Include="src\btcTypes.h" />
+    <ClInclude Include="src\CellSim.h" />
     <ClInclude Include="src\DepthTest.h" />
     <ClInclude Include="src\DrawTree.h" />
     <ClInclude Include="src\EntityHandler.h" />
