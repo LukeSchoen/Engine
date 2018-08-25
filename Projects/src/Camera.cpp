@@ -39,11 +39,11 @@ void Camera::Update(float speed, bool only2D, bool useTimeDelta, bool useMouse)
   if (!useTimeDelta)
     timeDelta = 1;
 
-  vec2 controllerTurn = Controls::GetController2DAxis(1);
-  controllerTurn = vec2(controllerTurn.y, -controllerTurn.x);
-  if (fabs(controllerTurn.x) < controllerDeadZone) controllerTurn.x = 0;
-  if (fabs(controllerTurn.y) < controllerDeadZone) controllerTurn.y = 0;
-  dir = dir + Delinerize(controllerTurn, 3.0f) * ControllerTurnSensitivity * timeDelta;
+//   vec2 controllerTurn = Controls::GetController2DAxis(1);
+//   controllerTurn = vec2(controllerTurn.y, -controllerTurn.x);
+//   if (fabs(controllerTurn.x) < controllerDeadZone) controllerTurn.x = 0;
+//   if (fabs(controllerTurn.y) < controllerDeadZone) controllerTurn.y = 0;
+//   dir = dir + Delinerize(controllerTurn, 3.0f) * ControllerTurnSensitivity * timeDelta;
 
   float camSinY = sin(dir.y);
   float camCosY = cos(dir.y);
