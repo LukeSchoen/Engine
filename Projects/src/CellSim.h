@@ -6,21 +6,24 @@
 #include "Controls.h"
 #include "FrameRate.h"
 
-const static float requiredGrowthHealth = 25;
+const static float maxHealth = 25; // also the required amount to grow currently..
 
 class CellSim
 {
 public:
   enum CellAction : uint8_t
   {
+    // Inject this program
     CA_Stay,
     CA_Heal,
     CA_Grow,
+    CA_HealHim,
     CA_TurnLeft,
     CA_TurnRight,
     CA_TurnAround,
     CA_Move,
     CA_Smak,
+    CA_Mutate,
     CA_ValueSetOnA,
     CA_ValueSetOnB,
     CA_ValueSetOnC,
@@ -37,12 +40,8 @@ public:
     CA_DoIfValueIsOffA,
     CA_DoIfValueIsOffB,
     CA_DoIfValueIsOffC,
+    CA_Die,
     CA_NUM
-  };
-
-  enum CellCondition : uint8_t
-  {
-
   };
 
   CellSim(Window *pWindow, int zoomOut = 1) : m_pWindow(pWindow), m_zoomOut(zoomOut)
@@ -64,40 +63,40 @@ public:
     // Nukes
     static int nuke = 0;
     nuke++;
-    if(false)
-    if (nuke % 500 == 0)
-    {
-      int sx = rand() % (m_dimensions.x + 64) - 64;
-      int sy = rand() % (m_dimensions.y + 64) - 64;
-      for (int y = Max(sy, 0); y < Min(m_dimensions.y, sy + 64); y++)
-        for (int x = Max(sx, 0); x < Min(m_dimensions.x, sx + 64); x++)
-        {
-          auto pcell = m_cells[x + y * m_dimensions.x];
-          if (pcell)
-            pcell->m_health = 0;
-        }
-    }
+    if (false)
+      if (nuke % 500 == 0)
+      {
+        int sx = rand() % (m_dimensions.x + 64) - 64;
+        int sy = rand() % (m_dimensions.y + 64) - 64;
+        for (int y = Max(sy, 0); y < Min(m_dimensions.y, sy + 64); y++)
+          for (int x = Max(sx, 0); x < Min(m_dimensions.x, sx + 64); x++)
+          {
+            auto pcell = m_cells[x + y * m_dimensions.x];
+            if (pcell)
+              pcell->m_health = 0;
+          }
+      }
 
     // Pioneers
     static int pioneer = 0;
     pioneer++;
-    if(true)
-    if (pioneer % 4000 == 0)
-      for (int y = 0; y < m_dimensions.y; y++)
-        for (int x = 0; x < m_dimensions.x; x++)
-        {
-          if(rand() > RAND_MAX  * 0.2)
-            m_cells[x + y * m_dimensions.x]->m_health = 0;
-          else
-            if (m_cells[x + y * m_dimensions.x]->m_health > 0)
-              m_cells[x + y * m_dimensions.x]->Mutate();
-        }
+    if (false)
+      if (pioneer % 4000 == 0)
+        for (int y = 0; y < m_dimensions.y; y++)
+          for (int x = 0; x < m_dimensions.x; x++)
+          {
+            if (rand() > RAND_MAX  * 0.2)
+              m_cells[x + y * m_dimensions.x]->m_health = 0;
+            else
+              if (m_cells[x + y * m_dimensions.x]->m_health > 0)
+                m_cells[x + y * m_dimensions.x]->Mutate();
+          }
 
     // Neutrinos
     if (true)
       for (int y = 0; y < m_dimensions.y; y++)
         for (int x = 0; x < m_dimensions.x; x++)
-          if(m_cells[x + y * m_dimensions.x]->m_health > 0)
+          if (m_cells[x + y * m_dimensions.x]->m_health > 0)
             if (rand() > RAND_MAX - 15)
               m_cells[x + y * m_dimensions.x]->Mutate();
 
@@ -139,7 +138,7 @@ public:
         float r = rgb[0] / 255.f;
         float g = rgb[1] / 255.f;
         float b = rgb[2] / 255.f;
-        float bright = ((*ppCell)->m_health / requiredGrowthHealth) * 0.5f + 0.5f;
+        float bright = ((*ppCell)->m_health / maxHealth) * 0.5f + 0.5f;
         r *= bright;
         g *= bright;
         b *= bright;
@@ -183,12 +182,12 @@ public:
     void Mutate()
     {
       bool willMutate = (rand() & 2);
-      int len = (rand() % 8);
-      if(willMutate)
+      int len = (rand() % 4);
+      if (willMutate)
         for (int i = 0; i < len; i++)
         {
           m_brain.Mutate();
-          bool colWillMutate = (rand() & 2) * (rand() & 2);
+          bool colWillMutate = true; // (rand() & 2) * (rand() & 2);
           colWillMutate = true;
           if (colWillMutate)
           {
@@ -240,9 +239,15 @@ public:
 
       void Mutate()
       {
+        if (rand() % 2)
+        {
+          auto idea = *(ideas.begin() + rand() % ideas.size());
+          idea.Mutate();
+          ideas.push_back(idea);
+        }
         if (rand() % 2) ideas.erase(ideas.begin() + rand() % ideas.size());
         if (rand() % 2) ideas.push_back(Idea().Generate());
-        while(ideas.size() < 2) ideas.push_back(Idea().Generate());
+        while (ideas.size() < 2) ideas.push_back(Idea().Generate());
       }
 
     private:
@@ -259,6 +264,13 @@ public:
           for (int i = 0; i < len; i++) // Instructions
             m_steps.push_back(CellAction(rand() % CA_NUM));
           return *this;
+        }
+
+        Idea& Mutate()
+        {
+          if (rand() % 2) m_steps.erase(m_steps.begin() + rand() % m_steps.size());
+          if (rand() % 2) m_steps.push_back(CellAction(rand() % CA_NUM));
+          while (m_steps.size() < 2) m_steps.push_back(CellAction(rand() % CA_NUM));
         }
 
         //private:
@@ -281,8 +293,9 @@ public:
     uint32_t m_color = 0;
     uint32_t m_fullColor = 0;
     uint32_t m_health = 0;
-    bool m_inBounds = true;
     //uint32_t m_energy = 0;
+
+    bool m_inBounds = true;
   };
 
 private:
@@ -307,15 +320,16 @@ private:
 
     switch (action)
     {
-
     case CA_Stay: { /*m_energy += 1;*/ break; }
-    case CA_Heal: { pCell->m_health = Min(pCell->m_health + 1, requiredGrowthHealth); break; }
+    case CA_Heal: { pCell->m_health = Min(pCell->m_health + 1, maxHealth); break; }
+    case CA_HealHim: { if ((*ppFr)->m_health > 0) (*ppFr)->m_health = Min((*ppFr)->m_health + pCell->m_health - 1 + 2, maxHealth); pCell->m_health = 1; break; }
     case CA_TurnLeft: { --pCell->m_direction; if (pCell->m_direction == -1) pCell->m_direction = 3; }
     case CA_TurnRight: { ++pCell->m_direction; if (pCell->m_direction == 4) pCell->m_direction = 0; }
     case CA_TurnAround: { pCell->m_direction += 2; if (pCell->m_direction >= 4) pCell->m_direction -= 4; }
-    case CA_Grow: { if ((*ppFr)->m_health == 0 && (*ppFr)->m_inBounds && pCell->m_health >= requiredGrowthHealth) { pCell->m_health = 1; **ppFr = *pCell; (*ppFr)->Mutate(); } break; }
+    case CA_Grow: { if ((*ppFr)->m_health == 0 && (*ppFr)->m_inBounds && pCell->m_health >= maxHealth) { pCell->m_health = 1; **ppFr = *pCell; (*ppFr)->Mutate(); } break; }
     case CA_Move: { if ((*ppFr)->m_health == 0 && (*ppFr)->m_inBounds) { **ppFr = *pCell; pCell->m_health = 0; } break; }
-    case CA_Smak: { if ((*ppFr)->m_health > 0) (*ppFr)->m_health = 0; break; }
+    case CA_Smak: { if ((*ppFr)->m_health > 0) (*ppFr)->m_health = Max((int)(*ppFr)->m_health - 5, 0); break; }
+    case CA_Mutate: { if ((*ppFr)->m_health > 0) (*ppFr)->Mutate(); break; }
     case CA_ValueSetOnA: { pCell->a = true; }
     case CA_ValueSetOnB: { pCell->b = true; }
     case CA_ValueSetOnC: { pCell->c = true; }
@@ -323,7 +337,7 @@ private:
     case CA_ValueSetOoffB: { pCell->b = false; }
     case CA_ValueSetOoffC: { pCell->c = false; }
 
-    // Continue if true type actions
+                           // Continue if true type actions
 
     case CA_DoIfFree: { if ((*ppFr)->m_health) pCell->m_brain.SkipThought(); break; }
     case CA_DoIfNotFree: { if (!(*ppFr)->m_health) pCell->m_brain.SkipThought(); break; }
@@ -336,6 +350,8 @@ private:
     case CA_DoIfValueIsOffA: { if (pCell->a) pCell->m_brain.SkipThought(); break; }
     case CA_DoIfValueIsOffB: { if (pCell->b) pCell->m_brain.SkipThought(); break; }
     case CA_DoIfValueIsOffC: { if (pCell->c) pCell->m_brain.SkipThought(); break; }
+    case CA_Die: { pCell->m_health = 0; break; }
+                             
 
     default:
       break;
@@ -351,11 +367,11 @@ private:
 
 void CellSimulator()
 {
-  int seed = 456;
+  int seed = 32141;
   for (int i = 0; i < seed; i++) rand();
 
   Window window("CellSim", false, 1200, 600);
-  CellSim simulation(&window, 5);
+  CellSim simulation(&window, 20);
 
   while (Controls::Update())
   {
@@ -363,6 +379,21 @@ void CellSimulator()
     simulation.Draw();
     window.Swap();
     simulation.Step();
+
+    static int imageID = 0;
+    static int CountDown = 2000;
+    CountDown--;
+    if (CountDown <= 0)
+    {
+      CountDown = 2000;
+      char buff[1024];
+      sprintf(buff, "c:/temp/grass/%d.png", imageID++);
+      for (size_t y = 0; y < window.height; y++)
+        for (size_t x = 0; x < window.width; x++)
+          window.pixels[x + y * window.width] |= 0xFF000000;
+      ImageFile::WriteImagePNG(buff, window.pixels, window.width, window.height);
+    }
+
     FrameRate::Update();
   }
 }
