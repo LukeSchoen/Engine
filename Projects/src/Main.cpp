@@ -1,32 +1,32 @@
-#include "Glorious.h"
-#include "Zelda.h"
-#include "Cosmic.h"
-#include "NovaCosm.h"
+#include "KhanLeastRects.h"
+#include "MarchingCubes.h"
 #include "SecondStream.h"
-#include "StreamTest.h"
-#include "Minecraft.h"
-#include "BTCBot.h"
-#include "pokemon.h"
-#include "DLux.h"
-#include "OpenGL.h"
+#include "Segmentation.h"
+#include "ParticleSim.h"
 #include "Compression.h"
 #include "PhysicsTest.h"
-#include "ModelView.h"
-#include "MarchingCubes.h"
-#include "Grass.h"
-#include "PixelLife.h"
-#include "DrawTree.h"
-#include "reductio.h"
-#include "Simple.h"
-#include "Substance.h"
-#include "ParticleSim.h"
-#include "Segmentation.h"
+#include "StreamTest.h"
 #include "DepthTest.h"
-#include "Rays.h"
-#include "SciFi.h"
-#include "Tracey.h"
-#include "KhanLeastRects.h"
+#include "ModelView.h"
+#include "PixelLife.h"
+#include "Minecraft.h"
+#include "Substance.h"
+#include "DrawTree.h"
+#include "NovaCosm.h"
+#include "Glorious.h"
+#include "reductio.h"
+#include "pokemon.h"
 #include "CellSim.h"
+#include "Cosmic.h"
+#include "BTCBot.h"
+#include "Simple.h"
+#include "OpenGL.h"
+#include "Tracey.h"
+#include "Zelda.h"
+#include "SciFi.h"
+#include "Grass.h"
+#include "DLux.h"
+#include "Rays.h"
 
 void main() // console entry
 {
@@ -36,7 +36,7 @@ void main() // console entry
   //Substance();
   //DepthTest();
   //ParticleSim();
-  CellSimulator();
+  //CellSimulator();
   //NovaCosm();
   //KhanQuadRects();
   //Glorious();

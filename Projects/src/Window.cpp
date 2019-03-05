@@ -14,14 +14,6 @@ Window::Window(char * windowTitle /*= "Program"*/, bool OpenGL /*= false*/, int 
     // VSYNC
     SDL_GL_SetSwapInterval(1);
 
-    // Do these help?
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    //glEnable(GL_LINE_SMOOTH);
-    //glEnable(GL_POLYGON_SMOOTH);
-    //glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    //glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-    //glEnable(GL_MULTISAMPLE);
 
     //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3); // OpenGL 3.1 core
@@ -51,6 +43,17 @@ Window::Window(char * windowTitle /*= "Program"*/, bool OpenGL /*= false*/, int 
     glEnable(GL_MULTISAMPLE); // Enable Multi sampling
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
+
+
+  // Do these help?
+  //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glEnable(GL_BLEND);
+  glEnable(GL_POINT_SMOOTH);
+  glEnable(GL_LINE_SMOOTH);
+  //glEnable(GL_POLYGON_SMOOTH);
+  glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+  glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+  glEnable(GL_MULTISAMPLE);
 }
 
 void Window::Clear(unsigned char red, unsigned char green, unsigned char blue)

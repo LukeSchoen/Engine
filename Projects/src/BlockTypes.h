@@ -20,7 +20,6 @@ enum modelType : int8_t
   plane,
 };
 
-
 struct BlockData
 {
   bool used = false;

@@ -96,7 +96,7 @@ void Minecraft()
 #else
   vec2i fullRes = Window::GetScreenRes();
   //Window window("Game", true, fullRes.x, fullRes.y, true); // Create Game Window
-  Window window("Game", true, 1920, 1080, true); // Create Game Window
+  Window window("Game", true, 800, 600, false); // Create Game Window
 #endif
 
   //if (SDL_GL_SetSwapInterval(-1) == -1) SDL_GL_SetSwapInterval(1); // VSYNC

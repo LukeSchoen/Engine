@@ -34,7 +34,7 @@ struct NovaCosmBlock
 
 struct NovaCosmModel
 {
-  float qMult = 512.f;
+  float qMult = 333.0;
   bool segmentation = false;
 
   NovaCosmBlock *root;

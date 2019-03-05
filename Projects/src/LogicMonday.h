@@ -42,7 +42,7 @@ struct InsightNodeHasher
 
 struct InsightScore
 {
-  uint64_t cases[4] = {0,0,0,0};
+  uint64_t cases[4] = {0, 0, 0, 0};
   double CorrelationStrength();
   void Clear();
 };
