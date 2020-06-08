@@ -1,5 +1,6 @@
 #ifndef RealTimeEngine_h__
 #define RealTimeEngine_h__
+
 #include "stdint.h"
 #include <time.h>
 
@@ -19,6 +20,5 @@ struct RealTimeEngine
   int Steps();
 
 };
-
 
 #endif // RealTimeEngine_h__

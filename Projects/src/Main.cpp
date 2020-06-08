@@ -52,7 +52,7 @@ void main() // console entry
   //DrawTree();
   //Cosmic();
   //Zelda();
-  //Minecraft();
+  Minecraft();
   //OpenGL();
   //PhysicsTest();
   //Compression();

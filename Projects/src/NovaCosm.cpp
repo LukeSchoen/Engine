@@ -52,7 +52,7 @@ void NovaCosm()
 
   //Window window("Game", true, 1920, 1080, true); // Create Game Window
 
-  pModel = new NovaCosmModel("F:/temp/Colledge.ncs");
+  pModel = new NovaCosmModel("F:/temp/2Colledge.ncs");
   //pModel = new NovaCosmModel("F:/temp/ExpressWay.ncs");
   //NovaCosmModel model("F:/Luke/Programming/Visual Studio/pixelly/Software Tracer/Expressway.pcf");
   //pModel->ExportPCF("F:/temp/ColledgeFull.pcf");
@@ -166,98 +166,96 @@ void NovaCosm()
     
     // Mouse Segmentation Selection
     // if left mouse click
-    NovaCosmBlock *block;
-    static std::vector<uint8_t> clipboardColorData;
-    static std::vector<uint8_t> clipboardPositionData;
-    static vec3 camCopyPos;
-    static int clipboarSrcLayer;
-    if(!Controls::GetLeftClick() && !turning)
-    {
-      static uint32_t *colData = nullptr;
-      static int colDataSize = 0;
-      int layer;
-      block = pModel->GetCamBlock(mouseWorldPos, &layer);
-      if (block)
-      {
-        if(block->voxelCount * 3 > colDataSize)
-        {
-          colDataSize = block->voxelCount * 3;
-          colData = (uint32_t*)realloc(colData, colDataSize);
-        }
-        memcpy(colData, block->voxelColData, block->voxelCount * 3);
-
-        // find which segment the mouse lies in
-        auto seg =(uint8_t*)block->voxelSegmentData;
-        uint8_t segR = seg[0]; uint8_t segG = seg[1]; uint8_t segB = seg[2];
-
-        float bestDist = 512;
-        for (int64_t vItr = 0; vItr < block->voxelCount; vItr++)
-        {
-          auto xyz = &((uint8_t*)block->voxelPosData)[vItr * 3];
-          auto segData = &((uint8_t*)block->voxelSegmentData)[vItr * 3];
-          auto rgb = &((uint8_t*)block->voxelColData)[vItr * 3];
-
-          float layerSize = (1.0 / (1LL << layer));
-          vec3 blockPos = (vec3(xyz[0], xyz[1], xyz[2]) + block->position) * layerSize;
-          float dist = (blockPos - mouseWorldPos).Length();
-          if (dist < bestDist)
-          {
-            bestDist = dist;
-            segR = segData[0];
-            segG = segData[1];
-            segB = segData[2];
-          }
-        }
-        // Generate cp;pr
-        uint8_t cr = 0x1E;
-        uint8_t cg = 0x90;
-        uint8_t cb = 0xFF;
-        float occ = 1-abs(sin(clock() /500.f));
-        cr += occ * (255 - cr);
-        cg += occ * (255 - cg);
-        cb += occ * (255 - cb);
-        for (int64_t vItr = 0; vItr < block->voxelCount; vItr++)
-        {
-          auto xyz = &((uint8_t*)block->voxelPosData)[vItr * 3];
-          auto segData = &((uint8_t*)block->voxelSegmentData)[vItr * 3];
-          auto rgb = &((uint8_t*)block->voxelColData)[vItr * 3];
-          if (segData[0] == segR && segData[1] == segG && segData[2] == segB)
-          {
-            rgb[0] = (rgb[0] + cr) / 2;
-            rgb[1] = (rgb[1] + cg) / 2;
-            rgb[2] = (rgb[2] + cb) / 2;
-          }
-        }
-        block->Updated = false;
-        block->voxels.AssignAttribute("color", AT_UNSIGNED_BYTE_NORM, block->voxelColData, 3, block->voxelCount);
-        memcpy(block->voxelColData, colData, block->voxelCount * 3);
-
-        // Store 
-        if (Controls::KeyDown(SDL_SCANCODE_LCTRL) && Controls::KeyDown(SDL_SCANCODE_C))
-        {
-          clipboarSrcLayer = layer;
-          camCopyPos = mouseWorldPos;
-          clipboardColorData.resize(block->voxelCount * 3);
-          clipboardPositionData.resize(block->voxelCount * 3);
-          memcpy(clipboardColorData.data(), colData, block->voxelCount * 3);
-          memcpy(clipboardPositionData.data(), block->voxelPosData, block->voxelCount * 3);
-        }
-      }
-    }
+//     NovaCosmBlock *block;
+//     static std::vector<uint8_t> clipboardColorData;
+//     static std::vector<uint8_t> clipboardPositionData;
+//     static vec3 camCopyPos;
+//     static int clipboarSrcLayer;
+//     if(!Controls::GetLeftClick() && !turning)
+//     {
+//       static uint32_t *colData = nullptr;
+//       static int colDataSize = 0;
+//       int layer;
+//       block = pModel->GetCamBlock(mouseWorldPos, &layer);
+//       if (block)
+//       {
+//         if(block->voxelCount * 3 > colDataSize)
+//         {
+//           colDataSize = block->voxelCount * 3;
+//           colData = (uint32_t*)realloc(colData, colDataSize);
+//         }
+//         memcpy(colData, block->voxelColData, block->voxelCount * 3);
+// 
+//         // find which segment the mouse lies in
+//         auto seg =(uint8_t*)block->voxelSegmentData;
+//         uint8_t segR = seg[0]; uint8_t segG = seg[1]; uint8_t segB = seg[2];
+// 
+//         float bestDist = 512;
+//         for (int64_t vItr = 0; vItr < block->voxelCount; vItr++)
+//         {
+//           auto xyz = &((uint8_t*)block->voxelPosData)[vItr * 3];
+//           auto segData = &((uint8_t*)block->voxelSegmentData)[vItr * 3];
+//           auto rgb = &((uint8_t*)block->voxelColData)[vItr * 3];
+// 
+//           float layerSize = (1.0 / (1LL << layer));
+//           vec3 blockPos = (vec3(xyz[0], xyz[1], xyz[2]) + block->position) * layerSize;
+//           float dist = (blockPos - mouseWorldPos).Length();
+//           if (dist < bestDist)
+//           {
+//             bestDist = dist;
+//             segR = segData[0];
+//             segG = segData[1];
+//             segB = segData[2];
+//           }
+//         }
+//         // Generate cp;pr
+//         uint8_t cr = 0x1E;
+//         uint8_t cg = 0x90;
+//         uint8_t cb = 0xFF;
+//         float occ = 1-abs(sin(clock() /500.f));
+//         cr += occ * (255 - cr);
+//         cg += occ * (255 - cg);
+//         cb += occ * (255 - cb);
+//         for (int64_t vItr = 0; vItr < block->voxelCount; vItr++)
+//         {
+//           auto xyz = &((uint8_t*)block->voxelPosData)[vItr * 3];
+//           auto segData = &((uint8_t*)block->voxelSegmentData)[vItr * 3];
+//           auto rgb = &((uint8_t*)block->voxelColData)[vItr * 3];
+//           if (segData[0] == segR && segData[1] == segG && segData[2] == segB)
+//           {
+//             rgb[0] = (rgb[0] + cr) / 2;
+//             rgb[1] = (rgb[1] + cg) / 2;
+//             rgb[2] = (rgb[2] + cb) / 2;
+//           }
+//         }
+//         block->Updated = false;
+//         block->voxels.AssignAttribute("color", AT_UNSIGNED_BYTE_NORM, block->voxelColData, 3, block->voxelCount);
+//         memcpy(block->voxelColData, colData, block->voxelCount * 3);
+// 
+//         // Store 
+//         if (Controls::KeyDown(SDL_SCANCODE_LCTRL) && Controls::KeyDown(SDL_SCANCODE_C))
+//         {
+//           clipboarSrcLayer = layer;
+//           camCopyPos = mouseWorldPos;
+//           clipboardColorData.resize(block->voxelCount * 3);
+//           clipboardPositionData.resize(block->voxelCount * 3);
+//           memcpy(clipboardColorData.data(), colData, block->voxelCount * 3);
+//           memcpy(clipboardPositionData.data(), block->voxelPosData, block->voxelCount * 3);
+//         }
+//       }
+//     }
     // Pasting
-    if (Controls::KeyDown(SDL_SCANCODE_LCTRL) && Controls::KeyDown(SDL_SCANCODE_V))
-    {
-      int64_t clipBoardPointCount = clipboardPositionData.size() / 3;
-      for (int64_t i = 0; i < clipBoardPointCount; i++)
-      {
-        auto &pos = clipboardPositionData;
-        auto &col = clipboardColorData;
-        pModel->AddPoint((block->position + vec3(pos[i + 0], pos[i + 1], pos[i + 2])) / (1 << clipboarSrcLayer) - camCopyPos + mouseWorldPos, (uint32_t)col[i + 0] | (uint32_t)col[i + 1] << 8 | (uint32_t)col[i + 2] << 16);
-      }
-    }
+//     if (Controls::KeyDown(SDL_SCANCODE_LCTRL) && Controls::KeyDown(SDL_SCANCODE_V))
+//     {
+//       int64_t clipBoardPointCount = clipboardPositionData.size() / 3;
+//       for (int64_t i = 0; i < clipBoardPointCount; i++)
+//       {
+//         auto &pos = clipboardPositionData;
+//         auto &col = clipboardColorData;
+//         pModel->AddPoint((block->position + vec3(pos[i + 0], pos[i + 1], pos[i + 2])) / (1 << clipboarSrcLayer) - camCopyPos + mouseWorldPos, (uint32_t)col[i + 0] | (uint32_t)col[i + 1] << 8 | (uint32_t)col[i + 2] << 16);
+//       }
+//     }
 
-
-    // Skybox
     Textures::SetTextureFilterMode(false);
     mat4 skyMVP;
     skyMVP = projectionMat * Camera::RotationMatrix();
@@ -281,7 +279,7 @@ void NovaCosm()
 
     pModel->Render(MVP, debugging);
 
-    if(block) block->Updated = true;
+    //if(block) block->Updated = true;
 
     glFinish();
     window.Swap(false); // Swap Window

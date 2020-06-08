@@ -6,14 +6,13 @@
 #include "Controls.h"
 #include "FrameRate.h"
 
-const static float maxHealth = 25; // also the required amount to grow currently..
+const static float maxHealth = 1000; // also the required amount to grow currently..
 
 class CellSim
 {
 public:
   enum CellAction : uint8_t
   {
-    // Inject this program
     CA_Stay,
     CA_Heal,
     CA_Grow,
@@ -78,27 +77,27 @@ public:
       }
 
     // Pioneers
-    static int pioneer = 0;
-    pioneer++;
-    if (false)
-      if (pioneer % 4000 == 0)
-        for (int y = 0; y < m_dimensions.y; y++)
-          for (int x = 0; x < m_dimensions.x; x++)
-          {
-            if (rand() > RAND_MAX  * 0.2)
-              m_cells[x + y * m_dimensions.x]->m_health = 0;
-            else
-              if (m_cells[x + y * m_dimensions.x]->m_health > 0)
-                m_cells[x + y * m_dimensions.x]->Mutate();
-          }
+//     static int pioneer = 0;
+//     pioneer++;
+//     if (false)
+//       if (pioneer % 4000 == 0)
+//         for (int y = 0; y < m_dimensions.y; y++)
+//           for (int x = 0; x < m_dimensions.x; x++)
+//           {
+//             if (rand() > RAND_MAX  * 0.2)
+//               m_cells[x + y * m_dimensions.x]->m_health = 0;
+//             else
+//               if (m_cells[x + y * m_dimensions.x]->m_health > 0)
+//                 m_cells[x + y * m_dimensions.x]->Mutate();
+//           }
 
     // Neutrinos
-    if (true)
-      for (int y = 0; y < m_dimensions.y; y++)
-        for (int x = 0; x < m_dimensions.x; x++)
-          if (m_cells[x + y * m_dimensions.x]->m_health > 0)
-            if (rand() > RAND_MAX - 15)
-              m_cells[x + y * m_dimensions.x]->Mutate();
+//     if (true)
+//       for (int y = 0; y < m_dimensions.y; y++)
+//         for (int x = 0; x < m_dimensions.x; x++)
+//           if (m_cells[x + y * m_dimensions.x]->m_health > 0)
+//             if (rand() > RAND_MAX - 15)
+//               m_cells[x + y * m_dimensions.x]->Mutate();
 
 
     // Step All
@@ -268,9 +267,10 @@ public:
 
         Idea& Mutate()
         {
-          if (rand() % 2) m_steps.erase(m_steps.begin() + rand() % m_steps.size());
-          if (rand() % 2) m_steps.push_back(CellAction(rand() % CA_NUM));
-          while (m_steps.size() < 2) m_steps.push_back(CellAction(rand() % CA_NUM));
+          //if (rand() % 2) m_steps.erase(m_steps.begin() + rand() % m_steps.size());
+          //if (rand() % 2) m_steps.push_back(CellAction(rand() % CA_NUM));
+          //while (m_steps.size() < 2) m_steps.push_back(CellAction(rand() % CA_NUM));
+          return Generate();
         }
 
         //private:
@@ -322,14 +322,15 @@ private:
     {
     case CA_Stay: { /*m_energy += 1;*/ break; }
     case CA_Heal: { pCell->m_health = Min(pCell->m_health + 1, maxHealth); break; }
-    case CA_HealHim: { if ((*ppFr)->m_health > 0) (*ppFr)->m_health = Min((*ppFr)->m_health + pCell->m_health - 1 + 2, maxHealth); pCell->m_health = 1; break; }
+    //case CA_HealHim: { if ((*ppFr)->m_health > 0) (*ppFr)->m_health = Min((*ppFr)->m_health + pCell->m_health - 1 + 2, maxHealth); pCell->m_health = 1; break; }
+    //case CA_HealHim: { if ((*ppFr)->m_health > 0) (*ppFr)->m_health = Min((*ppFr)->m_health + 10, maxHealth); break; }
     case CA_TurnLeft: { --pCell->m_direction; if (pCell->m_direction == -1) pCell->m_direction = 3; }
     case CA_TurnRight: { ++pCell->m_direction; if (pCell->m_direction == 4) pCell->m_direction = 0; }
     case CA_TurnAround: { pCell->m_direction += 2; if (pCell->m_direction >= 4) pCell->m_direction -= 4; }
-    case CA_Grow: { if ((*ppFr)->m_health == 0 && (*ppFr)->m_inBounds && pCell->m_health >= maxHealth) { pCell->m_health = 1; **ppFr = *pCell; (*ppFr)->Mutate(); } break; }
-    case CA_Move: { if ((*ppFr)->m_health == 0 && (*ppFr)->m_inBounds) { **ppFr = *pCell; pCell->m_health = 0; } break; }
-    case CA_Smak: { if ((*ppFr)->m_health > 0) (*ppFr)->m_health = Max((int)(*ppFr)->m_health - 5, 0); break; }
-    case CA_Mutate: { if ((*ppFr)->m_health > 0) (*ppFr)->Mutate(); break; }
+    case CA_Grow: { if ((*ppFr)->m_health == 0 && (*ppFr)->m_inBounds && pCell->m_health >= maxHealth) { pCell->m_health = pCell->m_health / 2; **ppFr = *pCell; (*ppFr)->Mutate(); } break; }
+    case CA_Move: { if ((*ppFr)->m_health == 0 && (*ppFr)->m_inBounds) { pCell->m_health = Max(pCell->m_health - 1, 0); **ppFr = *pCell; pCell->m_health = 0; } break; }
+    case CA_Smak: { if ((*ppFr)->m_health > 0) { pCell->m_health += (*ppFr)->m_health; (*ppFr)->m_health = 0; } break; }
+    //case CA_Mutate: { if ((*ppFr)->m_health > 0) (*ppFr)->Mutate(); break; }
     case CA_ValueSetOnA: { pCell->a = true; }
     case CA_ValueSetOnB: { pCell->b = true; }
     case CA_ValueSetOnC: { pCell->c = true; }
@@ -337,7 +338,7 @@ private:
     case CA_ValueSetOoffB: { pCell->b = false; }
     case CA_ValueSetOoffC: { pCell->c = false; }
 
-                           // Continue if true type actions
+    // Continue if true type actions
 
     case CA_DoIfFree: { if ((*ppFr)->m_health) pCell->m_brain.SkipThought(); break; }
     case CA_DoIfNotFree: { if (!(*ppFr)->m_health) pCell->m_brain.SkipThought(); break; }
@@ -350,8 +351,7 @@ private:
     case CA_DoIfValueIsOffA: { if (pCell->a) pCell->m_brain.SkipThought(); break; }
     case CA_DoIfValueIsOffB: { if (pCell->b) pCell->m_brain.SkipThought(); break; }
     case CA_DoIfValueIsOffC: { if (pCell->c) pCell->m_brain.SkipThought(); break; }
-    case CA_Die: { pCell->m_health = 0; break; }
-                             
+    //case CA_Die: { pCell->m_health = 0; break; }
 
     default:
       break;
@@ -371,7 +371,7 @@ void CellSimulator()
   for (int i = 0; i < seed; i++) rand();
 
   Window window("CellSim", false, 1200, 600);
-  CellSim simulation(&window, 20);
+  CellSim simulation(&window, 5);
 
   while (Controls::Update())
   {

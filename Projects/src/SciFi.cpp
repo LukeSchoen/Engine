@@ -74,10 +74,10 @@ void DrawModel(PolyModel * pModel, mat4 viewProjection, vec3 pos = vec3(0, 0, 0)
 void SciFi()
 {
   //Window window("SciFi", true, 1920, 1080, true);
-  Window window("SciFi", true, 800, 600, false);
+  Window window("SciFi", true, 1280, 1024, true);
 
   mat4 projectionMat;
-  projectionMat.Perspective(50.0f * (float)DegsToRads, (float)window.width / window.height, 2.0, 64000);
+  projectionMat.Perspective(90.0f * (float)DegsToRads, (float)window.width / window.height, 2.0, 64000);
 
   glPointSize(2.0f);
 
